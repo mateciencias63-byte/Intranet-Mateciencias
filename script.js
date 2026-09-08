@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     sessionStorage.setItem('dashboardUser', fullName);
+    sessionStorage.setItem('dashboardAuthenticated', 'true');
     window.location.assign('dashboard.html');
   };
 
@@ -163,10 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Verificar la contraseña
     if (storedPassword !== password) {
-      console.log('Comparación de contraseñas:');
-      console.log('Contraseña ingresada:', password, 'Largo:', password.length);
-      console.log('Contraseña guardada:', storedPassword, 'Largo:', storedPassword.length);
-      alert(`Contraseña incorrecta. Intenta de nuevo.\n\nTu contraseña debe ser: ${storedPassword}`);
+      alert('Contraseña incorrecta. Intenta de nuevo.');
       passwordInput.value = '';
       passwordInput.focus();
       return;
@@ -193,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
       usernameInput.value = '';
       passwordInput.value = '';
       sessionStorage.removeItem('dashboardUser');
+      sessionStorage.removeItem('dashboardAuthenticated');
       sessionStorage.removeItem('dashboardCareer');
     });
   }

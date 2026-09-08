@@ -1,4 +1,7 @@
 (() => {
+  if (document.body.classList.contains('home-login-page')) return;
+  if (document.body.classList.contains('dashboard-home-page') &&
+      sessionStorage.getItem('dashboardAuthenticated') !== 'true') return;
   const routes = {
     Admision: 'tarjetas/admision/admision-login.html',
     Inscripcion: 'tarjetas/inscripcion/inscripcion-ciclo.html',

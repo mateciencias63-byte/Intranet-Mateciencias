@@ -268,6 +268,19 @@
       const dashboardAvatar = document.getElementById('dashboardAvatar');
       const storedUser = UsuarioService.getStoredUserName();
       const logoutButton = document.getElementById('logoutButton');
+      const requireDashboardSession = () => {
+        const name = sessionStorage.getItem('dashboardUser');
+        const normalizeAccount = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim().toUpperCase();
+        const approved = UsuarioService.getApprovedAccounts().some(account =>
+          normalizeAccount(account.name) === normalizeAccount(name));
+        if (sessionStorage.getItem('dashboardAuthenticated') !== 'true' || !approved) {
+          document.querySelector('.dashboard').hidden = true;
+          sessionStorage.removeItem('dashboardAuthenticated');
+          window.location.replace('index.html');
+        }
+      };
+      requireDashboardSession();
+      window.addEventListener('pageshow', requireDashboardSession);
 
       // Derive a display name (always provide something) and render it immediately
       const displayName = storedUser || 'USUARIO';
@@ -323,10 +336,12 @@
       if (logoutButton) {
         logoutButton.addEventListener('click', () => {
           sessionStorage.removeItem('dashboardUser');
+          sessionStorage.removeItem('dashboardAuthenticated');
+          sessionStorage.removeItem('dashboardCareer');
           window.location.assign('index.html');
         });
       }
     </script>
-    <script src="navegacion.js?v=20260905-9"></script>
+    <script src="navegacion.js?v=20260908-1"></script>
   </body>
 </html>

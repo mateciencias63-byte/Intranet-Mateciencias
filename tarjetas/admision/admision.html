@@ -58,9 +58,10 @@
     </main>
     <script src="tarjetas/admision/usuario-admision.js"></script>
     <script src="usuario.js?v=20260905-4"></script>
+    <script src="tarjetas/administracion/registro-integrado.js?v=20260908-1"></script>
     <script>
       const admisionSessionUser = sessionStorage.getItem('admisionUsuario') || '';
-      const admisionAccess = UsuarioService.userIsInList(admisionSessionUser, window.admisionAutorizados || []);
+      const admisionAccess = window.registroAdminIntegrado || UsuarioService.userIsInList(admisionSessionUser, window.admisionAutorizados || []);
       if (!admisionAccess) {
         sessionStorage.removeItem('admisionUsuario');
         window.location.replace('tarjetas/admision/admision-login.html');

@@ -83,6 +83,17 @@ assert(!doc.querySelector('#comunicadoPreview').hidden,'Image preview works');fo
 assert(JSON.parse(localStorage.getItem('matecienciasNotificaciones'))[0].image.startsWith('data:image/png'),'Image-only announcement saved');
 assert(doc.querySelector('.portal-notice img'),'Image renders in home announcements');
 }
+if(page.startsWith('administracion/')){
+for(const [module,content] of [['Admision','#inscripcionesContent'],['Matricula','#matriculaContent']]){
+nav.querySelector('[data-module="'+module+'"]').click();await delay(500);
+const inner=doc.querySelector('#adminRegistroFrame');assert(!!inner,module+' opens inside right panel');
+for(let attempt=0;attempt<20&&!inner.contentDocument?.querySelector(content);attempt++)await delay(100);
+assert(!!inner.contentDocument.querySelector(content),module+' opens without second login');
+assert(inner.contentWindow.registroAdminIntegrado===true,module+' uses validated embedded administrator session');
+assert(frame.contentWindow.location.pathname.endsWith('/administracion/admin-panel.html'),module+' keeps administrator navigation');
+const back=inner.contentDocument.querySelector('.admision-actions,.matricula-back');assert(inner.contentWindow.getComputedStyle(back).display==='none',module+' hides standalone navigation');
+}
+}
 const paymentButton=nav.querySelector('[data-module="Pagos"],[data-module="pagos"],[data-view="pagos"]');assert(!!paymentButton,page+' payment menu exists');paymentButton.click();await delay(350);
 let history=doc.querySelector('.payment-history');assert(!!history,page+' payment history loads');
 if(page.startsWith('administracion/')){
@@ -101,6 +112,10 @@ assert(!history.querySelector('[data-add-payment],tbody button'),'Reader cannot 
 const text=history.querySelector('tbody').textContent;
 assert(page.startsWith('docentes/')?text.includes('Pago del docente')&&!text.includes('Pago del alumno'):text.includes('Pago del alumno')&&!text.includes('Pago del docente'),page+' sees only own assigned payments');
 }
+}
+for(const module of ['admision','matricula']){
+await new Promise(r=>{frame.onload=r;frame.src='/tarjetas/'+module+'/'+module+'.html?panel=admin';setTimeout(r,1500);});await delay(500);
+assert(frame.contentWindow.location.pathname.endsWith('/'+module+'-login.html'),module+' direct URL still requires its own login');
 }
 document.getElementById('result').textContent=JSON.stringify({checks});}catch(e){document.getElementById('result').textContent=JSON.stringify({error:e.message,checks});}})();
 </script>'''

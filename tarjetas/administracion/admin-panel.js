@@ -114,6 +114,8 @@
   renderAdminHome();
 
   const moduleScripts = {
+    Admision: 'tarjetas/administracion/admin-registros.js',
+    Matricula: 'tarjetas/administracion/admin-registros.js',
     'Pagos': 'pagos-historial.js',
     'Estudiantes': 'tarjetas/docentes/docente-estudiantes.js',
     Ranking: 'tarjetas/administracion/admin-ranking.js',
@@ -170,7 +172,7 @@
     const moduleName = button.dataset.module;
     activeModule = moduleName;
     document.querySelectorAll('.admin-nav button').forEach((item) => item.classList.toggle('active', item.dataset.module === moduleName));
-    const moduleTitles = { Inicio: 'Panel principal', Estudiantes: 'Alumnos', Ranking: 'Ranking', Materiales: 'Recursos académicos', Clases: 'Clases virtuales', Horario: 'Mi horario', Calendario: 'Agenda Académica', Tareas: 'Actividades', 'Exámenes': 'Evaluaciones', Grabaciones: 'Clases grabadas', PromedioGeneral: 'Calificaciones', Asistencia: 'Control de asistencia', Comunicados: 'Avisos', Chat: 'Mensajes', Encuestas: 'Encuestas', Certificados: 'Certificados', Silabos: 'Sílabos', MisDocentes: 'Mis docentes' };
+    const moduleTitles = { Admision: 'Admisión', Matricula: 'Matrícula', Inicio: 'Panel principal', Estudiantes: 'Alumnos', Ranking: 'Ranking', Materiales: 'Recursos académicos', Clases: 'Clases virtuales', Horario: 'Mi horario', Calendario: 'Agenda Académica', Tareas: 'Actividades', 'Exámenes': 'Evaluaciones', Grabaciones: 'Clases grabadas', PromedioGeneral: 'Calificaciones', Asistencia: 'Control de asistencia', Comunicados: 'Avisos', Chat: 'Mensajes', Encuestas: 'Encuestas', Certificados: 'Certificados', Silabos: 'Sílabos', MisDocentes: 'Mis docentes' };
     document.getElementById('adminHeading').textContent = moduleTitles[moduleName] || moduleName;
     if (moduleName === 'Inicio') { window.location.reload(); return; }
     loadModule(moduleName).then(() => { if (activeModule === moduleName) window.DocenteModules?.[moduleName]?.render?.(); });

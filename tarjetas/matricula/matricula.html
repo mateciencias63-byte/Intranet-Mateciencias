@@ -26,8 +26,9 @@
   <body>
     <main class="matricula-page"><section class="matricula-card"><h1>Matrícula</h1><p>Registro de estudiantes basado en las asistencias del Aula Virtual. Cada estudiante aparece una sola vez.</p><div id="matriculaContent"></div><a class="matricula-back" href="dashboard.html">Volver al panel</a></section></main>
     <script src="usuario.js?v=20260905-4"></script>
+    <script src="tarjetas/administracion/registro-integrado.js?v=20260908-1"></script>
     <script>
-      const matriculaAdminAccess = UsuarioService.isAdminSessionValid?.() === true;
+      const matriculaAdminAccess = window.registroAdminIntegrado === true;
       if (!matriculaAdminAccess && !sessionStorage.getItem('matriculaUsuario')) window.location.replace('tarjetas/matricula/matricula-login.html');
       if (matriculaAdminAccess) document.querySelector('.matricula-back').href = 'tarjetas/administracion/admin-panel.html';
       const matriculaContent = document.getElementById('matriculaContent');

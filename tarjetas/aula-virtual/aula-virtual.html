@@ -132,16 +132,22 @@
     </main>
 
     </div>
-    <script src="usuario.js?v=20260905-4"></script>
+    <script src="usuarios-config.js?v=20260908-1"></script><script src="usuarios-api.js?v=20260908-1"></script><script src="usuario.js?v=20260908-7"></script>
     <script>
       const aulaLoginPage = document.getElementById('aulaLoginPage');
       const aulaContent = document.getElementById('aulaContent');
       const aulaLoginForm = document.getElementById('aulaLoginForm');
       const aulaLoginError = document.getElementById('aulaLoginError');
-      aulaLoginForm.addEventListener('submit', (event) => {
+      aulaLoginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const username = document.getElementById('aulaUser').value.trim();
         const normalizedUsername = username.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/\s+/g, ' ');
+        if (window.UsuariosAPI?.enabled) {
+          try {
+            const user = await UsuariosAPI.verify();
+            if (UsuarioService.normalizeUserName(user.name) !== UsuarioService.normalizeUserName(username)) throw Error('Usuario diferente');
+          } catch (_) { window.location.assign('index.html');return; }
+        }
         const valid = UsuarioService.getApprovedAccounts().some((account) => {
           const normalizedAccount = account.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/\s+/g, ' ');
           return normalizedAccount === normalizedUsername;

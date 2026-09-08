@@ -11,6 +11,9 @@
   }
 
   function getApprovedAccounts() {
+    if (window.UsuariosAPI?.enabled) {
+      return window.usuariosRemotos || (UsuariosAPI.current()?.user ? [UsuariosAPI.current().user] : []);
+    }
     return APPROVED_ACCOUNTS;
   }
 

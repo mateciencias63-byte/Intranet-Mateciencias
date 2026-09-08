@@ -1,4 +1,15 @@
 (async () => {
+  if (window.UsuariosAPI?.enabled) {
+    try {
+      const user = await UsuariosAPI.verify();
+      if (user.role !== 'admin') throw Error('Acceso administrativo requerido');
+      UsuarioService.setAdminSession(user.name);
+      window.usuariosRemotos = (await UsuariosAPI.request('/users')).users;
+    } catch (_) {
+      window.location.replace('tarjetas/administracion/admin-login.html');
+      return;
+    }
+  }
   if (!UsuarioService.isAdminSessionValid()) {
     const requestedModule = new URLSearchParams(window.location.search).get('module');
     const loginUrl = ['Calendario', 'Encuestas'].includes(requestedModule) ? `tarjetas/administracion/admin-login.html?next=${requestedModule}` : 'tarjetas/administracion/admin-login.html';
@@ -109,11 +120,12 @@
     if (classItem) classes.splice(Number(classItem.dataset.class), 1);
     if (teacher || item || classItem) { localStorage.setItem(teacherKey, JSON.stringify(teachers)); localStorage.setItem(catalogKey, JSON.stringify(catalog)); localStorage.setItem(classLinksKey, JSON.stringify(classes)); render(); }
   });
-  document.getElementById('logoutAdmin').addEventListener('click', () => { UsuarioService.clearAdminSession(); window.location.assign('tarjetas/administracion/admin-login.html'); });
+  document.getElementById('logoutAdmin').addEventListener('click', async () => { if (window.UsuariosAPI?.enabled) { try { await UsuariosAPI.logout(); } catch (_) {} } UsuarioService.clearAdminSession(); window.location.assign('tarjetas/administracion/admin-login.html'); });
   render();
   renderAdminHome();
 
   const moduleScripts = {
+    Usuarios: 'tarjetas/administracion/admin-usuarios.js',
     Admision: 'tarjetas/administracion/admin-registros.js',
     Matricula: 'tarjetas/administracion/admin-registros.js',
     'Pagos': 'pagos-historial.js',
@@ -156,6 +168,10 @@
     document.body.appendChild(script);
     return loading;
   };
+  const usersButton = document.createElement('button');
+  usersButton.type = 'button';usersButton.dataset.module = 'Usuarios';
+  usersButton.innerHTML = '<span class="admin-nav-icon">♙</span><span>Usuarios</span>';
+  document.querySelector('.admin-nav [data-module="Inicio"]').after(usersButton);
   const studentsButton = document.querySelector('[data-module="Estudiantes"]');
   if (studentsButton && !document.querySelector('.admin-nav [data-module="Pagos"]')) {
     const treasuryButton = document.createElement('button');

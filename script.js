@@ -113,9 +113,20 @@ document.addEventListener('DOMContentLoaded', () => {
     alert('Solicita a Secretaría Académica el restablecimiento de tu contraseña.');
   });
 
-  function handleLoginSubmit(event) {
+  async function handleLoginSubmit(event) {
     if (event) event.preventDefault();
 
+    if (window.UsuariosAPI?.enabled) {
+      const button = loginForm.querySelector('button[type="submit"]');
+      if (button.disabled) return;
+      button.disabled = true;
+      try {
+        const user = await UsuariosAPI.login(usernameInput.value.trim(), passwordInput.value.trim());
+        showAuthorizedRoom(user.name);
+      } catch (error) { alert(error.message); }
+      finally { button.disabled = false;passwordInput.value = ''; }
+      return;
+    }
     const fullName = (usernameInput.value || '').replace(/\s+/g, ' ').trim();
     const password = (passwordInput.value || '').trim();
     const validName = fullName.split(/\s+/).length >= 2;

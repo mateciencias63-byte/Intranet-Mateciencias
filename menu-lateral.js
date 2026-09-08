@@ -16,7 +16,7 @@
       const icon = button.querySelector('.admin-nav-icon,.nav-icon,.aula-nav-icon,.sa-nav-icon');
       if (!icon || icon.classList.contains('menu-lateral-icon')) return;
       const label = button.textContent.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      const kind = /inicio|panel principal/.test(label) ? 'home' : /horario|agenda|calendario/.test(label) ? 'calendar' : /pago|tesorer|finanz/.test(label) ? 'payment' : /alumno|estudiante|docente|personal/.test(label) ? 'people' : /recurso|material|silabo|curso/.test(label) ? 'book' : /clase|grabaci/.test(label) ? 'video' : /mensaje|chat|aviso|comunic/.test(label) ? 'chat' : /ranking|certificado|beca/.test(label) ? 'award' : /informacion|ayuda/.test(label) ? 'info' : 'clipboard';
+      const kind = /inicio|panel principal/.test(label) ? 'home' : /horario|agenda|calendario/.test(label) ? 'calendar' : /pago|tesorer|finanz/.test(label) ? 'payment' : /alumno|estudiante|docente|personal|usuario/.test(label) ? 'people' : /recurso|material|silabo|curso/.test(label) ? 'book' : /clase|grabaci/.test(label) ? 'video' : /mensaje|chat|aviso|comunic/.test(label) ? 'chat' : /ranking|certificado|beca/.test(label) ? 'award' : /informacion|ayuda/.test(label) ? 'info' : 'clipboard';
       icon.classList.add('menu-lateral-icon');
       icon.setAttribute('aria-hidden','true');
       icon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">${icons[kind]}</svg>`;

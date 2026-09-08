@@ -239,14 +239,24 @@
       </section>
     </div>
 
-    <script src="usuario.js?v=20260905-4"></script>
+    <script src="usuarios-config.js?v=20260908-1"></script><script src="usuarios-api.js?v=20260908-1"></script><script src="usuario.js?v=20260908-7"></script>
     <script src="avatar.js?v=20260908-2"></script>
     <script>
       const dashboardUser = document.getElementById('dashboardUser');
       const dashboardAvatar = document.getElementById('dashboardAvatar');
       const storedUser = UsuarioService.getStoredUserName();
       const logoutButton = document.getElementById('logoutButton');
-      const requireDashboardSession = () => {
+      const requireDashboardSession = async () => {
+        if (window.UsuariosAPI?.enabled) {
+          const dashboard = document.querySelector('.dashboard');dashboard.hidden = true;
+          try {
+            const user = await UsuariosAPI.verify();
+            sessionStorage.setItem('dashboardUser', user.name);
+            sessionStorage.setItem('dashboardAuthenticated', 'true');
+            dashboardUser.textContent = user.name;dashboard.hidden = false;
+          } catch (_) { window.location.replace('index.html'); }
+          return;
+        }
         const name = sessionStorage.getItem('dashboardUser');
         const normalizeAccount = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim().toUpperCase();
         const approved = UsuarioService.getApprovedAccounts().some(account =>
@@ -292,7 +302,8 @@
 
 
       if (logoutButton) {
-        logoutButton.addEventListener('click', () => {
+        logoutButton.addEventListener('click', async () => {
+          if (window.UsuariosAPI?.enabled) { try { await UsuariosAPI.logout(); } catch (_) {} }
           sessionStorage.removeItem('dashboardUser');
           sessionStorage.removeItem('dashboardAuthenticated');
           sessionStorage.removeItem('dashboardCareer');

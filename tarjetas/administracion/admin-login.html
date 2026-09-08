@@ -145,15 +145,32 @@
     </div>
 
         <script src="tarjetas/administracion/usuarios-administrativo.js?v=20260905-3"></script>
-        <script src="usuario.js?v=20260905-4"></script>
+        <script src="usuarios-config.js?v=20260908-1"></script><script src="usuarios-api.js?v=20260908-1"></script><script src="usuario.js?v=20260908-7"></script>
         <script>
             const adminLoginForm = document.getElementById('adminLoginForm');
             const adminUserInput = document.getElementById('adminUser');
             const loginError = document.getElementById('loginError');
 
-            adminLoginForm.addEventListener('submit', (event) => {
+            if (window.UsuariosAPI?.enabled) {
+                const label = document.createElement('label');label.textContent = 'Código de 10 dígitos:';
+                const input = document.createElement('input');input.id = 'adminCode';input.type = 'password';input.inputMode = 'numeric';input.pattern = '[0-9]{10}';input.required = true;input.autocomplete = 'current-password';
+                label.append(input);adminLoginForm.querySelector('button').before(label);
+            }
+            adminLoginForm.addEventListener('submit', async (event) => {
                 event.preventDefault();
                 const username = adminUserInput.value.trim();
+                if (window.UsuariosAPI?.enabled) {
+                    const button = adminLoginForm.querySelector('button');if (button.disabled) return;button.disabled = true;
+                    try {
+                        const user = await UsuariosAPI.login(username, document.getElementById('adminCode').value);
+                        if (user.role !== 'admin') { await UsuariosAPI.logout();throw Error('Esta cuenta no es administradora.'); }
+                        UsuarioService.setAdminSession(user.name);
+                        window.location.assign('tarjetas/administracion/admin-panel.html');
+                    } catch (error) { loginError.textContent = error.message;loginError.style.display = 'block'; }
+                    finally { button.disabled = false;document.getElementById('adminCode').value = ''; }
+                    return;
+                }
+
                 if (!UsuarioService.adminUserIsAllowed(username)) {
                     loginError.textContent = 'El usuario no está autorizado para administrar la plataforma.';
                     loginError.style.display = 'block';

@@ -9,7 +9,9 @@
 .week-day-heading { position:sticky; top:0; z-index:4; background:#fff; padding:12px 4px; border-right:1px solid #d9dde2; border-bottom:1px solid #d9dde2; text-align:center; font:13px Arial,sans-serif; color:#64748b; }
 .week-hours,.week-day { position:relative; border-right:1px solid #d9dde2; background:repeating-linear-gradient(to bottom,transparent 0,transparent 33px,#eceef1 33px,#eceef1 34px,transparent 34px,transparent 67px,#d9dde2 67px,#d9dde2 68px); }
 .week-day.today,.week-day-heading.today { background-color:#fffbdf; }
-.week-now-line { position:absolute; left:0; right:0; height:0; border-top:1px dotted #e33939; z-index:3; pointer-events:none; }
+.week-now-line { position:absolute; left:0; right:0; height:0; border-top:2px solid #e33939; z-index:3; pointer-events:none; }
+.week-now-line::before { content:''; position:absolute; left:0; top:-5px; width:8px; height:8px; border-radius:50%; background:#e33939; }
+.week-heading .week-current-time { color:#00518e; font-weight:700; }
 .week-hour { height:68px; box-sizing:border-box; padding:7px 4px; text-align:center; font:11px Arial,sans-serif; color:#64748b; }
 .week-class { position:absolute; box-sizing:border-box; overflow:auto; border:2px solid #40c7eb; border-radius:4px; background:#fff; color:#174263; padding:7px; text-align:left; font:11px/1.35 Arial,sans-serif; }
 button.week-class { cursor:pointer; }

@@ -22,6 +22,14 @@
     target.replaceChildren();
     const root=document.createElement('section');root.className='week-schedule';target.append(root);
     let editor;
+    let positioned=false;
+    function showCurrentTime() {
+      const scroll=root.querySelector('.week-scroll'),line=root.querySelector('.week-now-line');
+      if(!scroll?.clientHeight||!line)return;
+      const col=line.parentElement;
+      scroll.scrollTo({top:Math.max(0,parseFloat(line.style.top)-scroll.clientHeight/2+44),left:Math.max(0,col.offsetLeft-(scroll.clientWidth-col.clientWidth)/2),behavior:'instant'});
+      positioned=true;
+    }
     function updateClock() {
       if(!root.isConnected)return;
       const parts=Object.fromEntries(clockFormat.formatToParts(new Date()).map(part=>[part.type,part.value]));
@@ -33,6 +41,9 @@
         if(index===day){const line=document.createElement('div');line.className='week-now-line';line.style.top=`${elapsed/60*68}px`;line.setAttribute('role','img');line.setAttribute('aria-label',`Hora actual en Perú: ${parts.hour}:${parts.minute}`);col.append(line);}
       });
       root.querySelectorAll('.week-day-heading').forEach((heading,index)=>heading.classList.toggle('today',index===day+1));
+      const clock=root.querySelector('.week-current-time');
+      if(clock)clock.textContent=`${days[day]} · ${parts.hour}:${parts.minute} · Hora de Perú`;
+      if(!positioned)showCurrentTime();
     }
     function render() {
       if(!root.isConnected)return;
@@ -40,6 +51,9 @@
       try{events=read();}catch{failed=true;}
       const editable=canEdit(),items=events.filter(valid);
       root.innerHTML='<header class="week-heading"><div><h2>Horario semanal</h2><p></p></div></header><div class="week-scroll" tabindex="0" aria-label="Horario de lunes a domingo"><div class="week-grid"></div></div><p class="week-message" role="status"></p>';
+      positioned=false;
+      const nowButton=document.createElement('button');nowButton.type='button';nowButton.className='week-button secondary';nowButton.textContent='Ver hora actual';nowButton.dataset.currentTime='true';nowButton.onclick=showCurrentTime;root.querySelector('header').append(nowButton);
+      const clock=document.createElement('p');clock.className='week-current-time';root.querySelector('.week-heading > div').append(clock);
       root.querySelector('.week-heading p').textContent=editable?'Registra el curso, el docente y las horas de cada clase.':'Horario publicado por administración.';
       if(editable&&!failed){const add=document.createElement('button');add.type='button';add.className='week-button';add.textContent='Agregar clase';add.onclick=()=>edit();root.querySelector('header').append(add);}
       const start=0;

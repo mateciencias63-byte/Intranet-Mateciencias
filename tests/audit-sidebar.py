@@ -37,6 +37,25 @@ button.querySelector('svg path,svg rect,svg circle').dispatchEvent(new MouseEven
 assert(frame.contentWindow.scrollY===0,page+' selecting option returns to top');
 assert(!doc.querySelector('.portal-home')||doc.querySelector('.portal-home').hidden,page+' summary hides on module navigation');
 frame.style.width='390px';await delay(100);style=frame.contentWindow.getComputedStyle(nav);assert(style.flexDirection==='column',page+' mobile vertical menu');assert(nav.getBoundingClientRect().width<=110,page+' mobile compact width');frame.style.width='1200px';
+const scheduleButton=nav.querySelector('[data-module="Horario"],[data-module="horarios"],[data-view="horario"]');
+assert(!!scheduleButton,page+' schedule option available');scheduleButton.click();await delay(400);
+const schedule=doc.querySelector('.week-schedule');assert(!!schedule,page+' weekly timetable loaded');
+assert(schedule.querySelectorAll('.week-day-heading').length===8,page+' seven days and hour column');
+if(page.startsWith('administracion/')){
+schedule.querySelector('.week-heading button').click();let editor=doc.querySelector('.week-editor'),form=editor.querySelector('form');
+form.elements.course.value='Álgebra de prueba';form.elements.teacher.value='Docente de prueba';form.elements.start.value='08:50';form.elements.end.value='08:00';form.requestSubmit();
+assert(!localStorage.getItem('matecienciasHorarioSemanal'),'Invalid ending time blocked');
+form.elements.end.value='10:20';form.elements.day.value='6';form.requestSubmit();await delay(80);
+let classes=JSON.parse(localStorage.getItem('matecienciasHorarioSemanal'));assert(classes.length===1&&classes[0].day===6&&classes[0].teacher==='Docente de prueba','Admin saves course, teacher, exact times and Sunday');
+doc.querySelector('button.week-class').click();editor=doc.querySelector('.week-editor');form=editor.querySelector('form');form.elements.course.value='Curso actualizado';form.requestSubmit();await delay(60);
+assert(JSON.parse(localStorage.getItem('matecienciasHorarioSemanal'))[0].course==='Curso actualizado','Admin edits existing class');
+doc.querySelector('button.week-class').click();editor=doc.querySelector('.week-editor');form=editor.querySelector('form');form.elements.course.value='Cambio no autorizado';sessionStorage.setItem('adminTimestamp','0');form.requestSubmit();
+assert(JSON.parse(localStorage.getItem('matecienciasHorarioSemanal'))[0].course==='Curso actualizado','Expired admin session cannot save');editor.close();
+sessionStorage.setItem('adminAutenticado','true');sessionStorage.setItem('adminUsuario','MateCiencias Adm');sessionStorage.setItem('adminTimestamp',String(Date.now()));
+}else{
+assert(!schedule.querySelector('.week-heading button,button.week-class,[contenteditable]'),page+' timetable is read-only');
+assert(schedule.textContent.includes('Curso actualizado')&&schedule.textContent.includes('Docente de prueba'),page+' shows administrator schedule');
+}
 if(page.startsWith('administracion/')){
 nav.querySelector('[data-module="Comunicados"]').click();await delay(400);
 const form=doc.querySelector('#comunicadoForm');assert(!!form,'Admin announcement form opens');

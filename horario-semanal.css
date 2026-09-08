@@ -1,0 +1,27 @@
+.week-schedule { min-width:0; width:100%; grid-column:1/-1; background:#fff; padding:18px; box-sizing:border-box; color:#174263; }
+.week-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+.week-heading h2 { margin:0; font-size:20px; }
+.week-heading p { margin:6px 0 0; color:#64748b; font-size:13px; }
+.week-button { padding:9px 14px; background:#0066ae; color:#fff; border:0; border-radius:4px; cursor:pointer; font:inherit; }
+.week-button.secondary { background:#eaf0f5; color:#174263; }
+.week-scroll { max-height:640px; overflow:auto; border:1px solid #d9dde2; }
+.week-grid { min-width:1040px; display:grid; grid-template-columns:66px repeat(7,minmax(0,1fr)); position:relative; }
+.week-day-heading { position:sticky; top:0; z-index:4; background:#fff; padding:12px 4px; border-right:1px solid #d9dde2; border-bottom:1px solid #d9dde2; text-align:center; font:13px Arial,sans-serif; color:#64748b; }
+.week-hours,.week-day { position:relative; border-right:1px solid #d9dde2; background:repeating-linear-gradient(to bottom,transparent 0,transparent 33px,#eceef1 33px,#eceef1 34px,transparent 34px,transparent 67px,#d9dde2 67px,#d9dde2 68px); }
+.week-day.today { background-color:#fffbdf; }
+.week-hour { height:68px; box-sizing:border-box; padding:7px 4px; text-align:center; font:11px Arial,sans-serif; color:#64748b; }
+.week-class { position:absolute; box-sizing:border-box; overflow:auto; border:2px solid #40c7eb; border-radius:4px; background:#fff; color:#174263; padding:7px; text-align:left; font:11px/1.35 Arial,sans-serif; }
+button.week-class { cursor:pointer; }
+.week-class strong,.week-class span { display:block; overflow-wrap:anywhere; }
+.week-class strong { font-size:12px; margin:4px 0; }
+.week-class .week-teacher { color:#64748b; }
+.week-message { margin:12px 0 0; color:#526579; font-size:13px; }
+.week-editor { border:0; border-radius:8px; padding:24px; width:min(510px,calc(100% - 50px)); max-height:85vh; overflow:auto; color:#174263; }
+.week-editor::backdrop { background:#102a4377; }
+.week-form { display:grid; gap:14px; }
+.week-form label { display:grid; gap:6px; font-size:14px; }
+.week-form input,.week-form select { box-sizing:border-box; width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:4px; font:inherit; }
+.week-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+.week-error { color:#a32020; margin:0; }
+.week-schedule button:focus-visible,.week-editor button:focus-visible { outline:3px solid #e4ac00; outline-offset:2px; }
+@media(max-width:600px) { .week-schedule { padding:10px; } .week-scroll { max-height:70vh; } }

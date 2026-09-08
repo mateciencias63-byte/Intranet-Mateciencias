@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cuestionario | IDEPUNP Regular 2026</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+    <style>
+      .regular-quiz { width:min(900px, calc(100% - 32px)); margin:40px auto; color:#111827; }
+      .regular-quiz-card { background:rgba(255,255,255,.96); border-radius:22px; padding:28px; box-shadow:0 18px 38px rgba(15,23,42,.18); }
+      .regular-quiz-head { margin-bottom:22px; }
+      .regular-quiz-head h1 { margin:0 0 8px; }
+      .regular-question { font-size:1.2rem; font-weight:700; margin:22px 0; }
+      .regular-options { display:grid; gap:12px; }
+      .regular-option { padding:14px 18px; border:1px solid #d1d5db; border-radius:12px; background:#fff; text-align:left; cursor:pointer; font-weight:700; }
+      .regular-option.selected { background:#f6c543; border-color:#d9a800; }
+      .regular-actions { display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; }
+      .regular-action { padding:12px 18px; border:0; border-radius:10px; background:#0b3b82; color:#fff; text-decoration:none; font-weight:700; cursor:pointer; }
+    </style>
+  </head>
+  <body>
+    <main class="regular-quiz">
+      <section class="regular-quiz-card">
+        <header class="regular-quiz-head">
+          <h1 id="quizTitle">Cuestionario</h1>
+          <div id="quizMeta">Regular 2026</div>
+        </header>
+        <div id="quizContent"></div>
+        <div class="regular-actions">
+          <button class="regular-action" id="nextQuestion" type="button" hidden>Siguiente</button>
+          <a class="regular-action" id="backLink" href="tarjetas/canva-studies/formularios-regular-2026-semanas.html">Volver</a>
+        </div>
+      </section>
+    </main>
+    <script src="tarjetas/canva-studies/formularios-regular-2026-preguntas.js"></script>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const week = Math.max(1, parseInt(params.get('week'), 10) || 1);
+      const course = params.get('curso') || 'Curso';
+      const key = `${week}|${course}`;
+      const questions = (window.Regular2026Questions && window.Regular2026Questions[key]) || [];
+      const content = document.getElementById('quizContent');
+      const nextButton = document.getElementById('nextQuestion');
+      let index = 0;
+      document.getElementById('quizTitle').textContent = course;
+      document.getElementById('quizMeta').textContent = `SEMANA ${week} · REGULAR 2026`;
+      document.getElementById('backLink').href = `tarjetas/canva-studies/formularios-regular-2026-semana.html?week=${week}`;
+      function renderQuestion() {
+        const question = questions[index];
+        if (!question) {
+          content.innerHTML = '<p class="regular-question">El contenido de este cuestionario de Regular 2026 está listo para agregarse de forma independiente.</p>';
+          nextButton.hidden = true;
+          return;
+        }
+        content.innerHTML = `<div>Pregunta ${index + 1} de ${questions.length}</div><div class="regular-question">${question.question}</div><div class="regular-options">${question.options.map((option, optionIndex) => `<button class="regular-option" type="button" data-index="${optionIndex}">${option}</button>`).join('')}</div>`;
+        content.querySelectorAll('.regular-option').forEach((button) => button.addEventListener('click', () => {
+          content.querySelectorAll('.regular-option').forEach((item) => item.classList.remove('selected'));
+          button.classList.add('selected');
+          nextButton.hidden = false;
+        }));
+      }
+      nextButton.addEventListener('click', () => { index += 1; renderQuestion(); });
+      renderQuestion();
+    </script>
+  </body>
+</html>

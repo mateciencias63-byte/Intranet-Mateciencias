@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MateCiencias | Aula Biblioteca</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+    <style>
+      :root {
+        --biblioteca-navy: #102a43;
+        --biblioteca-orange: #ea580c;
+        --biblioteca-green: #0d8f36;
+        --biblioteca-soft: #f7fafc;
+      }
+
+      body {
+        min-height: 100vh;
+        color: var(--biblioteca-navy);
+      }
+
+      .biblioteca-page {
+        min-height: 100vh;
+        padding: 28px clamp(16px, 4vw, 56px) 48px;
+      }
+
+      .biblioteca-shell {
+        width: min(1500px, 100%);
+        margin: 0 auto;
+      }
+
+      .biblioteca-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 28px;
+        padding: 24px 28px;
+        background: rgba(255, 255, 255, 0.96);
+        border-left: 6px solid var(--biblioteca-orange);
+        border-radius: 12px;
+        box-shadow: 0 12px 30px rgba(16, 42, 67, 0.12);
+      }
+
+      .biblioteca-brand {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .biblioteca-brand img {
+        width: 64px;
+        height: 64px;
+        object-fit: contain;
+      }
+
+      .biblioteca-kicker {
+        margin: 0 0 4px;
+        color: var(--biblioteca-orange);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .biblioteca-header h1 {
+        margin: 0;
+        font-size: clamp(1.6rem, 3vw, 2.4rem);
+      }
+
+      .biblioteca-header p {
+        margin: 6px 0 0;
+        color: #52606d;
+      }
+
+      .biblioteca-back {
+        color: var(--biblioteca-green);
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .biblioteca-back:hover {
+        text-decoration: underline;
+      }
+
+      .biblioteca-layout {
+        display: grid;
+        grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
+        gap: 24px;
+        align-items: start;
+      }
+
+      .biblioteca-layout.solo-catalogo {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .biblioteca-panel {
+        padding: 24px;
+        background: rgba(255, 255, 255, 0.96);
+        border-radius: 12px;
+        box-shadow: 0 12px 30px rgba(16, 42, 67, 0.12);
+      }
+
+      .biblioteca-panel h2 {
+        margin: 0 0 6px;
+        font-size: 1.2rem;
+      }
+
+      .biblioteca-panel-intro {
+        margin: 0 0 20px;
+        color: #52606d;
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .biblioteca-form {
+        display: grid;
+        gap: 13px;
+      }
+
+      .biblioteca-form label {
+        display: grid;
+        gap: 6px;
+        color: #243b53;
+        font-size: 0.86rem;
+        font-weight: 700;
+      }
+
+      .biblioteca-form input,
+      .biblioteca-form select,
+      .biblioteca-form textarea,
+      .biblioteca-toolbar input,
+      .biblioteca-toolbar select {
+        width: 100%;
+        padding: 10px 11px;
+        border: 1px solid #cbd5e1;
+        border-radius: 7px;
+        background: #ffffff;
+        color: var(--biblioteca-navy);
+        font: inherit;
+      }
+
+      .biblioteca-form textarea {
+        min-height: 74px;
+        resize: vertical;
+      }
+
+      .biblioteca-form input:focus,
+      .biblioteca-form select:focus,
+      .biblioteca-form textarea:focus,
+      .biblioteca-toolbar input:focus,
+      .biblioteca-toolbar select:focus {
+        outline: 2px solid rgba(234, 88, 12, 0.25);
+        border-color: var(--biblioteca-orange);
+      }
+
+      .biblioteca-file-help {
+        color: #627d98;
+        font-size: 0.76rem;
+        font-weight: 400;
+      }
+
+      .biblioteca-publish-button {
+        padding: 12px;
+        border: 0;
+        border-radius: 7px;
+        background: var(--biblioteca-orange);
+        color: #ffffff;
+        font: inherit;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .biblioteca-publish-button:hover {
+        background: #c2410c;
+      }
+
+      .estado-formulario {
+        min-height: 20px;
+        margin: 0;
+        font-size: 0.83rem;
+        font-weight: 700;
+      }
+
+      .estado-formulario.ok { color: var(--biblioteca-green); }
+      .estado-formulario.error { color: #b42318; }
+
+      .biblioteca-toolbar {
+        display: grid;
+        grid-template-columns: minmax(180px, 1fr) 190px 150px;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .biblioteca-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .biblioteca-summary h2 {
+        margin: 0;
+        font-size: 1.25rem;
+      }
+
+      .biblioteca-summary span {
+        color: #627d98;
+        font-size: 0.86rem;
+      }
+
+      .lista-documentos {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .documento-item {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        gap: 10px;
+        align-items: start;
+        padding: 15px;
+        background: var(--biblioteca-soft);
+        border: 1px solid #e2e8f0;
+        border-radius: 9px;
+        min-height: 220px;
+      }
+
+      .documento-icono {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 44px;
+        border-radius: 6px;
+        background: #fee2e2;
+        color: #dc2626;
+        font-size: 0.7rem;
+        font-weight: 900;
+      }
+
+      .documento-categoria {
+        color: var(--biblioteca-orange);
+        font-size: 0.72rem;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .documento-info h3 {
+        margin: 3px 0;
+        color: var(--biblioteca-navy);
+        font-size: 1rem;
+      }
+
+      .documento-info p,
+      .documento-info small {
+        margin: 0;
+        color: #627d98;
+        font-size: 0.82rem;
+      }
+
+      .documento-info small {
+        display: block;
+        margin-top: 5px;
+      }
+
+      .documento-acciones {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 8px;
+      }
+
+      .boton-descarga,
+      .boton-eliminar {
+        padding: 8px 10px;
+        border-radius: 6px;
+        font: inherit;
+        font-size: 0.78rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .boton-descarga {
+        border: 1px solid var(--biblioteca-green);
+        background: var(--biblioteca-green);
+        color: #ffffff;
+      }
+
+      .boton-eliminar {
+        border: 1px solid #fecaca;
+        background: #ffffff;
+        color: #b42318;
+      }
+
+      .biblioteca-vacia {
+        display: grid;
+        gap: 8px;
+        justify-items: center;
+        padding: 54px 20px;
+        border: 1px dashed #cbd5e1;
+        border-radius: 9px;
+        color: #627d98;
+        text-align: center;
+      }
+
+      .biblioteca-vacia strong { color: var(--biblioteca-navy); }
+
+      @media (max-width: 820px) {
+        .biblioteca-header,
+        .biblioteca-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .biblioteca-header {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .biblioteca-toolbar {
+          grid-template-columns: 1fr;
+        }
+
+        .lista-documentos {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 560px) {
+        .lista-documentos {
+          grid-template-columns: 1fr;
+        }
+
+        .documento-item {
+          min-height: 0;
+        }
+
+        .documento-icono {
+          width: 40px;
+          height: 44px;
+        }
+
+      }
+
+      @media (min-width: 821px) and (max-width: 1200px) {
+        .lista-documentos {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="biblioteca-page">
+      <div class="biblioteca-shell">
+        <header class="biblioteca-header">
+          <div class="biblioteca-brand">
+            <img src="logo.png" alt="Logo de MateCiencias" />
+            <div>
+              <p class="biblioteca-kicker">Aula de lectura</p>
+              <h1>Biblioteca virtual</h1>
+              <p>Libros y documentos organizados para aprender mejor.</p>
+            </div>
+          </div>
+          <a class="biblioteca-back" href="dashboard.html">&larr; Volver al panel</a>
+        </header>
+
+        <div class="biblioteca-layout solo-catalogo">
+          <section class="biblioteca-panel" aria-labelledby="catalogoTitulo">
+            <div class="biblioteca-summary">
+              <h2 id="catalogoTitulo">Catálogo</h2>
+              <span id="contadorDocumentos">0 documentos publicados</span>
+            </div>
+            <div class="biblioteca-toolbar">
+              <input id="buscadorDocumentos" type="search" placeholder="Buscar por título, autor o curso" aria-label="Buscar documentos" />
+              <select id="filtroCategoria" aria-label="Filtrar por categoría">
+                <option value="todos">Todas las categorías</option>
+              </select>
+              <select id="ordenDocumentos" aria-label="Ordenar documentos">
+                <option value="recientes">Más recientes</option>
+                <option value="titulo">Por título</option>
+                <option value="categoria">Por categoría</option>
+              </select>
+            </div>
+            <div class="lista-documentos" id="listaDocumentos"></div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <script src="tarjetas/biblioteca/biblioteca-documentos.js"></script>
+  </body>
+</html>

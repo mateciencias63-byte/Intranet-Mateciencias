@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MateCiencias | Aula Virtual</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+  </head>
+  <body class="internal-page">
+    <style>
+      .aula-login-page { min-height: 100vh; display: grid; place-items: center; padding: 16px; }
+      .aula-login-card { width: min(400px, 100%); padding: 42px 40px 38px; background: #fff; border-radius: 14px; box-shadow: 0 18px 45px rgba(15,41,80,.22); }
+      .aula-login-card img { display:block; width:112px; height:112px; margin:0 auto 28px; object-fit:contain; }
+      .aula-login-card h1 { margin:0; color:#078b38; font-size:1.5rem; text-align:center; }
+      .aula-login-card p { margin:8px 0 28px; color:#666; font-size:.9rem; text-align:center; }
+      .aula-login-form { display:grid; gap:14px; }
+      .aula-login-form label { display:grid; gap:8px; color:#222; font-size:.875rem; font-weight:700; }
+      .aula-login-form input { width:100%; padding:12px; border:2px solid #ddd; border-radius:8px; box-sizing:border-box; font:inherit; }
+      .aula-login-form button { padding:11px; border:0; border-radius:8px; background:#0d8f36; color:#fff; cursor:pointer; font:inherit; font-weight:700; }
+      .aula-login-error { display:none; margin:0; color:#c33 !important; text-align:left !important; }
+      .aula-login-back { display:block; margin-top:20px; color:#078b38; text-align:center; text-decoration:none; font-size:.875rem; }
+    </style>
+    <section class="aula-login-page" id="aulaLoginPage">
+      <main class="aula-login-card"><img src="logo.png" alt="Logo de MateCiencias" /><h1>Aula Virtual</h1><p>Ingresa con tu usuario registrado.</p><form class="aula-login-form" id="aulaLoginForm"><label for="aulaUser">Usuario:<input id="aulaUser" required /></label><p class="aula-login-error" id="aulaLoginError">El usuario no está registrado.</p><button type="submit">Acceder</button></form><a class="aula-login-back" href="dashboard.html">&larr; Volver al panel principal</a></main>
+    </section>
+    <div id="aulaContent" hidden>
+    <header class="internal-header aula-header">
+      <div class="internal-header-left">
+        <div>
+          <div class="internal-title">Aula Virtual - Intranet</div>
+          <div class="welcome-tagline" style="color:#4f6b7b; font-size:1rem;">Bienvenido al Aula Virtual.</div>
+        </div>
+      </div>
+      <div class="internal-header-right profile-panel-summary">
+        <div class="internal-user-info">
+          <div class="profile-avatar" id="aulaAvatar"></div>
+          <div>
+            <div class="internal-user" id="aulaName">Estudiante</div>
+            <div style="font-size:0.85rem;color:#6b7280;">Perfil</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="aula-main">
+      <section class="aula-cards-section">
+        <div class="logo-cards-grid" id="studentUniversityCatalog">
+          <a class="logo-card logo-card-link" href="beca18-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de BECA 18">
+            <img src="Beca18.png" alt="BECA 18" />
+            <div class="logo-label">BECA 18</div>
+          </a>
+          <a class="logo-card logo-card-link" href="coar-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de COAR">
+            <img src="COAR.png" alt="COAR" />
+            <div class="logo-label">COAR</div>
+          </a>
+          <a class="logo-card logo-card-link" href="unprg-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional Pedro Ruiz Gallo">
+            <img src="UNPRG.png" alt="UNPRG" />
+            <div class="logo-label">UNPRG</div>
+          </a>
+          <a class="logo-card logo-card-link" href="untumbes-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional de Tumbes">
+            <img src="UNTUMBES.png" alt="UNTUMBES" />
+            <div class="logo-label">UNTUMBES</div>
+          </a>
+          <a class="logo-card logo-card-link" href="unt-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional de Trujillo">
+            <img src="UNT.png" alt="UNT" />
+            <div class="logo-label">UNT</div>
+          </a>
+          <a class="logo-card logo-card-link" href="uni-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional de Ingeniería">
+            <img src="UNI.png" alt="UNI" />
+            <div class="logo-label">UNI</div>
+          </a>
+          <a class="logo-card logo-card-link" href="unf-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional Federico Villarreal">
+            <img src="UNF.jpg" alt="UNF" />
+            <div class="logo-label">UNF</div>
+          </a>
+          <a class="logo-card logo-card-link" href="udep-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de UDEP">
+            <img src="UDEP.png" alt="UDEP" />
+            <div class="logo-label">UDEP</div>
+          </a>
+          <a class="logo-card logo-card-link" href="unsaac-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional de San Antonio Abad del Cusco">
+            <img src="UNSAAC.jpg" alt="UNSAAC" />
+            <div class="logo-label">UNSAAC</div>
+          </a>
+          <a class="logo-card logo-card-link" href="up-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad del Pacífico">
+            <img src="UPacifico.png" alt="UP" />
+            <div class="logo-label">UP</div>
+          </a>
+          <a class="logo-card logo-card-link" href="unmsm-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional Mayor de San Marcos">
+            <img src="UNMSM.png" alt="UNMSM" />
+            <div class="logo-label">UNMSM</div>
+          </a>
+          <a class="logo-card logo-card-link" href="unca-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional del Callao">
+            <img src="UNCA.png" alt="UNCA" />
+            <div class="logo-label">UNCA</div>
+          </a>
+          <a class="logo-card logo-card-link" href="uncp-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional del Centro del Perú">
+            <img src="UNCP.png" alt="UNCP" />
+            <div class="logo-label">UNCP</div>
+          </a>
+          <a class="logo-card logo-card-link" href="pucp-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Pontificia Universidad Católica del Perú">
+            <img src="PUCP.png" alt="PUCP" />
+            <div class="logo-label">PUCP</div>
+          </a>
+          <a class="logo-card logo-card-link" href="unc-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional de Cajamarca">
+            <img src="UNC.png" alt="UNC" />
+            <div class="logo-label">UNC</div>
+          </a>
+          <a class="logo-card logo-card-link" href="unfv-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional Federico Villarreal">
+            <img src="UNFV.png" alt="UNFV" />
+            <div class="logo-label">UNFV</div>
+          </a>
+          <a class="logo-card logo-card-link" href="unsa-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional de San Agustín">
+            <img src="UNSA.png" alt="UNSA" />
+            <div class="logo-label">UNSA</div>
+          </a>
+          <a class="logo-card logo-card-link" href="unsch-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional de San Cristóbal de Huamanga">
+            <img src="UNSCH.png" alt="UNSCH" />
+            <div class="logo-label">UNSCH</div>
+          </a>
+          <a class="logo-card logo-card-link" href="unap-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad Nacional de la Amazonía Peruana">
+            <img src="UNAP.png" alt="UNAP" />
+            <div class="logo-label">UNAP</div>
+          </a>
+          <a class="logo-card logo-card-link" href="ulima-acceso.html" target="_blank" rel="noopener" aria-label="Abrir aula virtual de la Universidad de Lima">
+            <img src="ULIMA.png" alt="ULIMA" />
+            <div class="logo-label">ULIMA</div>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    </div>
+    <script src="usuario.js?v=20260905-4"></script>
+    <script>
+      const aulaLoginPage = document.getElementById('aulaLoginPage');
+      const aulaContent = document.getElementById('aulaContent');
+      const aulaLoginForm = document.getElementById('aulaLoginForm');
+      const aulaLoginError = document.getElementById('aulaLoginError');
+      aulaLoginForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const username = document.getElementById('aulaUser').value.trim();
+        const normalizedUsername = username.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/\s+/g, ' ');
+        const valid = UsuarioService.getApprovedAccounts().some((account) => {
+          const normalizedAccount = account.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/\s+/g, ' ');
+          return normalizedAccount === normalizedUsername;
+        });
+        if (!valid) { aulaLoginError.style.display = 'block'; return; }
+        sessionStorage.setItem('aulaVirtualAuth', 'true');
+        sessionStorage.setItem('dashboardUser', username);
+        const next = new URLSearchParams(window.location.search).get('next');
+        window.location.assign(next === 'calendario' ? 'tarjetas/aula-virtual/aula-virtual-contenido.html?view=calendario' : 'tarjetas/aula-virtual/aula-virtual-contenido.html');
+      });
+      async function renderAulaCatalog() {
+        const catalog = document.getElementById('studentUniversityCatalog');
+        const localCatalog = JSON.parse(localStorage.getItem('matecienciasAulaCatalogo') || '[]');
+        let baseCatalog = [];
+        try { baseCatalog = await (await fetch('aula-catalogo.json', { cache: 'no-store' })).json(); } catch (error) { baseCatalog = []; }
+        const entries = [...baseCatalog, ...localCatalog].filter((item) => item.activo);
+        catalog.innerHTML = entries.map((item) => `<a class="logo-card logo-card-link" href="${item.url}" aria-label="Abrir ${item.nombre}"><img src="${item.imagen || 'IDEPUNP.png'}" alt="${item.nombre}" /><div class="logo-label">${item.nombre}</div></a>`).join('');
+      }
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const aulaNameEl = document.getElementById('aulaName');
+        const aulaAvatar = document.getElementById('aulaAvatar');
+        const catalog = document.getElementById('studentUniversityCatalog');
+        if (catalog && sessionStorage.getItem('aulaVirtualAuth') !== 'true') return;
+
+        // Obtener el nombre del usuario desde UsuarioService
+        const storedName = UsuarioService.getStoredUserName() || 'Estudiante';
+        const initials = UsuarioService.getInitials(storedName);
+
+        if (aulaNameEl) aulaNameEl.textContent = storedName;
+        
+        if (aulaAvatar) {
+          // Crear SVG avatar con iniciales
+          const colors = ['#1e7a42', '#0d8f36', '#16a34a', '#22c55e', '#059669', '#0891b2'];
+          let hash = 0;
+          for (let i = 0; i < storedName.length; i++) {
+            hash = storedName.charCodeAt(i) + ((hash << 5) - hash);
+          }
+          const bgColor = colors[Math.abs(hash % colors.length)];
+          
+          const svg = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="50" fill="${bgColor}"/>
+            <text x="50" y="50" font-size="40" font-weight="bold" fill="white" text-anchor="middle" dy=".3em">${initials}</text>
+          </svg>`;
+          
+          aulaAvatar.innerHTML = svg;
+        }
+      });
+    </script>
+  </body>
+</html>

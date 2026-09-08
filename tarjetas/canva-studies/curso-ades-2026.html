@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-sin-barra">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canva Studies | IDEPUNP ADES 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+  </head>
+  <body class="scroll-sin-barra">
+    <div class="formularios-page">
+      <section class="formularios-panel">
+        <div class="user-profile-bar" id="userProfile"></div>
+        <div class="welcome-banner" style="margin-top: -54px;">
+          <strong>IDEPUNP SETIEMBRE A DICIEMBRE</strong>
+          <div class="welcome-tagline">ADES 2026</div>
+        </div>
+
+        <div class="formularios-cards">
+          <article class="formulario-card" onclick="window.location.href='tarjetas/canva-studies/curso-ades-2026-semanas.html'" style="cursor:pointer;">
+            <div class="formulario-avatar">
+              <img src="canvas%20studies.png" alt="Canva Studies" draggable="false" onmousedown="return false;" oncontextmenu="return false;" />
+            </div>
+            <div class="formulario-body">
+              <strong>FORMULARIOS X SEMANA</strong>
+            </div>
+          </article>
+
+          <article class="formulario-card" onclick="window.location.href='tarjetas/canva-studies/curso-ades-2026-modulos.html'" style="cursor:pointer;">
+            <div class="formulario-avatar">
+              <img src="canvas%20studies.png" alt="Canva Studies" draggable="false" onmousedown="return false;" oncontextmenu="return false;" />
+            </div>
+            <div class="formulario-body">
+              <strong>MODULOS ESCANEADOS</strong>
+            </div>
+          </article>
+
+          <article class="formulario-card" onclick="window.location.href='tarjetas/canva-studies/curso-ades-2026-cursos.html'" style="cursor:pointer;">
+            <div class="formulario-avatar">
+              <img src="canvas%20studies.png" alt="Canva Studies" draggable="false" onmousedown="return false;" oncontextmenu="return false;" />
+            </div>
+            <div class="formulario-body">
+              <strong>FORMULARIOS X CURSO</strong>
+            </div>
+          </article>
+
+          <article class="formulario-card">
+            <div class="formulario-avatar"><img src="canvas%20studies.png" alt="Solucionarios" /></div>
+            <div class="formulario-body"><strong>SOLUCIONARIOS</strong></div>
+          </article>
+
+          <article class="formulario-card">
+            <div class="formulario-avatar"><img src="canvas%20studies.png" alt="Simulacro de Ciencias" /></div>
+            <div class="formulario-body"><strong>SIMULACRO DE CIENCIAS</strong></div>
+          </article>
+
+          <article class="formulario-card">
+            <div class="formulario-avatar"><img src="canvas%20studies.png" alt="Simulacro de Medicina" /></div>
+            <div class="formulario-body"><strong>SIMULACRO DE MEDICINA</strong></div>
+          </article>
+
+          <article class="formulario-card">
+            <div class="formulario-avatar"><img src="canvas%20studies.png" alt="Simulacro de Letras" /></div>
+            <div class="formulario-body"><strong>SIMULACRO DE LETRAS</strong></div>
+          </article>
+        </div>
+
+        <div class="formulario-footer">
+          <a href="dashboard.html" class="btn-link">Volver al panel</a>
+        </div>
+      </section>
+    </div>
+    <script src="usuario.js?v=20260905-4"></script>
+    <script src="perfil-ranking.js"></script>
+    <script>
+      PerfilRankingService.renderProfile(document.getElementById('userProfile'));
+      document.querySelectorAll('.formulario-card').forEach((card) => {
+        const name = card.querySelector('strong')?.textContent.trim();
+        if (!name?.startsWith('SIMULACRO')) return;
+        card.style.cursor = 'pointer';
+        card.onclick = () => location.assign(`tarjetas/canva-studies/evaluacion-personalizada.html?ciclo=${encodeURIComponent('ADES 2026')}&tipo=${encodeURIComponent(name)}`);
+      });
+    </script>
+  </body>
+</html>

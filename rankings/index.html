@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todos los rankings | MateCiencias</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="icon" href="../logo.png" />
+    <style>
+      body { min-height:100vh; margin:0; background:url('../fondo.png') center/cover fixed no-repeat; color:#102344; }
+      .rankings-page { width:min(1180px,calc(100% - 32px)); margin:auto; padding:30px 0 50px; }
+      .rankings-header { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:24px; padding:22px 26px; border-radius:20px; background:rgba(255,255,255,.96); box-shadow:0 15px 35px rgba(15,35,70,.16); }
+      .rankings-header h1 { margin:0; color:#001a4d; }
+      .rankings-back { padding:11px 18px; border-radius:10px; background:#1769d1; color:#fff; text-decoration:none; font-weight:800; }
+      .rankings-list { display:grid; gap:24px; }
+      .ranking-group { padding:22px; border:1px solid #c9dff8; border-radius:18px; background:rgba(255,255,255,.96); box-shadow:0 14px 30px rgba(15,35,70,.14); animation:groupEntry .45s ease both; }
+      .ranking-group h2 { margin:0 0 16px; color:#001a4d; }
+      .ranking-wrap { overflow-x:auto; }
+      table { width:100%; border-collapse:collapse; }
+      th,td { padding:11px 10px; border-bottom:1px solid #dbe7f5; text-align:left; white-space:nowrap; }
+      th { color:#1769d1; font-size:.76rem; text-transform:uppercase; }
+      tbody tr:nth-child(-n+3) { background:#eef5ff; }
+      .rankings-empty { padding:30px; text-align:center; border-radius:18px; background:rgba(255,255,255,.95); color:#64748b; }
+      @keyframes groupEntry { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+      @media(max-width:650px){.rankings-header{align-items:flex-start;flex-direction:column}.ranking-group{padding:15px}}
+    </style>
+  </head>
+  <body>
+    <main class="rankings-page">
+      <header class="rankings-header">
+        <div><h1>TODOS LOS RANKINGS</h1><p>Resultados organizados por cuestionario.</p></div>
+        <a class="rankings-back" href="../tarjetas/canva-studies/formularios.html">AL INICIO</a>
+      </header>
+      <div class="rankings-list" id="rankingsList"></div>
+    </main>
+    <script src="rankings.js"></script>
+  </body>
+</html>

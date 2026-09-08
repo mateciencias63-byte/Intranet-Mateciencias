@@ -1,0 +1,3 @@
+window.MatriculaAccesos = [
+  'MateCiencias Adm',
+];

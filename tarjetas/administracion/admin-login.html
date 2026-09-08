@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MateCiencias | Login Administrativo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+        
+        .admin-login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+            background: transparent;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .admin-login-box {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+        .admin-login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .admin-login-logo img {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+        .admin-login-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #0d8f36;
+            margin-bottom: 10px;
+        }
+        .admin-login-subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #0d8f36;
+        }
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background: #0d8f36;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .login-button:hover {
+            background: #0a6c27;
+        }
+        .login-error {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #0d8f36;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-login-container">
+        <div class="admin-login-box">
+            <div class="admin-login-logo">
+                <img src="logo.png" alt="MateCiencias Logo" />
+            </div>
+            <div class="admin-login-title">Panel Administrativo</div>
+            <div class="admin-login-subtitle">Acceso restringido para administradores</div>
+
+            <div class="login-error" id="loginError"></div>
+
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminUser">Usuario:</label>
+                    <input type="text" id="adminUser" placeholder="Ingrese su usuario" required />
+                </div>
+                <button type="submit" class="login-button">Acceder</button>
+            </form>
+
+            <div class="back-link">
+                <a href="dashboard.html">← Volver al panel principal</a>
+            </div>
+        </div>
+    </div>
+
+        <script src="tarjetas/administracion/usuarios-administrativo.js?v=20260905-3"></script>
+        <script src="usuario.js?v=20260905-4"></script>
+        <script>
+            const adminLoginForm = document.getElementById('adminLoginForm');
+            const adminUserInput = document.getElementById('adminUser');
+            const loginError = document.getElementById('loginError');
+
+            adminLoginForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const username = adminUserInput.value.trim();
+                if (!UsuarioService.adminUserIsAllowed(username)) {
+                    loginError.textContent = 'El usuario no está autorizado para administrar la plataforma.';
+                    loginError.style.display = 'block';
+                    return;
+                }
+                loginError.style.display = 'none';
+                UsuarioService.setAdminSession(username);
+                const nextModule = new URLSearchParams(window.location.search).get('next');
+                window.location.assign(nextModule === 'CalendarioIndependiente' ? 'tarjetas/calendario/calendario-academico.html' : ['Calendario', 'Encuestas'].includes(nextModule) ? `tarjetas/administracion/admin-panel.html?module=${nextModule}` : 'tarjetas/administracion/admin-panel.html');
+            });
+        </script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Módulos Escaneados - IDEPUNP ADES 2026</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+    <script src="tarjetas/canva-studies/curso-ades-2026-modulos-data.js"></script>
+    <style>
+      .modulos-page {
+        width: 100%;
+        min-height: 100vh;
+        background: url('fondo.png') center/cover no-repeat;
+        background-attachment: fixed;
+        padding: 40px 24px;
+      }
+
+      .modulos-container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .modulos-header {
+        text-align: center;
+        margin-bottom: 48px;
+        color: white;
+      }
+
+      .modulos-header h1 {
+        font-size: 2.5rem;
+        margin: 0 0 8px 0;
+        font-weight: 700;
+        color: #001a4d;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .modulos-header p {
+        font-size: 1rem;
+        color: rgba(0, 26, 77, 0.8);
+        margin: 0;
+      }
+
+      .modulos-list {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 28px;
+      }
+
+      .modulo-item {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modulo-item:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+      }
+
+      .modulo-header {
+        position: relative;
+        background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+        height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      .modulo-header img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        user-select: none;
+        -webkit-user-drag: none;
+        -webkit-user-select: none;
+        pointer-events: none;
+      }
+
+      .pdf-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #3b82f6;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+
+      .modulo-info {
+        padding: 20px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modulo-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0 0 12px 0;
+        line-height: 1.4;
+      }
+
+      .modulo-size {
+        display: none;
+      }
+
+      .modulo-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        font-size: 0.85rem;
+      }
+
+      .modulo-curso {
+        color: #6b7280;
+        font-weight: 600;
+      }
+
+      .modulo-source {
+        color: #9ca3af;
+        font-size: 0.8rem;
+      }
+
+      .modulo-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: auto;
+      }
+
+      .btn-descargar {
+        flex: 1;
+        padding: 12px 16px;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-descargar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+      }
+
+      .btn-eliminar {
+        display: none;
+      }
+
+      .upload-section {
+        display: none;
+      }
+
+      .upload-form {
+        display: none;
+      }
+
+      .btn-upload {
+        display: none;
+      }
+
+      .modulos-footer {
+        text-align: center;
+        margin-top: 48px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .btn-link {
+        color: #60a5fa;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-link:hover {
+        color: #93c5fd;
+      }
+
+      .empty-state {
+        text-align: center;
+        color: #6b7280;
+        padding: 60px 40px;
+        font-size: 1.1rem;
+        background: white;
+        border-radius: 12px;
+        grid-column: 1 / -1;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="modulos-page">
+      <div class="modulos-container">
+        <div class="modulos-header">
+          <h1>MODULOS ESCANEADOS EN PDF
+        
+          </h1>
+          <p>Descarga los módulos escaneados de tu semana</p>
+        </div>
+
+        <div class="modulos-list" id="modulosList"></div>
+
+        <div class="modulos-footer">
+          <a href="tarjetas/canva-studies/curso-ades-2026.html" class="btn-link">← Volver</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Cargar módulos al cargar la página
+      function cargarModulos() {
+        const modulosList = document.getElementById('modulosList');
+        const modulos = ModulosADES2026.modulos || [];
+
+        if (modulos.length === 0) {
+          modulosList.innerHTML = '<div class="empty-state">No hay módulos disponibles aún.</div>';
+          return;
+        }
+
+        modulosList.innerHTML = '';
+        modulos.forEach((modulo, index) => {
+          const item = document.createElement('div');
+          item.className = 'modulo-item';
+          item.innerHTML = `
+            <div class="modulo-header">
+              <div class="pdf-badge">PDF</div>
+              <img src="fon.jpeg" alt="${modulo.titulo}" draggable="false" onmousedown="return false;" oncontextmenu="return false;" />
+            </div>
+            <div class="modulo-info">
+              <p class="modulo-title">${modulo.titulo}</p>
+              <div class="modulo-meta">
+                <span class="modulo-curso">MÓDULO</span>
+                <span class="modulo-source">IDEPUNP</span>
+              </div>
+              <div class="modulo-actions">
+                <a href="${modulo.enlace}" download class="btn-descargar">Descargar</a>
+              </div>
+            </div>
+          `;
+          modulosList.appendChild(item);
+        });
+      }
+
+      function eliminarModulo(id) {
+        if (confirm('¿Estás seguro que deseas eliminar este módulo?')) {
+          const index = ModulosADES2026.modulos.findIndex(m => m.id === id);
+          if (index > -1) {
+            ModulosADES2026.modulos.splice(index, 1);
+            cargarModulos();
+          }
+        }
+      }
+
+      // Cargar módulos al iniciar
+      document.addEventListener('DOMContentLoaded', cargarModulos);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <base href="../../" />
+  <meta charset="utf-8" />
+  <script>window.location.replace('tarjetas/calendario/calendario-academico.html');</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Acceso al Calendario | MateCiencias</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="logo.png" />
+  <style>
+    body { margin:0; min-height:100vh; display:grid; place-items:center; }
+    .calendar-login { width:min(400px,calc(100% - 32px)); padding:32px; box-sizing:border-box; background:white; border-radius:14px; box-shadow:0 12px 35px #1233; }
+    .calendar-login h1 { color:#0d8f36; text-align:center; }
+    .calendar-login form,.calendar-login label { display:grid; gap:12px; }
+    .calendar-login input { padding:12px; border:1px solid #cbd5e1; border-radius:8px; font:inherit; }
+    .calendar-login button { padding:12px; border:0; border-radius:8px; background:#0d8f36; color:white; font:inherit; font-weight:bold; cursor:pointer; }
+    .calendar-login a { display:block; margin-top:22px; text-align:center; color:#0d8f36; }
+    #calendarLoginError { color:#b42318; }
+  </style>
+</head>
+<body>
+  <main class="calendar-login">
+    <h1>Calendario</h1>
+    <p>Acceso para usuarios autorizados.</p>
+    <form id="calendarLoginForm">
+      <label>Usuario<input id="calendarUser" required autocomplete="username" /></label>
+      <p id="calendarLoginError" role="alert" hidden>Este usuario no tiene permiso para acceder al Calendario.</p>
+      <button type="submit">Acceder</button>
+    </form>
+    <a href="dashboard.html">← Volver al panel principal</a>
+  </main>
+  <script src="tarjetas/administracion/usuarios-administrativo.js?v=20260905-3"></script>
+  <script src="usuario.js?v=20260905-4"></script>
+  <script src="tarjetas/calendario/calendario-acceso.js?v=20260905-7"></script>
+  <script>
+    document.getElementById('calendarLoginForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const allowed = CalendarioAcceso.login(document.getElementById('calendarUser').value);
+      document.getElementById('calendarLoginError').hidden = allowed;
+      if (allowed) window.location.assign('tarjetas/calendario/calendario-academico.html');
+    });
+  </script>
+</body>
+</html>

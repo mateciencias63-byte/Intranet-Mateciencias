@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Biblioteca Virtual - IDEPUNP REGULAR 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+    <style>
+      :root {
+        --biblioteca-navy: #001a4d;
+        --biblioteca-orange: #ea580c;
+        --biblioteca-green: #0d8f36;
+        --biblioteca-soft: #f7fafc;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Roboto', Arial, Helvetica, sans-serif;
+        background-image: url('fondo.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: var(--biblioteca-navy);
+      }
+
+      .biblioteca-page {
+        min-height: 100vh;
+        padding: 40px 24px;
+        background: rgba(255, 255, 255, 0.97);
+      }
+
+      .biblioteca-shell {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .biblioteca-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px;
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 32px;
+        border-left: 6px solid var(--biblioteca-orange);
+        box-shadow: 0 4px 12px rgba(0, 26, 77, 0.1);
+      }
+
+      .biblioteca-brand {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .biblioteca-brand img {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+      }
+
+      .biblioteca-kicker {
+        margin: 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--biblioteca-orange);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .biblioteca-header h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        color: var(--biblioteca-navy);
+        font-weight: 700;
+      }
+
+      .biblioteca-back {
+        color: var(--biblioteca-green);
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.3s ease;
+      }
+
+      .biblioteca-back:hover {
+        opacity: 0.7;
+      }
+
+      .biblioteca-layout {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 28px;
+      }
+
+      .biblioteca-panel {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0, 26, 77, 0.08);
+      }
+
+      .biblioteca-panel h2 {
+        margin: 0 0 18px;
+        font-size: 1.1rem;
+        color: var(--biblioteca-navy);
+      }
+
+      .biblioteca-form label {
+        display: grid;
+        gap: 6px;
+        margin-bottom: 16px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--biblioteca-navy);
+      }
+
+      .biblioteca-form input,
+      .biblioteca-form select,
+      .biblioteca-toolbar input,
+      .biblioteca-toolbar select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #d4e4f2;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: inherit;
+        color: var(--biblioteca-navy);
+        background: white;
+        box-sizing: border-box;
+      }
+
+      .biblioteca-form input:focus,
+      .biblioteca-form select:focus,
+      .biblioteca-toolbar input:focus,
+      .biblioteca-toolbar select:focus {
+        outline: none;
+        border-color: var(--biblioteca-orange);
+        box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+      }
+
+      .biblioteca-summary {
+        background: white;
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        border-left: 4px solid var(--biblioteca-green);
+      }
+
+      .biblioteca-summary h2 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+        color: var(--biblioteca-navy);
+      }
+
+      .biblioteca-summary span {
+        display: block;
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--biblioteca-green);
+      }
+
+      .documento-item {
+        background: #f9fbff;
+        border: 1px solid #e0e7ff;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+      }
+
+      .documento-item:hover {
+        background: white;
+        border-color: var(--biblioteca-orange);
+        box-shadow: 0 4px 12px rgba(234, 88, 12, 0.15);
+      }
+
+      .documento-titulo {
+        margin: 0 0 8px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--biblioteca-navy);
+      }
+
+      .documento-meta {
+        font-size: 0.85rem;
+        color: #5a7f9f;
+        margin: 0;
+      }
+
+      .documento-categoria {
+        display: inline-block;
+        background: var(--biblioteca-soft);
+        color: var(--biblioteca-orange);
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 8px;
+      }
+
+      .documento-descarga {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 8px 12px;
+        background: var(--biblioteca-green);
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .documento-descarga:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+      }
+
+      .biblioteca-vacia {
+        text-align: center;
+        padding: 40px 20px;
+        color: #5a7f9f;
+      }
+
+      .biblioteca-vacia strong {
+        color: var(--biblioteca-navy);
+      }
+
+      @media (max-width: 768px) {
+        .biblioteca-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .biblioteca-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+
+        .biblioteca-header h1 {
+          font-size: 1.4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="biblioteca-page">
+      <div class="biblioteca-shell">
+        <header class="biblioteca-header">
+          <div class="biblioteca-brand">
+            <img src="logo.png" alt="Logo" />
+            <div>
+              <p class="biblioteca-kicker">Aula de lectura</p>
+              <h1>Biblioteca Virtual - REGULAR 2026</h1>
+            </div>
+          </div>
+          <a class="biblioteca-back" href="tarjetas/canva-studies/formularios-regular-2026.html">← Volver</a>
+        </header>
+
+        <div class="biblioteca-layout">
+          <section class="biblioteca-panel">
+            <h2>Filtros</h2>
+            <div class="biblioteca-form">
+              <label for="filtroCategoria">Categoría</label>
+              <select id="filtroCategoria" onchange="filtrarDocumentos()">
+                <option value="todos">Todas las categorías</option>
+              </select>
+
+              <label for="filtroTexto">Buscar</label>
+              <input
+                id="filtroTexto"
+                type="text"
+                placeholder="Buscar documento..."
+                oninput="filtrarDocumentos()"
+              />
+            </div>
+          </section>
+
+          <section class="biblioteca-panel">
+            <div class="biblioteca-summary">
+              <h2>Total de documentos</h2>
+              <span id="contadorDocumentos">0</span>
+            </div>
+
+            <div id="listaDocumentos"></div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      let documentosCargados = [];
+
+      async function cargarDocumentos() {
+        try {
+          const respuesta = await fetch('tarjetas/biblioteca/biblioteca-index.json?v=20260905-6');
+          documentosCargados = await respuesta.json();
+          inicializarFiltros();
+          renderizarDocumentos();
+        } catch (error) {
+          console.error('Error cargando documentos:', error);
+          document.getElementById('listaDocumentos').innerHTML =
+            '<div class="biblioteca-vacia"><strong>Error al cargar documentos</strong></div>';
+        }
+      }
+
+      function inicializarFiltros() {
+        const categorias = [...new Set(documentosCargados.map((doc) => doc.categoria))].sort();
+        const selectCategoria = document.getElementById('filtroCategoria');
+
+        categorias.forEach((cat) => {
+          const option = document.createElement('option');
+          option.value = cat;
+          option.textContent = cat;
+          selectCategoria.appendChild(option);
+        });
+      }
+
+      function filtrarDocumentos() {
+        renderizarDocumentos();
+      }
+
+      function renderizarDocumentos() {
+        const categoria = document.getElementById('filtroCategoria').value;
+        const textoFiltro = document.getElementById('filtroTexto').value.toLowerCase();
+
+        let documentosFiltrados = documentosCargados.filter((doc) => {
+          const coincideCategoria = categoria === 'todos' || doc.categoria === categoria;
+          const coincideTexto =
+            doc.titulo.toLowerCase().includes(textoFiltro) ||
+            doc.autor.toLowerCase().includes(textoFiltro) ||
+            doc.categoria.toLowerCase().includes(textoFiltro);
+
+          return coincideCategoria && coincideTexto && doc.publicado;
+        });
+
+        const listaDocumentos = document.getElementById('listaDocumentos');
+        const contadorDocumentos = document.getElementById('contadorDocumentos');
+
+        contadorDocumentos.textContent = documentosFiltrados.length;
+
+        if (documentosFiltrados.length === 0) {
+          listaDocumentos.innerHTML =
+            '<div class="biblioteca-vacia"><strong>No hay documentos que coincidan con los filtros</strong></div>';
+          return;
+        }
+
+        listaDocumentos.innerHTML = documentosFiltrados
+          .map(
+            (doc) => `
+          <div class="documento-item">
+            <p class="documento-titulo">${escaparHtml(doc.titulo)}</p>
+            <p class="documento-meta"><strong>Autor:</strong> ${escaparHtml(doc.autor)}</p>
+            <p class="documento-meta"><strong>Descripción:</strong> ${escaparHtml(doc.descripcion)}</p>
+            <span class="documento-categoria">${escaparHtml(doc.categoria)}</span>
+            ${
+              doc.ruta
+                ? `<a href="${doc.ruta}" class="documento-descarga" download>📥 Descargar</a>`
+                : ''
+            }
+          </div>
+        `
+          )
+          .join('');
+      }
+
+      function escaparHtml(texto) {
+        const div = document.createElement('div');
+        div.textContent = texto;
+        return div.innerHTML;
+      }
+
+      // Cargar documentos al abrir la página
+      cargarDocumentos();
+    </script>
+  </body>
+</html>

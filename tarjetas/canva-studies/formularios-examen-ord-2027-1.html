@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Examen Ordinario 2027-1</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+  </head>
+  <body>
+    <div class="formularios-page">
+      <section class="formularios-panel">
+        <div class="user-profile-bar" id="userProfile"></div>
+        <div class="welcome-banner" style="margin-top: -44px;">
+          <strong>EXAMEN ORDINARIO</strong>
+          <div class="welcome-tagline">2027-1</div>
+        </div>
+        <div class="formularios-cards examen-areas-grid">
+          <article class="formulario-card" style="cursor:pointer;"><div class="formulario-avatar"><img src="UNP.png" alt="Ciencias" /></div><div class="formulario-body"><strong>CIENCIAS</strong></div></article>
+          <article class="formulario-card" style="cursor:pointer;"><div class="formulario-avatar"><img src="UNP.png" alt="Letras" /></div><div class="formulario-body"><strong>LETRAS</strong></div></article>
+          <article class="formulario-card" style="cursor:pointer;"><div class="formulario-avatar"><img src="UNP.png" alt="Ciencias de la Salud" /></div><div class="formulario-body"><strong>CIENCIAS DE LA SALUD</strong></div></article>
+        </div>
+        <div class="formulario-footer"><a href="tarjetas/canva-studies/formularios.html" class="btn-link">Volver</a></div>
+      </section>
+    </div>
+    <script src="usuario.js?v=20260905-4"></script>
+    <script src="perfil-ranking.js"></script>
+    <script>
+      PerfilRankingService.renderProfile(document.getElementById('userProfile'));
+      document.querySelectorAll('.examen-areas-grid .formulario-card').forEach((card) => {
+        const area = card.querySelector('strong').textContent.trim();
+        card.style.cursor = 'pointer';
+        card.onclick = () => location.assign(`tarjetas/canva-studies/evaluacion-personalizada.html?ciclo=${encodeURIComponent('ORDINARIO 2027-1')}&tipo=${encodeURIComponent(area)}`);
+      });
+    </script>
+  </body>
+</html>

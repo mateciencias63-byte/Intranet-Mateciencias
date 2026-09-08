@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cuestionario | MateCiencias</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body { min-height:100vh; background:url('fondo.png') center/cover fixed; color:#102a43; }
+      .cuestionario-page { width:min(920px,100%); margin:auto; padding:28px 18px 44px; }
+      .cuestionario-header, .cuestionario-card { border:1px solid rgba(16,42,67,.12); border-radius:12px; background:rgba(255,255,255,.96); box-shadow:0 16px 36px rgba(16,42,67,.12); }
+      .cuestionario-header { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; }
+      .cuestionario-header h1 { margin:0; font-size:clamp(1.35rem,3vw,2rem); }
+      .cuestionario-header p { margin:6px 0 0; color:#60758a; }
+      .cuestionario-card { margin-top:18px; padding:24px; }
+      .question { padding:18px 0; border-bottom:1px solid #dbe7ed; }
+      .question:last-child { border-bottom:0; }
+      .question h2 { margin:0 0 12px; font-size:1rem; }
+      .option { display:flex; align-items:center; gap:12px; width:100%; margin:10px 0; padding:10px 14px; border:1px solid #dbe7ed; border-radius:12px; background:#fff; cursor:pointer; transition:background .2s,border-color .2s,box-shadow .2s,transform .2s; }
+      .option:hover { background:#f0faef; border-color:#168044; transform:translateY(-1px); }
+      .option:has(input:checked) { background:#e8f5eb; border-color:#168044; box-shadow:0 0 0 2px rgba(22,128,68,.14); }
+      .option input { position:absolute; opacity:0; pointer-events:none; }
+      .option-icon { display:grid; place-items:center; flex:0 0 50px; min-height:44px; border-right:1px solid #dbe7ed; padding-right:12px; font-size:1.8rem; line-height:1; }
+      .option-text { color:#102a43; line-height:1.4; }
+      .quiz-message { color:#60758a; line-height:1.6; }
+      .quiz-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+      .quiz-button { display:inline-flex; padding:11px 16px; border:0; border-radius:7px; background:#168044; color:#fff; cursor:pointer; font:inherit; font-weight:700; text-decoration:none; }
+      .quiz-button.secondary { background:#e8eef1; color:#102a43; }
+      .quiz-result { margin-top:16px; color:#168044; font-weight:700; line-height:1.6; }
+      .answer-key { width:100%; margin-top:20px; border-collapse:collapse; font-size:.88rem; }
+      .answer-key th, .answer-key td { padding:9px 10px; border:1px solid #dbe7ed; text-align:left; }
+      .answer-key th { background:#e8f5eb; color:#102a43; }
+      .answer-key td:first-child { width:70px; text-align:center; font-weight:700; }
+      @media print {
+        body { background:#fff; }
+        .cuestionario-page { width:100%; padding:0; }
+        .cuestionario-header, .cuestionario-card { box-shadow:none; }
+        .quiz-actions, .quiz-result { display:none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="cuestionario-page">
+      <header class="cuestionario-header"><div><h1 id="quizTitle">Cuestionario</h1><p id="quizSubtitle"></p></div><a class="quiz-button secondary" href="tarjetas/aula-virtual/aula-virtual-contenido.html">Volver</a></header>
+      <section class="cuestionario-card" id="quizContent"><p class="quiz-message">Cargando preguntas...</p></section>
+    </main>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const course = params.get('curso') || 'Curso';
+      const slug = params.get('slug') || 'curso';
+      const week = Number(params.get('semana') || 1);
+      document.getElementById('quizTitle').textContent = course;
+      document.getElementById('quizSubtitle').textContent = `Semana ${week} - Cuestionario`;
+      const content = document.getElementById('quizContent');
+      let publishedCourses = [];
+      try { publishedCourses = JSON.parse(localStorage.getItem('matecienciasExamenesPublicados') || '[]'); } catch (error) { publishedCourses = []; }
+      if (Array.isArray(publishedCourses) && publishedCourses.includes(slug)) {
+        const script = document.createElement('script');
+        script.src = `MATERIAL%201/cuestionario/${slug}/semana${week}/preguntas.js`;
+        script.onload = renderQuiz;
+        script.onerror = () => { content.innerHTML = '<p class="quiz-message">Este cuestionario no está habilitado por tu Docente.</p>'; };
+        document.body.appendChild(script);
+      } else {
+        content.innerHTML = '<p class="quiz-message">Este cuestionario aún no ha sido publicado.</p>';
+      }
+
+      function getQuestions() { return window.cuestionarioPreguntas || window.preguntas || window.PREGUNTAS || []; }
+      function renderQuiz() {
+        const questions = getQuestions();
+        const optionIcons = ['❤️', '👍', '😂', '😮', '🙏'];
+        if (!Array.isArray(questions) || !questions.length) { content.innerHTML = '<p class="quiz-message">Este cuestionario no está habilitado por tu Docente.</p>'; return; }
+        content.innerHTML = `<form id="quizForm">${questions.map((question, index) => `<article class="question"><h2>${index + 1}. ${question.enunciado || question.pregunta || 'Pregunta'}</h2>${(question.opciones || question.options || []).map((option, optionIndex) => `<label class="option"><input type="radio" name="question-${index}" value="${optionIndex}" /><span class="option-icon" aria-hidden="true">${optionIcons[optionIndex] || '•'} ${String.fromCharCode(65 + optionIndex)}</span><span class="option-text">${option}</span></label>`).join('')}</article>`).join('')}<div class="quiz-actions"><button class="quiz-button" type="submit">Finalizar</button></div><div class="quiz-result" id="quizResult"></div><div id="answerKey" hidden></div></form>`;
+        document.getElementById('quizForm').addEventListener('submit', (event) => {
+          event.preventDefault();
+          const form = new FormData(event.currentTarget);
+          let correct = 0;
+          let incorrect = 0;
+          let blank = 0;
+          questions.forEach((question, index) => {
+            const selectedAnswer = form.get(`question-${index}`);
+            if (selectedAnswer === null) { blank += 1; return; }
+            const answer = Number(selectedAnswer);
+            if (question.respuesta !== null && answer === Number(question.respuesta ?? question.answer ?? question.correcta)) correct += 1;
+            else incorrect += 1;
+          });
+          const score = Number((correct * 4 - incorrect * 0.25 - blank * 0.10).toFixed(2));
+          const result = { student: sessionStorage.getItem('dashboardUser') || 'Estudiante', course, slug, week, score, correct, incorrect, blank, total: questions.length, completedAt: new Date().toISOString() };
+          let results = [];
+          try { results = JSON.parse(localStorage.getItem('matecienciasResultadosExamenes') || '[]'); } catch (error) { results = []; }
+          if (!Array.isArray(results)) results = [];
+          results.push(result);
+          localStorage.setItem('matecienciasResultadosExamenes', JSON.stringify(results));
+          document.getElementById('quizResult').textContent = `Puntaje: ${score} puntos | Correctas: ${correct} (+${(correct * 4).toFixed(2)}) | Incorrectas: ${incorrect} (-${(incorrect * 0.25).toFixed(2)}) | En blanco: ${blank} (-${(blank * 0.10).toFixed(2)})`;
+          const keyRows = questions.map((question, index) => {
+            const answerIndex = question.respuesta;
+            const answerText = question.respuestaTexto || (answerIndex === null || answerIndex === undefined ? 'No definida' : `${String.fromCharCode(97 + Number(answerIndex))}) ${(question.opciones || question.options || [])[answerIndex]}`);
+            return `<tr><td>${index + 1}</td><td>${answerText}</td></tr>`;
+          }).join('');
+          document.getElementById('answerKey').hidden = false;
+          document.getElementById('answerKey').innerHTML = `<h2>Claves correctas</h2><table class="answer-key"><thead><tr><th>Pregunta</th><th>Respuesta correcta</th></tr></thead><tbody>${keyRows}</tbody></table><div class="quiz-actions"><button class="quiz-button secondary" type="button" id="printQuiz">Convertir en PDF</button></div>`;
+          document.getElementById('printQuiz').addEventListener('click', () => window.print());
+        });
+      }
+    </script>
+  </body>
+</html>

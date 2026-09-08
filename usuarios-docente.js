@@ -1,0 +1,22 @@
+window.docentesAutorizados = Object.freeze([
+  'Steven Aponte Ramirez',
+  'Joel Chiroque Chiroque',
+  'José Sullón Albines',
+  'Carmen Ramírez Sánchez',
+  'docente05',
+  'docente06',
+  'docente07',
+  'docente08',
+  'docente09',
+  'docente10',
+  'docente11',
+  'docente12',
+  'docente13',
+  'docente14',
+  'docente15',
+  'docente16',
+  'docente17',
+  'docente18',
+  'docente19',
+  'docente20'
+]);                          

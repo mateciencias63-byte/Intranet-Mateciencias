@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evaluación personalizada</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+    <style>
+      :root { --neon:#00eaff; --blue:#075dff; --navy:#020b22; --panel:#061536; --violet:#3620b8; }
+      body {
+        margin:0;
+        min-height:100vh;
+        background:
+          linear-gradient(135deg,rgba(0,8,30,.97),rgba(1,12,45,.94)),
+          radial-gradient(circle at 75% 10%,rgba(0,102,255,.35),transparent 35%);
+        color:#fff;
+        font-family:Roboto,Arial,sans-serif;
+      }
+      body::before {
+        content:""; position:fixed; inset:0; pointer-events:none; opacity:.38;
+        background:linear-gradient(135deg,transparent 0 44%,rgba(0,67,255,.24) 44% 48%,transparent 48% 75%,rgba(58,32,184,.28) 75% 80%,transparent 80%);
+      }
+      .evaluacion-page { min-height:100vh; padding:18px clamp(16px,2vw,38px) 30px; box-sizing:border-box; position:relative; }
+      .evaluacion-header { display:flex; align-items:center; justify-content:space-between; gap:24px; }
+      .evaluacion-header .user-profile-bar {
+        flex:0 0 auto; margin:0; padding:10px 28px 10px 12px; min-width:230px;
+        border:2px solid #a855f7; border-radius:20px; color:#fff;
+        background:linear-gradient(135deg,#07132e,#111b43 70%,#311067);
+        box-shadow:inset 0 0 18px rgba(168,85,247,.22),8px 8px 0 rgba(91,33,182,.72),0 0 18px rgba(168,85,247,.45);
+        clip-path:none;
+      }
+      .evaluacion-header .profile-avatar { background:linear-gradient(135deg,#7c3aed,#4f46e5); border:2px solid #d8b4fe; box-shadow:0 0 15px #a855f7; }
+      .evaluacion-header .user-profile-bar span { color:#b8d8ff; }
+      .evaluacion-title {
+        flex:1 1 auto; min-width:0; margin:0; padding:5px 20px 10px;
+        font-size:clamp(1rem,2.5vw,2.75rem); line-height:1.05; white-space:nowrap;
+        font-style:italic; font-weight:900; letter-spacing:.02em; text-transform:uppercase;
+        text-shadow:3px 3px 0 #20366d,0 0 18px rgba(0,234,255,.38);
+        border-bottom:3px solid var(--neon); transform:skewX(-5deg);
+      }
+      .evaluacion-subtitle {
+        width:fit-content; margin:8px 0 18px 150px; padding:6px 28px;
+        color:#07132e; font-size:clamp(.9rem,1.4vw,1.25rem); font-weight:900; font-style:italic;
+        background:linear-gradient(90deg,#fde047,#facc15 80%,#f59e0b);
+        border:0; border-left:5px solid #fff;
+        border-radius:4px 16px 16px 4px;
+        box-shadow:8px 8px 0 rgba(7,19,46,.75);
+        clip-path:none;
+      }
+      .evaluacion-stats { display:grid; grid-template-columns:repeat(3,minmax(220px,1fr)); gap:clamp(18px,4vw,70px); margin:34px 12px 20px; max-width:1300px; }
+      .evaluacion-stat {
+        position:relative; min-height:74px; padding:15px 24px 12px 88px; box-sizing:border-box;
+        background:linear-gradient(135deg,rgba(4,15,43,.96),rgba(9,25,60,.92));
+        border:1px solid rgba(255,255,255,.72);
+        border-radius:18px;
+        box-shadow:inset 0 0 18px rgba(88,28,135,.22),-8px 0 0 #7c3aed,0 12px 18px rgba(0,0,0,.65);
+        clip-path:none;
+        transform:translateY(-6px);
+        filter:drop-shadow(0 10px 8px rgba(0,0,0,.48));
+        transition:transform .2s ease,filter .2s ease,box-shadow .2s ease;
+      }
+      .evaluacion-stat:hover {
+        transform:translateY(-10px);
+        filter:drop-shadow(0 15px 10px rgba(0,0,0,.58));
+        box-shadow:inset 0 0 24px rgba(168,85,247,.35),-8px 0 0 #a855f7,0 17px 24px rgba(0,0,0,.78),0 0 18px rgba(168,85,247,.5);
+      }
+      .evaluacion-stat::before {
+        position:absolute; left:24px; top:50%; transform:translateY(-50%); color:var(--neon);
+        font-size:2rem; font-weight:900; text-shadow:0 0 12px var(--neon);
+      }
+      .evaluacion-stat:nth-child(1)::before { content:"▤"; color:#a855f7; }
+      .evaluacion-stat:nth-child(2)::before { content:"☆"; color:#facc15; }
+      .evaluacion-stat:nth-child(3)::before { content:"◷"; color:#4ade80; }
+      .evaluacion-stat span { display:block; color:var(--neon); font-size:.8rem; letter-spacing:.12em; margin-bottom:5px; font-weight:900; }
+      .evaluacion-stat strong { font-size:1.15rem; color:#fff; text-shadow:0 0 7px rgba(255,255,255,.3); }
+      .evaluacion-content {
+        display:grid;
+        grid-template-columns:minmax(0,680px) 200px;
+        gap:34px;
+        align-items:center;
+        justify-content:center;
+        width:100%;
+        max-width:980px;
+        margin-inline:auto;
+      }
+      .evaluacion-question {
+        position:relative; min-height:330px; max-height:370px; display:grid; place-items:center; padding:24px 28px 24px 42px; box-sizing:border-box;
+        background-color:#fff; background-position:center; background-repeat:no-repeat; background-size:contain;
+        border:3px solid #d8d7e8; border-radius:20px;
+        box-shadow:inset 0 0 0 1px #fff,8px 10px 0 rgba(210,211,226,.92),0 18px 28px rgba(0,0,0,.48);
+        clip-path:none;
+      }
+      .evaluacion-question.blank-time { border-color:#22c55e; box-shadow:inset 0 0 22px rgba(34,197,94,.24),0 0 24px rgba(34,197,94,.75); }
+      .evaluacion-question.blank-time::after { content:"SIN RESPONDER"; position:absolute; right:18px; top:14px; padding:8px 14px; border-radius:999px; background:#22c55e; color:#fff; font-weight:900; box-shadow:0 0 16px rgba(34,197,94,.75); }
+      .evaluacion-question p { max-width:720px; font-size:1.45rem; text-align:center; color:#fff; }
+      .evaluacion-options { display:grid; gap:12px; align-self:center; }
+      .evaluacion-option {
+        height:56px;
+        position:relative; padding-inline:20px;
+        border:3px solid #8b5cf6;
+        border-radius:18px;
+        background:linear-gradient(90deg,#fff,#f5f3ff);
+        color:#111827;
+        font-weight:900;
+        font-size:1.8rem;
+        line-height:1;
+        cursor:pointer;
+        box-shadow:inset 0 0 9px rgba(139,92,246,.15),5px 6px 0 rgba(76,29,149,.72),0 10px 16px rgba(0,0,0,.32);
+        clip-path:none;
+        transition:transform .16s ease,box-shadow .16s ease,filter .16s ease;
+      }
+      .evaluacion-option:nth-child(1){border-color:#8b5cf6}
+      .evaluacion-option:nth-child(2){border-color:#ec4899}
+      .evaluacion-option:nth-child(3){border-color:#22c55e}
+      .evaluacion-option:nth-child(4){border-color:#eab308}
+      .evaluacion-option:nth-child(5){border-color:#0ea5e9}
+      .evaluacion-option:hover { transform:translateY(-3px) scale(1.015); filter:brightness(1.04); box-shadow:inset 0 0 12px rgba(139,92,246,.18),7px 9px 0 rgba(30,27,75,.7),0 14px 20px rgba(0,0,0,.38); }
+      .evaluacion-option:active { transform:translateY(4px); box-shadow:inset 0 0 14px rgba(139,92,246,.2),0 2px 0 #312e81; }
+      .evaluacion-option.selected { border-color:#facc15; background:linear-gradient(135deg,#b45309,#facc15); color:#111; box-shadow:0 0 22px rgba(250,204,21,.85),0 5px 0 #713f12; }
+      .evaluacion-option.correct { border-color:#facc15; background:linear-gradient(135deg,#fde047,#facc15); color:#111; box-shadow:0 0 24px rgba(250,204,21,.9),0 5px 0 #854d0e; }
+      .evaluacion-option.incorrect { border-color:#ef4444; background:linear-gradient(135deg,#ef4444,#b91c1c); color:#fff; box-shadow:0 0 24px rgba(239,68,68,.85),0 5px 0 #7f1d1d; }
+      .evaluacion-empty { padding:24px; color:#dffbff !important; border:1px solid var(--neon); border-radius:0; background:rgba(2,11,34,.94); }
+      @media(max-width:900px){ .evaluacion-title{padding-inline:8px;font-size:clamp(.65rem,2.4vw,1.4rem)}.evaluacion-subtitle{margin-left:0}.evaluacion-stats{grid-template-columns:1fr;gap:10px}.evaluacion-content{grid-template-columns:1fr}.evaluacion-options{grid-template-columns:repeat(5,1fr);gap:6px}.evaluacion-option{height:54px}.evaluacion-question{min-height:360px} }
+      @media(max-width:620px){ .evaluacion-header{align-items:flex-start;flex-direction:column}.evaluacion-header .user-profile-bar{align-self:stretch;min-width:0}.evaluacion-options{grid-template-columns:1fr}.evaluacion-question{min-height:300px;padding:12px} }
+    </style>
+  </head>
+  <body>
+    <main class="evaluacion-page">
+      <header class="evaluacion-header">
+        <h1 class="evaluacion-title" id="evaluationTitle">EVALUACIÓN</h1>
+        <div class="user-profile-bar" id="userProfile"></div>
+      </header>
+      <section class="evaluacion-stats">
+        <div class="evaluacion-stat"><span>PROGRESO</span><strong id="progress">Pregunta 0 de 0</strong></div>
+        <div class="evaluacion-stat"><span>PUNTAJE</span><strong id="score">0.00</strong></div>
+        <div class="evaluacion-stat"><span>TIEMPO</span><strong id="timer">03:00</strong></div>
+      </section>
+      <section class="evaluacion-content">
+        <div class="evaluacion-question" id="question"><p class="evaluacion-empty">El contenido personalizado de esta evaluación está listo para agregar preguntas.</p></div>
+        <div class="evaluacion-options" id="options">
+          <button class="evaluacion-option" type="button" data-option="A" aria-label="Alternativa A">❤️ A</button><button class="evaluacion-option" type="button" data-option="B" aria-label="Alternativa B">👍 B</button><button class="evaluacion-option" type="button" data-option="C" aria-label="Alternativa C">😂 C</button><button class="evaluacion-option" type="button" data-option="D" aria-label="Alternativa D">😮 D</button><button class="evaluacion-option" type="button" data-option="E" aria-label="Alternativa E">🙏 E</button>
+        </div>
+      </section>
+    </main>
+    <script src="usuario.js?v=20260905-4"></script>
+    <script src="perfil-ranking.js"></script>
+    <script src="tarjetas/canva-studies/evaluaciones-personalizadas-data.js?v=20260905-6"></script>
+    <script>
+      PerfilRankingService.renderProfile(document.getElementById('userProfile'));
+      const params = new URLSearchParams(location.search);
+      const course = params.get('curso') || params.get('tipo') || 'Evaluación';
+      const cycle = params.get('ciclo') || '';
+      const week = params.get('semana') || '';
+      const titleParts = [week ? `SEMANA ${week}` : '', course, cycle].filter(Boolean);
+      let displayTitle = titleParts.join(' - ');
+      if (!week && course === 'EXAMEN ADES' && /^ADES\s+/i.test(cycle)) {
+        displayTitle = `EXAMEN ${cycle}`;
+      } else if (!week && /^ORDINARIO\s+/i.test(cycle)) {
+        displayTitle = `EXAMEN ${cycle} ${course}`;
+      } else if (!week && /^EXTRAORDINARIO\s+/i.test(cycle)) {
+        displayTitle = `${course} ${cycle}`;
+      } else if (!week && /^UNI\s+/i.test(cycle)) {
+        const uniYear = cycle.match(/\b\d{4}\b/)?.[0] || cycle.replace(/^UNI\s+/i, '');
+        displayTitle = `EXAMEN UNI ${uniYear} - ${course}`;
+      } else if (!week && /^(SIMULACRO|EXAMEN)/i.test(course)) {
+        displayTitle = `${course} ${cycle}`.trim();
+      }
+      const evaluationKey = [cycle, week, course].join('|');
+      const questions = (window.EvaluacionesPersonalizadas || {})[evaluationKey] || [];
+      const rankingCourse = displayTitle;
+      document.getElementById('evaluationTitle').textContent = displayTitle;
+      document.title = displayTitle;
+      document.getElementById('progress').textContent = `Pregunta ${questions.length ? 1 : 0} de ${questions.length}`;
+      const optionButtons = Array.from(document.querySelectorAll('.evaluacion-option'));
+      const questionElement = document.getElementById('question');
+      const startedAt = Date.now();
+      let currentIndex = 0;
+      let correct = 0;
+      let incorrect = 0;
+      let blank = 0;
+      let score = 0;
+      let answered = false;
+      let remainingSeconds = 3 * 60;
+
+      function renderQuestion() {
+        const item = questions[currentIndex];
+        if (!item) return;
+        answered = false;
+        remainingSeconds = 3 * 60;
+        document.getElementById('timer').textContent = '03:00';
+        optionButtons.forEach((button) => button.classList.remove('selected', 'correct', 'incorrect'));
+        questionElement.classList.remove('blank-time');
+        questionElement.style.backgroundImage = item.image ? `url('${item.image}')` : 'none';
+        questionElement.innerHTML = item.text ? `<p>${item.text}</p>` : '';
+        const questionNumber = item.number || currentIndex + 1;
+        document.getElementById('progress').textContent = `Pregunta ${questionNumber} · ${currentIndex + 1} de ${questions.length}`;
+      }
+
+      function finishEvaluation() {
+        PerfilRankingService.saveResult({
+          course: rankingCourse,
+          correct,
+          incorrect,
+          blank,
+          score,
+          time: Math.round((Date.now() - startedAt) / 1000)
+        });
+        window.location.assign(`ranking.html?curso=${encodeURIComponent(rankingCourse)}`);
+      }
+
+      optionButtons.forEach((button) => button.addEventListener('click', () => {
+        if (!questions.length || answered) return;
+        answered = true;
+        const selected = button.dataset.option;
+        const answer = questions[currentIndex].answer;
+        if (!answer) {
+          // Una pregunta sin clave no modifica el puntaje.
+        } else if (selected === answer) {
+          button.classList.add('correct');
+          correct += 1;
+          score += 4;
+        } else {
+          button.classList.add('incorrect');
+          const correctButton = optionButtons.find((item) => item.dataset.option === answer);
+          if (correctButton) correctButton.classList.add('correct');
+          incorrect += 1;
+          score -= 0.25;
+        }
+        document.getElementById('score').textContent = score.toFixed(2);
+        window.setTimeout(() => {
+          currentIndex += 1;
+          if (currentIndex >= questions.length) finishEvaluation();
+          else renderQuestion();
+        }, 750);
+      }));
+
+      window.setInterval(() => {
+        if (!questions.length || answered || remainingSeconds <= 0) return;
+        remainingSeconds -= 1;
+        const minutes = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
+        const seconds = String(remainingSeconds % 60).padStart(2, '0');
+        document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+        if (remainingSeconds === 0) {
+          answered = true;
+          blank += 1;
+          score -= 0.10;
+          questionElement.classList.add('blank-time');
+          document.getElementById('score').textContent = score.toFixed(2);
+          window.setTimeout(() => {
+            currentIndex += 1;
+            if (currentIndex >= questions.length) finishEvaluation();
+            else renderQuestion();
+          }, 900);
+        }
+      }, 1000);
+
+      if (questions.length) renderQuestion();
+    </script>
+  </body>
+</html>

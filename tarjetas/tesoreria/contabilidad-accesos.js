@@ -1,0 +1,1 @@
+window.ContabilidadAccesos = ['MateCiencias Adm'];

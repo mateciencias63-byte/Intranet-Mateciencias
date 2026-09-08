@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Banco de preguntas - Semana 1 Geografía - ADES 2026</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+    <style>
+      html {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        overflow: hidden;
+        background: url('fondo.png') center/cover no-repeat;
+        background-attachment: fixed;
+        color: #111111;
+        font-family: 'Roboto', Arial, Helvetica, sans-serif;
+      }
+
+      .quiz-page {
+        width: min(1100px, 130%);
+        margin: 0 auto;
+        padding: 24px 24px 12px;
+      }
+
+      .quiz-header {
+        display: grid;
+        gap: 18px;
+        margin-bottom: 24px;
+      }
+
+      .header-top,
+      .question-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .header-top strong,
+      .question-header .title {
+        font-size: clamp(2rem, 2.5vw, 2.5rem);
+        display: block;
+      }
+
+      .header-top small,
+      .question-meta {
+        color: #374151;
+        display: block;
+      }
+
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .stat-card {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        padding: 12px 14px;
+        min-height: 70px;
+      }
+
+      .stat-card span {
+        display: block;
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        color: #374151;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+
+      .stat-card strong {
+        font-size: 1.1rem;
+        display: block;
+      }
+
+      .quiz-board {
+        display: block;
+      }
+
+      .choice-panel,
+      .question-panel {
+        border-radius: 0;
+        background: transparent;
+        border: none;
+        padding: 0;
+        box-shadow: none;
+      }
+
+      .choice-panel {
+        margin-top: 0;
+        padding: 0;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        display: flex;
+        justify-content: center;
+      }
+
+      .choice-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 12px;
+        justify-items: center;
+        max-width: 380px;
+        width: 100%;
+      }
+
+      .choice-item {
+        display: grid;
+        place-items: center;
+        width: 92%;
+        min-height: 50px;
+        padding: 0;
+        border-radius: 14px;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        background: #ffffff;
+        color: #111111;
+        font-weight: 900;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+        position: relative;
+      }
+
+      .choice-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 35px rgba(246, 197, 67, 0.22);
+      }
+
+      .choice-item.selected {
+        transform: translateY(-2px);
+        background: #f6c543;
+        color: #111111;
+        border-color: rgba(246, 197, 67, 0.75);
+      }
+
+      .choice-item.correct {
+        background: #f6c543;
+        color: #111111;
+        border-color: rgba(0, 0, 0, 0.12);
+      }
+
+      .choice-item.incorrect {
+        background: #ef4444;
+        color: #ffffff;
+        border-color: rgba(139, 0, 0, 0.4);
+      }
+
+      .question-body {
+        display: grid;
+        grid-template-columns: 1.8fr 0.55fr;
+        gap: 24px;
+        align-items: start;
+        margin-top: 48px;
+      }
+
+      .question-image {
+        width: 100%;
+        min-height: 420px;
+        border-radius: 0;
+        background: transparent center top / contain no-repeat;
+        background-origin: border-box;
+        background-clip: border-box;
+        border: none;
+        padding: 0;
+        overflow: hidden;
+        box-shadow: none;
+      }
+
+      .question-result {
+        display: none;
+        padding: 14px 18px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        color: #111111;
+        font-weight: 700;
+      }
+
+      .question-result.visible {
+        display: block;
+      }
+
+      .next-row {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        position: fixed;
+        left: 160px;
+        bottom: 40px;
+        margin: 0;
+        z-index: 60;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 180px;
+        padding: 14px 20px;
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.12);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      @media (max-width: 920px) {
+        .stats-row,
+        .question-body {
+          grid-template-columns: 1fr;
+        }
+
+        .next-row {
+          left: auto;
+          bottom: 20px;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="quiz-page">
+      <div class="user-profile-bar" id="userProfile"></div>
+      <div class="quiz-header header-top">
+        <strong>SEMANA 1 - GEOGRAFÍA - ADES 2026</strong>
+        <small>Practica con preguntas tipo examen de la Universidad Nacional de Piura.</small>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <span>Progreso</span>
+          <strong id="progressStat">Pregunta 1 de 158</strong>
+        </div>
+        <div class="stat-card">
+          <span>Puntaje</span>
+          <strong id="scoreStat">0.00</strong>
+        </div>
+        <div class="stat-card">
+          <span>Tiempo</span>
+          <strong id="timeStat">03:00</strong>
+        </div>
+      </div>
+
+      <div class="question-body">
+        <div class="question-image" style="background-image: url('Teoria/GEOGRAFIA/001.png');"></div>
+        <section class="choice-panel">
+          <ul class="choice-list"></ul>
+        </section>
+      </div>
+
+      <div class="question-result" id="questionResult"></div>
+      <section class="ranking-panel" id="rankingPanel"></section>
+
+      <div class="next-row" style="display:none;">
+        <button class="btn btn-primary" id="nextButton" type="button">Siguiente</button>
+      </div>
+    </div>
+
+    <script src="usuario.js?v=20260905-4"></script>
+    <script src="perfil-ranking.js"></script>
+    <script src="tarjetas/canva-studies/semana1_geografia_ades2026-data.js"></script>
+    <script>
+      PerfilRankingService.renderProfile(document.getElementById('userProfile'));
+      const choiceList = document.querySelector('.choice-list');
+      let choiceItems = [];
+      const nextButton = document.getElementById('nextButton');
+      const questionResultEl = document.getElementById('questionResult');
+      const scoreStat = document.getElementById('scoreStat');
+      const timeStat = document.getElementById('timeStat');
+
+      const questions = window.semana1GeografiaAdes2026Questions || [];
+      const optionKeys = ['A', 'B', 'C', 'D', 'E'];
+      const optionEmojis = { A: '❤️', B: '👍', C: '😂', D: '😮', E: '🙏' };
+      let currentIndex = 0;
+      let selectedOption = null;
+      let score = 0;
+      let correctAnswers = 0;
+      let answered = false;
+      const totalTimeSeconds = 3 * 60;
+      let remainingSeconds = totalTimeSeconds;
+      let timerInterval = null;
+      const quizStartedAt = Date.now();
+
+      function createChoiceButtons() {
+        if (!choiceList) return;
+        choiceList.innerHTML = optionKeys
+          .map(
+            (option) => `<li class="choice-item" data-option="${option}" role="button" tabindex="0" aria-label="Alternativa ${option}"><span class="choice-key" aria-hidden="true">${optionEmojis[option]} ${option}</span></li>`
+          )
+          .join('');
+
+        choiceItems = Array.from(choiceList.querySelectorAll('.choice-item'));
+        choiceItems.forEach((item) => {
+          item.addEventListener('click', () => {
+            if (answered) return;
+            selectedOption = item.dataset.option;
+            choiceItems.forEach((choice) => choice.classList.remove('selected'));
+            item.classList.add('selected');
+            window.setTimeout(() => {
+              if (!answered) {
+                handleNext();
+              }
+            }, 220);
+          });
+        });
+      }
+
+      function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const secs = (seconds % 60).toString().padStart(2, '0');
+        return `${minutes}:${secs}`;
+      }
+
+      function startTimer() {
+        if (!timeStat) return;
+        timeStat.textContent = formatTime(remainingSeconds);
+        timerInterval = setInterval(() => {
+          remainingSeconds -= 1;
+          timeStat.textContent = formatTime(remainingSeconds);
+          if (remainingSeconds <= 0) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            if (!answered) handleNext();
+          }
+        }, 1000);
+      }
+
+      function stopTimer() {
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+      }
+
+      function loadQuestion(idx) {
+        const q = questions[idx];
+        const qImgEl = document.querySelector('.question-image');
+        if (qImgEl) qImgEl.style.backgroundImage = `url('${q.img}')`;
+        const progressStat = document.getElementById('progressStat');
+        if (progressStat) progressStat.textContent = `Pregunta ${idx + 1} de ${questions.length}`;
+
+        selectedOption = null;
+        answered = false;
+        questionResultEl.textContent = '';
+        choiceItems.forEach((item) => item.classList.remove('selected', 'correct', 'incorrect', 'blank'));
+        nextButton.textContent = 'SIGUIENTE PREGUNTA →';
+      }
+
+      function handleNext() {
+        if (!answered) {
+          const blankScore = -0.1;
+          const correctScore = 4;
+          const wrongScore = -0.25;
+          const correctOption = questions[currentIndex].answer;
+
+          choiceItems.forEach((item) => item.classList.remove('correct'));
+          choiceItems.forEach((item) => {
+            if (item.dataset.option === correctOption) item.classList.add('correct');
+          });
+
+          if (!selectedOption) {
+            score += blankScore;
+            questionResultEl.textContent = 'En blanco: -0.10';
+            choiceItems.forEach((item) => item.classList.add('blank'));
+          } else if (selectedOption === correctOption) {
+            score += correctScore;
+            correctAnswers += 1;
+            questionResultEl.textContent = 'Correcta: +4.00';
+          } else {
+            score += wrongScore;
+            questionResultEl.textContent = 'Incorrecta: -0.25';
+            const sel = choiceItems.find((it) => it.dataset.option === selectedOption);
+            if (sel) sel.classList.add('incorrect');
+          }
+
+          scoreStat.textContent = score.toFixed(2);
+          answered = true;
+          stopTimer();
+
+          window.setTimeout(() => {
+            if (currentIndex < questions.length - 1) {
+              currentIndex += 1;
+              loadQuestion(currentIndex);
+              remainingSeconds = totalTimeSeconds;
+              startTimer();
+            } else {
+              stopTimer();
+              nextButton.disabled = true;
+              questionResultEl.textContent = `Prueba finalizada. Puntaje: ${score.toFixed(2)}`;
+              const ranking = PerfilRankingService.saveResult({ course: document.title, correct: correctAnswers, score, time: Math.round((Date.now() - quizStartedAt) / 1000) });
+              window.location.assign(`ranking.html?curso=${encodeURIComponent(document.title)}`);
+            }
+          }, 500);
+        }
+      }
+
+      createChoiceButtons();
+      if (questions.length > 0) {
+        loadQuestion(0);
+        startTimer();
+      }
+
+      if (nextButton) {
+        nextButton.addEventListener('click', handleNext);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MateCiencias | Acceso Admisión</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+  </head>
+  <body>
+    <style>
+      .service-login-page { display:flex; justify-content:center; align-items:center; width:100%; min-height:100vh; padding:20px; box-sizing:border-box; }
+      .service-login-box { width:100%; max-width:400px; padding:40px; border-radius:12px; background:#fff; box-shadow:0 10px 40px rgba(0,0,0,.2); box-sizing:border-box; }
+      .service-login-logo { display:flex; justify-content:center; margin-bottom:30px; }
+      .service-login-logo img { width:80px; height:80px; object-fit:contain; user-select:none; -webkit-user-select:none; -webkit-user-drag:none; -webkit-touch-callout:none; pointer-events:none; }
+      .service-login-title { margin-bottom:10px; color:#0d8f36; font-size:24px; font-weight:700; text-align:center; }
+      .service-login-subtitle { margin-bottom:30px; color:#666; font-size:14px; text-align:center; }
+      .service-login-form { display:grid; gap:14px; }
+      .service-login-form label { display:grid; gap:8px; color:#333; font-size:14px; font-weight:600; }
+      .service-login-form input { width:100%; padding:12px; border:2px solid #ddd; border-radius:8px; font:inherit; box-sizing:border-box; }
+      .service-login-form input:focus { outline:none; border-color:#0d8f36; }
+      .service-login-button { padding:12px; border:0; border-radius:8px; background:#0d8f36; color:#fff; cursor:pointer; font-size:16px; font-weight:700; }
+      .service-login-error { margin:0; padding:12px; border-radius:8px; background:#fee; color:#c33; font-size:14px; }
+      .service-login-error.hidden { display:none; }
+      .service-login-back { margin-top:20px; color:#0d8f36; font-size:14px; text-align:center; text-decoration:none; }
+    </style>
+    <div class="service-login-page">
+      <main class="service-login-box">
+        <div class="service-login-logo" oncontextmenu="return false;"><img src="logo.png" alt="MateCiencias Logo" draggable="false" ondragstart="return false;" onmousedown="return false;" /></div>
+        <div class="service-login-title">Panel de Admisión</div>
+        <div class="service-login-subtitle">Acceso restringido para MateCiencias Adm</div>
+        <form class="service-login-form" id="admisionLoginForm">
+          <label for="admisionUserInput">Usuario:<input id="admisionUserInput" type="text" placeholder="Ingrese su usuario" required /></label>
+          <p class="service-login-error hidden" id="admisionLoginError">Este usuario no tiene permiso para acceder a Admisión.</p>
+          <button type="submit" class="service-login-button">Acceder</button>
+          <a href="dashboard.html" class="service-login-back">&larr; Volver al panel principal</a>
+        </form>
+      </main>
+    </div>
+    <script src="tarjetas/admision/usuario-admision.js"></script>
+    <script src="usuario.js?v=20260905-4"></script>
+    <script>
+      const admisionLoginForm = document.getElementById('admisionLoginForm');
+      const admisionUserInput = document.getElementById('admisionUserInput');
+      const admisionLoginError = document.getElementById('admisionLoginError');
+      admisionLoginForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const username = admisionUserInput.value.trim();
+        const allowed = UsuarioService.userIsInList(username, window.admisionAutorizados || []);
+        admisionLoginError.classList.toggle('hidden', allowed);
+        if (!allowed) return;
+        sessionStorage.setItem('admisionUsuario', username);
+        window.location.assign('tarjetas/admision/admision.html');
+      });
+    </script>
+  </body>
+</html>

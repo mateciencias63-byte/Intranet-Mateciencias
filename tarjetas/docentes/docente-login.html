@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MateCiencias | Login Docente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+    <style>
+      body {
+        min-height: 100vh;
+      }
+
+      .docente-login-page {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 16px;
+      }
+
+      .docente-login-card {
+        width: min(400px, 100%);
+        padding: 42px 40px 38px;
+        background: #ffffff;
+        border-radius: 14px;
+        box-shadow: 0 18px 45px rgba(15, 41, 80, 0.22);
+      }
+
+      .docente-login-logo {
+        display: block;
+        width: 112px;
+        height: 112px;
+        margin: 0 auto 28px;
+        object-fit: contain;
+      }
+
+      .docente-login-title {
+        margin: 0;
+        color: #078b38;
+        font-size: 1.5rem;
+        line-height: 1.25;
+        text-align: center;
+      }
+
+      .docente-login-subtitle {
+        margin: 8px 0 28px;
+        color: #666666;
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
+      .docente-login-form {
+        display: grid;
+        gap: 14px;
+      }
+
+      .docente-login-form label {
+        display: grid;
+        gap: 8px;
+        color: #222222;
+        font-size: 0.875rem;
+        font-weight: 700;
+      }
+
+      .docente-login-form input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #dddddd;
+        border-radius: 8px;
+        color: #333333;
+        font: inherit;
+      }
+
+      .docente-login-form input:focus {
+        outline: none;
+        border-color: #078b38;
+      }
+
+      .docente-login-button {
+        width: 100%;
+        margin-top: 6px;
+        padding: 11px;
+        border: 0;
+        border-radius: 8px;
+        background: #0d8f36;
+        color: #ffffff;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .docente-login-button:hover {
+        background: #0a6c27;
+      }
+
+      .docente-login-back {
+        display: block;
+        margin-top: 20px;
+        color: #078b38;
+        font-size: 0.875rem;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      .docente-login-back:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 420px) {
+        .docente-login-card {
+          padding: 34px 26px 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="docente-login-page">
+      <main class="docente-login-card">
+        <img class="docente-login-logo" src="logo.png" alt="Logo de MateCiencias" />
+        <h1 class="docente-login-title">Panel Docente</h1>
+
+        <form class="docente-login-form" id="docenteLoginForm">
+          <label for="docenteUserInput">
+            Usuario:
+            <input id="docenteUserInput" type="text" placeholder="Ingrese su usuario" required />
+          </label>
+          <p class="form-error hidden" id="docenteLoginError">El usuario no está autorizado para acceder.</p>
+          <button type="submit" class="docente-login-button">Acceder</button>
+        </form>
+
+        <a href="dashboard.html" class="docente-login-back">&larr; Volver al panel principal</a>
+      </main>
+    </div>
+
+    <script src="tarjetas/docentes/usuarios-docente.js?v=20260905-4"></script>
+    <script src="usuario.js?v=20260905-4"></script>
+    <script>
+      const docenteLoginForm = document.getElementById('docenteLoginForm');
+      const docenteUserInput = document.getElementById('docenteUserInput');
+      const docenteLoginError = document.getElementById('docenteLoginError');
+
+      if (docenteLoginForm) {
+        docenteLoginForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const username = docenteUserInput.value.trim();
+          const usuarioAutorizado = UsuarioService.userIsInList(
+            username,
+            window.docentesAutorizados || []
+          );
+
+          if (!usuarioAutorizado) {
+            if (docenteLoginError) {
+              docenteLoginError.classList.remove('hidden');
+            }
+            return;
+          }
+
+          if (docenteLoginError) {
+            docenteLoginError.classList.add('hidden');
+          }
+
+          sessionStorage.setItem('docenteUser', username);
+          window.location.assign('tarjetas/docentes/administrativo.html');
+        });
+      }
+    </script>
+  </body>
+</html>

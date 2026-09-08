@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ranking | MateCiencias</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+    <style>
+      :root { --cyan:#00eaff; --blue:#086bff; --violet:#8b2cff; --pink:#e928ff; --navy:#01091e; }
+      body { margin:0; min-height:100vh; background:radial-gradient(circle at 50% 16%,#0b1d54 0,#030b25 38%,#010617 78%); color:#fff; font-family:Roboto,Arial,sans-serif; }
+      body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.38; background:linear-gradient(135deg,transparent 0 42%,rgba(7,75,255,.22) 42% 46%,transparent 46% 73%,rgba(156,27,255,.2) 73% 77%,transparent 77%); }
+      .ranking-page { min-height:100vh; padding:24px clamp(14px,3vw,44px) 30px; color:#fff; box-sizing:border-box; position:relative; }
+      .ranking-card { width:min(1420px,100%); min-height:calc(100vh - 54px); margin:0 auto; padding:20px 30px 26px; border:3px solid transparent; border-radius:28px; background:linear-gradient(#020a20,#020a20) padding-box,linear-gradient(135deg,var(--cyan),var(--blue),var(--pink)) border-box; box-shadow:inset 0 0 45px rgba(17,46,130,.42),0 0 28px rgba(0,174,255,.42); box-sizing:border-box; }
+      .ranking-card > .user-profile-bar { margin:0 auto 10px; padding:9px 24px 9px 10px; border:2px solid #a855f7; border-radius:16px; background:linear-gradient(135deg,#07132e,#111b43 70%,#311067); color:#fff; box-shadow:6px 7px 0 rgba(91,33,182,.62),0 0 16px rgba(168,85,247,.5); }
+      .ranking-card > .user-profile-bar .profile-avatar { background:linear-gradient(135deg,#1769d1,#7c3aed); border:2px solid var(--cyan); box-shadow:0 0 14px var(--cyan); }
+      .ranking-card > .user-profile-bar span { color:var(--cyan); }
+      .ranking-title { margin:6px 0 0; text-align:center; font-size:clamp(3.2rem,9vw,7rem); font-style:italic; font-weight:900; letter-spacing:.04em; line-height:.9; color:#eef6ff; text-shadow:4px 5px 0 #344ca5,8px 9px 0 #681b9f,0 0 24px rgba(0,234,255,.7); transform:skewX(-5deg); }
+      .ranking-course { margin:14px 0 28px; color:#b9c8ff; text-align:center; font-size:clamp(1rem,2vw,1.5rem); font-weight:900; letter-spacing:.28em; text-transform:uppercase; }
+      .ranking-course::before,.ranking-course::after { content:""; display:inline-block; width:80px; height:3px; margin:0 18px 5px; background:linear-gradient(90deg,var(--cyan),var(--pink)); box-shadow:0 0 9px var(--cyan); }
+      .ranking-message { display:none; }
+      .ranking-table { width:100%; border-collapse:separate; border-spacing:0 12px; padding:14px 18px; border:2px solid var(--violet); border-radius:20px; box-shadow:inset 0 0 24px rgba(13,63,185,.28),0 0 18px rgba(139,44,255,.45); }
+      .ranking-table th,.ranking-table td { padding:16px 14px; border:0; text-align:left; }
+      .ranking-table th { color:var(--cyan); font-size:.82rem; letter-spacing:.05em; text-transform:uppercase; border-bottom:1px solid #204ea9; }
+      .ranking-table tbody tr { background:linear-gradient(90deg,rgba(4,18,52,.98),rgba(6,25,67,.94)); outline:2px solid #0878ff; box-shadow:inset 0 0 18px rgba(0,99,255,.24),0 0 12px rgba(0,174,255,.28); }
+      .ranking-table tbody tr:first-child { outline-color:var(--cyan); box-shadow:inset 0 0 20px rgba(0,119,255,.3),0 0 18px rgba(0,234,255,.42); }
+      .ranking-table tbody tr { animation: rankingEntry .45s ease both; }
+      .ranking-table tbody tr:nth-child(2) { animation-delay: .06s; }
+      .ranking-table tbody tr:nth-child(3) { animation-delay: .12s; }
+      .ranking-table tbody tr:nth-child(n+4) { animation-delay: .18s; }
+      .ranking-table td:first-child { width:90px; color:#facc15; font-size:1.6rem; font-weight:900; text-align:center; text-shadow:0 0 12px #facc15; }
+      .ranking-table td:nth-child(3) { color:var(--cyan); font-size:1.15rem; font-weight:900; }
+      .ranking-table td:nth-child(4) { color:#4ade80; font-size:1.15rem; font-weight:900; }
+      .ranking-table td:nth-child(5) { color:#fb3b4b; font-size:1.15rem; font-weight:900; }
+      .ranking-table td:nth-child(6) { color:#facc15; font-size:1.15rem; font-weight:900; }
+      .ranking-table td:last-child { color:#fff; font-weight:900; }
+      .ranking-person { display:flex; align-items:center; gap:10px; font-weight:900; }
+      .ranking-avatar { display:grid; place-items:center; width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,#1769d1,#7c3aed); border:2px solid var(--cyan); color:#fff; box-shadow:0 0 10px rgba(0,234,255,.65); }
+      .ranking-empty { padding:22px; color:#a9bdd3; text-align:center; }
+      .ranking-home { display:block; width:fit-content; margin:26px auto 0; padding:14px 38px; border:2px solid var(--cyan); border-radius:16px; background:linear-gradient(135deg,#061536,#07348f 65%,#52168d); color:#fff; font-size:1.05rem; font-weight:900; text-decoration:none; box-shadow:6px 7px 0 #351477,0 0 18px rgba(0,234,255,.65); transition:.18s ease; }
+      .ranking-home:hover { transform:translateY(-3px); filter:brightness(1.2); }
+      .ranking-links { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
+      @keyframes rankingEntry { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: translateX(0); } }
+      @media (max-width: 600px) {
+        .ranking-card { padding:18px 10px; }
+        .ranking-table th, .ranking-table td { padding: 11px 7px; font-size: .85rem; }
+        .ranking-table { overflow-x:auto; display:block; }
+        .ranking-course::before,.ranking-course::after { display:none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="ranking-page">
+      <section class="ranking-card">
+        <div class="user-profile-bar" id="userProfile"></div>
+        <h1 class="ranking-title">RANKING</h1>
+        <p class="ranking-course" id="rankingCourse"></p>
+        <p class="ranking-message">FELICIDADES a quienes participaron</p>
+        <table class="ranking-table">
+          <thead><tr><th>Puesto</th><th>Participante</th><th>Puntaje</th><th>Aciertos</th><th>Incorrectas</th><th>En blanco</th><th>Tiempo</th></tr></thead>
+          <tbody id="rankingRows"></tbody>
+        </table>
+        <div class="ranking-links">
+          <a class="ranking-home" href="tarjetas/canva-studies/formularios.html">AL INICIO</a>
+        </div>
+      </section>
+    </main>
+    <script src="usuario.js?v=20260905-4"></script>
+    <script src="perfil-ranking.js"></script>
+    <script>
+      PerfilRankingService.renderProfile(document.getElementById('userProfile'));
+      const course = new URLSearchParams(window.location.search).get('curso') || 'Todos los cuestionarios';
+      document.getElementById('rankingCourse').textContent = course;
+      const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (character) => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' })[character]);
+      const initials = (name) => String(name || 'Estudiante').trim().split(/\s+/).filter(Boolean).slice(0,2).map((part) => part[0]).join('').toUpperCase();
+      let ranking = [];
+      try {
+        ranking = JSON.parse(localStorage.getItem('matecienciasRanking') || '[]');
+      } catch (error) {
+        ranking = [];
+      }
+      ranking = ranking.filter((item) => item.course === course).sort((left, right) => right.correct - left.correct || right.score - left.score || left.time - right.time || left.finishedAt - right.finishedAt);
+      document.getElementById('rankingRows').innerHTML = ranking.length
+        ? ranking.map((item, index) => `<tr><td>${index + 1}</td><td><div class="ranking-person"><span class="ranking-avatar">${escapeHtml(initials(item.name))}</span>${escapeHtml(item.name)}</div></td><td>${Number(item.score).toFixed(2)}</td><td>${Number(item.correct || 0)}</td><td>${Number(item.incorrect || 0)}</td><td>${Number(item.blank || 0)}</td><td>${Number(item.time || 0)}s</td></tr>`).join('')
+        : '<tr><td class="ranking-empty" colspan="7">Aún no hay participantes registrados.</td></tr>';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Banco de preguntas ADES 2026</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: url('fondo.png') center/cover no-repeat;
+        color: #ffffff;
+        font-family: 'Roboto', Arial, Helvetica, sans-serif;
+      }
+
+      .quiz-page {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 40px 24px 32px;
+      }
+
+      .quiz-header {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .quiz-header strong {
+        font-size: clamp(1.9rem, 2.5vw, 2.8rem);
+      }
+
+      .quiz-layout {
+        display: grid;
+        grid-template-columns: 1.35fr 0.95fr;
+        gap: 20px;
+      }
+
+      .quiz-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 18px;
+        padding: 24px 22px;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 18px 38px rgba(15, 23, 42, 0.18);
+      }
+
+      .quiz-card h2 {
+        margin-top: 0;
+        margin-bottom: 12px;
+        font-size: 2rem;
+      }
+
+      .quiz-card p {
+        margin: 0;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 18px;
+        border-radius: 12px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.98rem;
+        transition: transform 0.15s ease, opacity 0.15s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn-primary {
+        background: #f6c543;
+        color: #111827;
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.12);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+      }
+
+      .btn-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      @media (max-width: 700px) {
+        .quiz-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="quiz-page">
+      <div class="quiz-header">
+        <strong>Banco de preguntas</strong>
+        <small id="course-subtitle">ADES 2026 — Selecciona el botón para comenzar.</small>
+      </div>
+
+      <div class="quiz-layout">
+        <div class="quiz-card">
+          <h2 id="course-name">Curso</h2>
+          <p>
+            Has abierto el banco de preguntas para <span id="course-label">este curso</span>.
+            Aquí puedes continuar con la evaluación del curso.
+          </p>
+        </div>
+
+        <div class="quiz-card">
+          <h2>Continuar</h2>
+          <p>Presiona el botón para acceder a la siguiente sección del curso.</p>
+          <div class="btn-row">
+            <button id="go-next" class="btn btn-primary" type="button">Ir a la evaluación</button>
+            <a class="btn btn-secondary" href="tarjetas/canva-studies/formularios.html">Volver al menú</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const course = decodeURIComponent(params.get('curso') || 'ADES 2026');
+
+      document.getElementById('course-name').textContent = course;
+      document.getElementById('course-label').textContent = course;
+      document.getElementById('course-subtitle').textContent = `${course} — Selecciona el botón para comenzar.`;
+
+      document.getElementById('go-next').addEventListener('click', () => {
+        window.location.assign('tarjetas/canva-studies/curso-ades-2026-semanas.html');
+      });
+    </script>
+  </body>
+</html>

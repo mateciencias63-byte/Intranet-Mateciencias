@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MateCiencias | Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+  </head>
+  <body class="dashboard-home-page">
+    <div class="dashboard">
+      <aside class="login-panel">
+        <div class="institution-card">
+          <img class="institution-logo" src="logo.png" alt="Logo de MateCiencias" draggable="false" oncontextmenu="return false;" />
+          <div class="institution-name">MATECIENCIAS</div>
+        </div>
+
+        <div class="account-shell">
+          <div class="account-avatar" id="dashboardAvatar"></div>
+          <div class="account-name" id="dashboardUser">Usuario</div>
+          <div class="account-role">Alumno</div>
+          <button class="logout-link" id="logoutButton" type="button">Cerrar sesión</button>
+        </div>
+      </aside>
+
+      <section class="content">
+        <div class="welcome-banner" id="welcomeBanner">
+          <div class="welcome-tagline">RECURSOS ACADÉMICOS DE MATECIENCIAS</div>
+        </div>
+
+        <section class="cards-grid" id="cardsGrid">
+          <article class="panel card-admin" data-service="Admision" id="admisionPanel">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="9" y="8" width="46" height="44" rx="4" fill="#0b6fb5" />
+                <path d="M45 8v44" stroke="#e8eef2" stroke-width="3" />
+                <circle cx="26" cy="27" r="6" fill="none" stroke="#e8eef2" stroke-width="4" />
+                <path d="M17.5 40c1.7-5.6 4.8-8.4 8.5-8.4s6.8 2.8 8.5 8.4" fill="none" stroke="#e8eef2" stroke-width="4" stroke-linecap="round" />
+                <circle cx="50" cy="19" r="3" fill="#e8eef2" />
+                <circle cx="50" cy="39" r="3" fill="#e8eef2" />
+              </svg>
+            </div>
+            <div class="card-title">Admisión</div>
+          </article>
+
+          <article class="panel card-formularios" data-service="Inscripcion" onclick="window.location.assign('tarjetas/inscripcion/inscripcion-ciclo.html');" role="link" tabindex="0">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="15" y="9" width="34" height="46" rx="5" fill="none" stroke="#0b6fb5" stroke-width="4" />
+                <path d="M23 21h18M23 30h18M23 39h11" stroke="#0b6fb5" stroke-width="4" stroke-linecap="round" />
+                <path d="M40 42v10M35 47h10" stroke="#0b6fb5" stroke-width="4" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="card-title">Inscripción</div>
+          </article>
+
+          <article class="panel card-admin" data-service="Matricula" id="matriculaPanel">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="8" y="8" width="48" height="39" rx="6" fill="#0b6fb5" />
+                <path d="M8 38h48" stroke="#e8eef2" stroke-width="3" />
+                <path d="M21 17h11M21 23h11M21 29h8" stroke="#e8eef2" stroke-width="4" stroke-linecap="round" />
+                <path d="m37 17 12 5-5 2 3 6-4 2-3-6-3 4V17Z" fill="#e8eef2" />
+                <path d="M32 47v8M23 55h18" stroke="#0b6fb5" stroke-width="4" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="card-title">Matrícula</div>
+          </article>
+
+          <article class="panel card-admin" data-service="Panel administrativo" id="adminPanel">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <path d="M10 12h39a5 5 0 0 1 5 5v29a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V17a5 5 0 0 1 5-5Z" fill="#0b6fb5" />
+                <path d="M15 22h22M15 31h16M15 40h13" stroke="#e8eef2" stroke-width="4" stroke-linecap="round" />
+                <circle cx="44" cy="37" r="10" fill="#e8eef2" />
+                <circle cx="44" cy="36" r="7" fill="#0b6fb5" />
+                <path d="M29 58c1.8-8 7.2-13 15-13s13.2 5 15 13a3 3 0 0 1-3 4H32a3 3 0 0 1-3-4Z" fill="#0b6fb5" />
+              </svg>
+            </div>
+            <div class="card-title">Gestión Administrativo</div>
+          </article>
+
+          <article class="panel card-admin" data-service="Contabilidad" id="contabilidadPanel">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="10" y="8" width="44" height="35" rx="6" fill="#0b6fb5" />
+                <rect x="20" y="16" width="24" height="4" rx="2" fill="#e8eef2" />
+                <circle cx="32" cy="29" r="3" fill="#e8eef2" />
+                <path d="M32 43v7M25 50h14" stroke="#0b6fb5" stroke-width="4" stroke-linecap="round" />
+                <path d="M21 51h22l4 5H17l4-5Z" fill="#0b6fb5" />
+              </svg>
+            </div>
+            <div class="card-title">Tesorería Académica</div>
+          </article>
+
+          <article class="panel card-formularios" id="formulariosPanel" data-service="Formularios">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <g fill="#0b6fb5">
+                  <ellipse cx="32" cy="7" rx="8" ry="4" />
+                  <ellipse cx="49.5" cy="14.5" rx="8" ry="4" transform="rotate(45 49.5 14.5)" />
+                  <ellipse cx="57" cy="32" rx="4" ry="8" />
+                  <ellipse cx="49.5" cy="49.5" rx="8" ry="4" transform="rotate(-45 49.5 49.5)" />
+                  <ellipse cx="32" cy="57" rx="8" ry="4" />
+                  <ellipse cx="14.5" cy="49.5" rx="8" ry="4" transform="rotate(45 14.5 49.5)" />
+                  <ellipse cx="7" cy="32" rx="4" ry="8" />
+                  <ellipse cx="14.5" cy="14.5" rx="8" ry="4" transform="rotate(-45 14.5 14.5)" />
+                  <circle cx="32" cy="18" r="3" />
+                  <circle cx="42" cy="22" r="3" />
+                  <circle cx="46" cy="32" r="3" />
+                  <circle cx="42" cy="42" r="3" />
+                  <circle cx="32" cy="46" r="3" />
+                  <circle cx="22" cy="42" r="3" />
+                  <circle cx="18" cy="32" r="3" />
+                  <circle cx="22" cy="22" r="3" />
+                </g>
+              </svg>
+            </div>
+            <div class="card-title">Canva Studies</div>
+          </article>
+
+          <article class="panel card-docentes" id="docentePanel" data-service="Panel de docentes">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <circle cx="32" cy="21" r="8" fill="#0b6fb5" />
+                <path d="M17 48c2.5-9 8-14 15-14s12.5 5 15 14" fill="none" stroke="#0b6fb5" stroke-width="5" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="card-title">Gestión de Docentes</div>
+          </article>
+
+          <article class="panel card-aula" id="aulaPanel" data-service="Aula virtual">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="11" y="9" width="42" height="34" rx="6" fill="#0b6fb5" />
+                <rect x="27" y="14" width="10" height="3" rx="1.5" fill="#e8eef2" />
+                <circle cx="32" cy="27" r="5" fill="#e8eef2" />
+                <path d="M24.5 37c1.3-4.6 4.1-7 7.5-7s6.2 2.4 7.5 7" fill="#e8eef2" />
+                <path d="M9 42h46v5a6 6 0 0 1-6 6H15a6 6 0 0 1-6-6v-5Z" fill="#0b6fb5" />
+                <path d="M13 42h38v4H13z" fill="#e8eef2" />
+              </svg>
+            </div>
+            <div class="card-title">Intranet Académica</div>
+          </article>
+
+          <article class="panel card-biblioteca" id="bibliotecaPanel" data-service="Biblioteca virtual">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="9" y="9" width="22" height="48" rx="4" fill="#0b6fb5" />
+                <rect x="14" y="15" width="12" height="4" rx="1" fill="#e8eef2" />
+                <rect x="14" y="49" width="12" height="4" rx="1" fill="#e8eef2" />
+                <path d="M31 13a4 4 0 0 1 3-4.8l14-3a4 4 0 0 1 4.8 3l9 42a4 4 0 0 1-3 4.8l-14 3a4 4 0 0 1-4.8-3L31 13Z" fill="#0b6fb5" />
+                <path d="m38 15 11-2M45 48l11-2" stroke="#e8eef2" stroke-width="4" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="card-title">Gestión de Biblioteca</div>
+          </article>
+
+          <article class="panel card-psicologia" data-service="Gestion Psicologica">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="10" y="9" width="44" height="35" rx="3" fill="none" stroke="#0b6fb5" stroke-width="4" />
+                <rect x="15" y="14" width="34" height="25" rx="1" fill="#0b6fb5" />
+                <circle cx="32" cy="25" r="7" fill="#ffffff" />
+                <path d="M20 40c2-7 6.5-11 12-11s10 4 12 11" fill="#ffffff" />
+                <path d="M18 46h28" stroke="#0b6fb5" stroke-width="4" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="card-title">Gestión Psicológica</div>
+          </article>
+
+          <article class="panel card-vai" data-service="VAIA">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <path d="M5 25 29 10a6 6 0 0 1 6 0l24 15a4 4 0 0 1 0 7L35 47a6 6 0 0 1-6 0L5 32a4 4 0 0 1 0-7Z" fill="none" stroke="#0b6fb5" stroke-width="5" stroke-linejoin="round" />
+                <path d="M32 12v25M8 28l24 15 24-15M17 39v11c0 3 7 8 15 8s15-5 15-8V39" fill="none" stroke="#0b6fb5" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="card-title">VAIA</div>
+          </article>
+
+          <article class="panel card-becas" data-service="Becas">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="10" y="7" width="38" height="46" rx="5" fill="none" stroke="#0b6fb5" stroke-width="4" />
+                <path d="M19 18h20M19 27h15M19 36h11" stroke="#0b6fb5" stroke-width="4" stroke-linecap="round" />
+                <circle cx="43" cy="42" r="9" fill="#0b6fb5" stroke="#ffffff" stroke-width="2" />
+                <path d="m38 49-2 11 7-4 7 4-2-11" fill="#0b6fb5" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" />
+                <path d="m43 36 1.8 3.6 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4-2.9-2.8 4-.6L43 36Z" fill="#ffffff" />
+              </svg>
+            </div>
+            <div class="card-title">Becas</div>
+          </article>
+
+          <article class="panel card-silabos" data-service="Gestion De Silabos">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="12" y="9" width="40" height="48" rx="5" fill="none" stroke="#0b6fb5" stroke-width="4" />
+                <path d="M25 9v-2h14v8H25V9Z" fill="#0b6fb5" />
+                <path d="M21 25h22M21 34h15M21 43h11" stroke="#0b6fb5" stroke-width="4" stroke-linecap="round" />
+                <circle cx="44" cy="45" r="10" fill="#0b6fb5" stroke="#ffffff" stroke-width="2" />
+                <path d="m38 45 4 4 8-9" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="card-title">Gestión de Sílabos</div>
+          </article>
+
+          <article class="panel card-intranet-universitaria" data-service="Intranet Universitaria">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="11" y="9" width="42" height="34" rx="6" fill="#0b6fb5" />
+                <rect x="27" y="14" width="10" height="3" rx="1.5" fill="#e8eef2" />
+                <circle cx="32" cy="27" r="5" fill="#e8eef2" />
+                <path d="M24.5 37c1.3-4.6 4.1-7 7.5-7s6.2 2.4 7.5 7" fill="#e8eef2" />
+                <path d="M9 42h46v5a6 6 0 0 1-6 6H15a6 6 0 0 1-6-6v-5Z" fill="#0b6fb5" />
+                <path d="M13 42h38v4H13z" fill="#e8eef2" />
+              </svg>
+            </div>
+            <div class="card-title">Intranet Universitaria</div>
+          </article>
+
+          <article class="panel card-intranet-idiomas" data-service="Intranet Idiomas">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="11" y="9" width="42" height="34" rx="6" fill="#0b6fb5" />
+                <rect x="27" y="14" width="10" height="3" rx="1.5" fill="#e8eef2" />
+                <circle cx="32" cy="27" r="5" fill="#e8eef2" />
+                <path d="M24.5 37c1.3-4.6 4.1-7 7.5-7s6.2 2.4 7.5 7" fill="#e8eef2" />
+                <path d="M9 42h46v5a6 6 0 0 1-6 6H15a6 6 0 0 1-6-6v-5Z" fill="#0b6fb5" />
+                <path d="M13 42h38v4H13z" fill="#e8eef2" />
+              </svg>
+            </div>
+            <div class="card-title">Intranet Idiomas</div>
+          </article>
+
+          <article class="panel card-calendario" data-service="Calendario Academico">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <rect x="9" y="13" width="46" height="42" rx="5" fill="none" stroke="#0b6fb5" stroke-width="4" />
+                <path d="M9 25h46M20 8v11M44 8v11" fill="none" stroke="#0b6fb5" stroke-width="4" stroke-linecap="round" />
+                <path d="M18 34h6v6h-6zm11 0h6v6h-6zm11 0h6v6h-6zM18 44h6v6h-6zm11 0h6v6h-6z" fill="#0b6fb5" />
+              </svg>
+            </div>
+            <div class="card-title">Calendario</div>
+          </article>
+
+          <article class="panel card-secretaria" data-service="Secretaria Academica" id="secretariaPanel">
+            <div class="card-icon">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <path d="M10 24 32 10l22 14v31H10V24Z" fill="none" stroke="#0b6fb5" stroke-width="4" stroke-linejoin="round" />
+                <path d="M6 24h52M17 28v20M28 28v20M39 28v20M50 28v20M6 55h52" fill="none" stroke="#0b6fb5" stroke-width="4" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="card-title">Secretaría Académica</div>
+          </article>
+
+
+        </section>
+      </section>
+    </div>
+
+    <script src="usuario.js?v=20260905-4"></script>
+    <script>
+      const dashboardUser = document.getElementById('dashboardUser');
+      const dashboardAvatar = document.getElementById('dashboardAvatar');
+      const storedUser = UsuarioService.getStoredUserName();
+      const logoutButton = document.getElementById('logoutButton');
+
+      // Derive a display name (always provide something) and render it immediately
+      const displayName = storedUser || 'USUARIO';
+
+
+      const maleNames = ['UZIEL', 'CARLOS', 'LUIS', 'DIEGO', 'JAVIER', 'TOMAS', 'MATEO', 'SAMUEL', 'BRUNO', 'DANIELA', 'CHRISTIAN', 'FERNANDO', 'GABRIEL', 'OSCAR', 'RICARDO', 'KEVIN'];
+      const femaleNames = ['MARIA', 'ANA', 'SOFIA', 'CAMILA', 'ELENA', 'VALERIA', 'ISABELLA', 'DANIELA', 'JULIANA', 'MARIANA', 'NATALIA', 'RENATA', 'PAULA', 'CARLA', 'LUCIA'];
+
+      const setAvatar = (fullName) => {
+        if (!dashboardAvatar) return;
+
+        const photo = sessionStorage.getItem('dashboardUserPhoto') || sessionStorage.getItem('dashboardUserAvatar') || sessionStorage.getItem('userPhoto');
+        dashboardAvatar.innerHTML = '';
+
+        if (photo) {
+          const img = document.createElement('img');
+          img.src = photo;
+          img.alt = fullName || 'Usuario';
+          img.className = 'account-avatar-img';
+          dashboardAvatar.appendChild(img);
+          return;
+        }
+
+        const initials = UsuarioService.getInitials(fullName);
+        const colors = ['#0d8f36', '#1f8748', '#0a6c27', '#117a5a', '#0b5f3f'];
+        let colorIndex = 0;
+        try {
+          let sum = 0;
+          for (let i = 0; i < initials.length; i++) sum += initials.charCodeAt(i);
+          colorIndex = sum % colors.length;
+        } catch (e) { colorIndex = 0; }
+        const bg = colors[colorIndex];
+
+        const initialsSvg = `
+          <svg viewBox="0 0 100 100" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="50" fill="${bg}" />
+            <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="40" fill="#ffffff" font-weight="700">${initials}</text>
+          </svg>
+        `;
+
+        dashboardAvatar.innerHTML = initialsSvg;
+      };
+
+      // Always show a display name (falls back to 'USUARIO') and set avatar
+      if (dashboardUser) {
+        dashboardUser.textContent = displayName;
+      }
+      // Call setAvatar with displayName so silhouette/initials appear when no photo is stored
+      setAvatar(displayName);
+
+
+
+      if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+          sessionStorage.removeItem('dashboardUser');
+          window.location.assign('index.html');
+        });
+      }
+    </script>
+    <script src="navegacion.js?v=20260905-9"></script>
+  </body>
+</html>

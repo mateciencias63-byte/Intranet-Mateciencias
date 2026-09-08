@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MateCiencias | Contabilidad</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+  </head>
+  <body>
+    <style>
+      .accounting-page { min-height:100vh; padding:32px clamp(18px,4vw,58px) 48px; color:#12233f; }
+      .accounting-card { width:100%; padding:24px; border:1px solid #e1e8f0; border-radius:10px; background:#fff; box-shadow:0 12px 28px rgba(15,41,80,.08); }
+      .accounting-header { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:22px; }
+      .accounting-header h1 { margin:0; font-size:clamp(1.7rem,3vw,2.35rem); }
+      .accounting-header p { margin:7px 0 0; color:#65748b; }
+      .accounting-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:22px; }
+      .accounting-metric { padding:17px; border:1px solid #dce6f0; border-radius:10px; background:#f8fbff; }
+      .accounting-metric span { color:#65748b; font-size:.75rem; font-weight:700; text-transform:uppercase; }
+      .accounting-metric strong { display:block; margin-top:7px; color:#12233f; font-size:1.45rem; }
+      .accounting-metric.paid { border-top:4px solid #0d8f36; }.accounting-metric.pending { border-top:4px solid #ef7d32; }.accounting-metric.cancelled { border-top:4px solid #c83d45; }.accounting-metric.count { border-top:4px solid #1769d1; }
+      .accounting-form { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; align-items:end; margin-bottom:22px; padding:18px; border:1px solid #dce6f0; border-radius:10px; background:#f8fbff; }
+      .accounting-field { display:grid; gap:7px; color:#12233f; font-size:.82rem; font-weight:700; }
+      .accounting-field input, .accounting-field select { width:100%; height:42px; padding:10px; border:1px solid #cbd5e1; border-radius:7px; background:#fff; color:#12233f; font:inherit; }
+      .accounting-submit { height:42px; padding:10px 14px; border:0; border-radius:7px; background:#0d8f36; color:#fff; cursor:pointer; font-weight:700; }
+      .accounting-cancel-edit { height:42px; padding:10px 14px; border:1px solid #94a3b8; border-radius:7px; background:#fff; color:#475569; cursor:pointer; font-weight:700; }
+      .accounting-cancel-edit.hidden { display:none; }
+      .accounting-message { margin:0 0 16px; color:#0d8f36; font-size:.82rem; font-weight:700; }
+      .accounting-toolbar { display:grid; grid-template-columns:2fr 1fr 1fr auto; gap:10px; margin-bottom:14px; }
+      .accounting-toolbar input,.accounting-toolbar select { height:42px; padding:9px 11px; border:1px solid #cbd5e1; border-radius:7px; background:#fff; font:inherit; }
+      .accounting-export { border:0; border-radius:7px; padding:10px 15px; background:#1769d1; color:#fff; cursor:pointer; font-weight:800; }
+      .accounting-table-wrap { width:100%; overflow:auto; border:1px solid #cbd5e1; }
+      .accounting-table { width:100%; min-width:800px; border-collapse:collapse; font-size:.82rem; }
+      .accounting-table th, .accounting-table td { padding:12px 10px; border:1px solid #d6e1eb; text-align:left; }
+      .accounting-table th { background:#eaf8ef; font-size:.74rem; text-transform:uppercase; }
+      .accounting-table tbody tr:nth-child(even) { background:#f8fbfc; }
+      .accounting-status { color:#08652b; font-weight:700; }
+      .accounting-status.pending { color:#a54e18; }
+      .accounting-status.cancelled { color:#b4232f; }
+      .accounting-actions { display:flex; gap:6px; }.accounting-delete,.accounting-edit { padding:6px 9px; border:0; border-radius:5px; cursor:pointer; font-weight:800; }.accounting-delete { background:#fde8e8; color:#b4232f; }.accounting-edit { background:#e9f2ff; color:#1769d1; }
+      .accounting-back { display:inline-block; margin-top:18px; color:#0d8f36; font-weight:700; text-decoration:none; }
+      @media (max-width:900px) { .accounting-form,.accounting-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } .accounting-toolbar { grid-template-columns:1fr 1fr; } .accounting-submit { width:fit-content; } }
+      @media (max-width:600px) { .accounting-form,.accounting-metrics,.accounting-toolbar { grid-template-columns:1fr; } }
+    </style>
+    <main class="accounting-page">
+      <section class="accounting-card">
+        <header class="accounting-header"><div><h1>Sistema de Contabilidad</h1><p>Control integral de pagos, deudas y comprobantes del intranet</p></div><strong id="accountingUser"></strong></header>
+        <section class="accounting-metrics"><article class="accounting-metric paid"><span>Total cobrado</span><strong id="metricPaid">S/ 0.00</strong></article><article class="accounting-metric pending"><span>Deuda pendiente</span><strong id="metricPending">S/ 0.00</strong></article><article class="accounting-metric cancelled"><span>Anulado</span><strong id="metricCancelled">S/ 0.00</strong></article><article class="accounting-metric count"><span>Operaciones</span><strong id="metricCount">0</strong></article></section>
+        <form class="accounting-form" id="paymentForm">
+          <label class="accounting-field">Código/DNI<input id="paymentCode" required placeholder="Código del alumno" /></label>
+          <label class="accounting-field">Nombre completo<input id="paymentStudent" required placeholder="Nombre y apellidos" /></label>
+          <label class="accounting-field">Concepto<select id="paymentConcept" required><option>Matrícula</option><option>Mensualidad</option><option>Curso</option><option>Simulacro</option><option>Examen</option><option>Material</option><option>Otro</option></select></label>
+          <label class="accounting-field">Curso o ciclo<input id="paymentDetail" required placeholder="Ej. Regular 2026" /></label>
+          <label class="accounting-field">Monto (S/)<input id="paymentAmount" type="number" min="0.01" step="0.01" required placeholder="0.00" /></label>
+          <label class="accounting-field">Método<select id="paymentMethod"><option>Efectivo</option><option>Yape</option><option>Plin</option><option>Transferencia</option><option>Tarjeta</option><option>Depósito</option></select></label>
+          <label class="accounting-field">N.º comprobante<input id="paymentReceipt" placeholder="Boleta, operación o recibo" /></label>
+          <label class="accounting-field">Fecha<input id="paymentDate" type="date" required /></label>
+          <label class="accounting-field">Vencimiento<input id="paymentDueDate" type="date" /></label>
+          <label class="accounting-field">Estado<select id="paymentStatus"><option value="pagado">Pagado</option><option value="pendiente">Pendiente</option><option value="anulado">Anulado</option></select></label>
+          <label class="accounting-field">Observación<input id="paymentNotes" placeholder="Detalle opcional" /></label>
+          <button class="accounting-submit" id="paymentSubmit" type="submit">Registrar pago</button><button class="accounting-cancel-edit hidden" id="cancelEdit" type="button">Cancelar edición</button>
+        </form>
+        <p class="accounting-message" id="accountingMessage" role="status"></p>
+        <section class="accounting-toolbar"><input id="paymentSearch" type="search" placeholder="Buscar alumno, DNI, comprobante o ciclo" /><select id="statusFilter"><option value="">Todos los estados</option><option value="pagado">Pagados</option><option value="pendiente">Pendientes</option><option value="anulado">Anulados</option></select><select id="conceptFilter"><option value="">Todos los conceptos</option></select><button class="accounting-export" id="exportPayments" type="button">Exportar CSV</button></section>
+        <div id="accountingTable"></div><a class="accounting-back" href="dashboard.html">&larr; Volver al panel</a>
+      </section>
+    </main>
+    <script src="tarjetas/tesoreria/usuario-tesorera.js"></script>
+    <script src="usuario.js?v=20260905-4"></script>
+    <script src="tarjetas/tesoreria/contabilidad-sistema.js"></script>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IDEPUNP ADES 2026 - Semana</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+  </head>
+  <body>
+    <div class="formularios-page">
+      <section class="formularios-panel">
+        <div class="user-profile-bar" id="userProfile"></div>
+        <div class="welcome-banner" style="margin-top: -44px;">
+          <strong id="weekTitle">SEMANA 1</strong>
+          <div class="welcome-tagline">MateCiencias — Aprende, razona y alcanza tus metas.</div>
+        </div>
+
+        <div class="formularios-cards week-courses-grid" id="courseGrid"></div>
+
+        <div class="formulario-footer">
+          <a href="tarjetas/canva-studies/curso-ades-2026-semanas.html" class="btn-link">Volver a las semanas</a>
+        </div>
+      </section>
+    </div>
+
+    <script src="usuario.js?v=20260905-4"></script>
+    <script src="perfil-ranking.js"></script>
+    <script>
+      PerfilRankingService.renderProfile(document.getElementById('userProfile'));
+      const params = new URLSearchParams(window.location.search);
+      const weekNumber = parseInt(params.get('week'), 10) || 1;
+      const weekTitle = document.getElementById('weekTitle');
+      const courseGrid = document.getElementById('courseGrid');
+
+      const courses = ['Razonamiento Matemático', 'Razonamiento Lógico', 'Aptitud Verbal', 'Matemática 1', 'Física', 'Química', 'Biología', 'Lenguaje', 'Literatura', 'Matemática 2', 'Historia del Perú', 'Economía', 'Geografía'];
+
+      weekTitle.textContent = `SEMANA ${weekNumber}`;
+
+      courses.forEach((curso) => {
+        const card = document.createElement('article');
+        card.className = 'formulario-card';
+        card.style.cursor = 'pointer';
+        card.onclick = () => window.location.assign(`tarjetas/canva-studies/evaluacion-personalizada.html?ciclo=${encodeURIComponent('ADES 2026')}&semana=${weekNumber}&curso=${encodeURIComponent(curso)}`);
+        card.innerHTML = `
+          <div class="formulario-avatar">
+            <img src="canvas%20studies.png" alt="${curso}" draggable="false" onmousedown="return false;" oncontextmenu="return false;" />
+          </div>
+          <div class="formulario-body">
+            <strong>${curso}</strong>
+          </div>
+        `;
+        courseGrid.appendChild(card);
+      });
+    </script>
+  </body>
+</html>

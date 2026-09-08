@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IDEPUNP Regular 2026 - Formularios por semana</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+  </head>
+  <body>
+    <div class="formularios-page">
+      <section class="formularios-panel">
+        <div class="user-profile-bar" id="userProfile"></div>
+        <div class="welcome-banner" style="margin-top: -24px;">
+          <strong>FORMULARIOS X SEMANA</strong>
+          <div class="welcome-tagline">IDEPUNP SETIEMBRE A DICIEMBRE · REGULAR 2026</div>
+        </div>
+        <div class="formularios-cards" id="weeksGrid"></div>
+        <div class="formulario-footer"><a href="tarjetas/canva-studies/formularios-regular-2026.html" class="btn-link">Volver a Regular 2026</a></div>
+      </section>
+    </div>
+    <script src="usuario.js?v=20260905-4"></script>
+    <script src="perfil-ranking.js"></script>
+    <script>
+      PerfilRankingService.renderProfile(document.getElementById('userProfile'));
+      const weeksGrid = document.getElementById('weeksGrid');
+      for (let week = 1; week <= 10; week += 1) {
+        const card = document.createElement('article');
+        card.className = 'formulario-card';
+        card.style.cursor = 'pointer';
+        card.onclick = () => window.location.assign(`tarjetas/canva-studies/formularios-regular-2026-semana.html?week=${week}`);
+        card.innerHTML = `<div class="formulario-avatar"><img src="canvas%20studies.png" alt="Semana ${week}" /></div><div class="formulario-body"><strong>SEMANA ${week}</strong></div>`;
+        weeksGrid.appendChild(card);
+      }
+    </script>
+  </body>
+</html>

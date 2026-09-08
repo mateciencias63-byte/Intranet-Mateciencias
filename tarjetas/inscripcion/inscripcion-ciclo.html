@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MateCiencias | Pre-inscripción</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+    <style>
+      body { background-image:url('fondo.png'); background-size:cover; background-position:center center; background-repeat:no-repeat; background-attachment:fixed; }
+      .inscripcion-page { min-height:100vh; padding:32px clamp(18px,4vw,58px) 48px; }
+      .inscripcion-card { width:100%; max-width:980px; margin:0 auto; padding:28px; border:1px solid #e1e8f0; border-radius:10px; background:#fff; box-shadow:0 12px 28px rgba(15,41,80,.08); }
+      .inscripcion-logo { display:block; width:min(120px, 40vw); height:auto; margin:0 auto 16px; user-select:none; -webkit-user-select:none; -webkit-user-drag:none; pointer-events:none; }
+      .inscripcion-card h1 { margin:0; color:#12233f; font-size:clamp(1.7rem,3vw,2.35rem); text-align:center; }
+      .inscripcion-card > p { margin:8px 0 24px; color:#65748b; text-align:center; }
+      .inscripcion-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; }
+      .inscripcion-form label { display:grid; gap:6px; color:#12233f; font-size:.82rem; font-weight:700; }
+      .inscripcion-ubigeo-wrapper { display:flex; gap:8px; align-items:flex-end; }
+      .inscripcion-ubigeo-wrapper label { margin:0; flex:1; }
+      .inscripcion-form input, .inscripcion-form select { width:100%; padding:11px; border:1px solid #cbd5e1; border-radius:7px; background:#fff; color:#12233f; font:inherit; box-sizing:border-box; }
+      .inscripcion-form input:focus, .inscripcion-form select:focus { outline:2px solid #168044; outline-offset:-1px; }
+      .ubigeo-help-button { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; margin-left:6px; border:2px solid #168044; border-radius:50%; background:#f0f9f5; color:#168044; cursor:pointer; font:inherit; font-weight:700; font-size:1rem; padding:0; transition:all 0.2s ease; }
+      .ubigeo-help-button:hover { background:#168044; color:#fff; box-shadow:0 2px 8px rgba(22,128,68,0.3); }
+      .ubigeo-help-button:active { transform:scale(0.95); }
+      .inscripcion-phone { display:flex; align-items:center; overflow:hidden; border:1px solid #cbd5e1; border-radius:7px; background:#fff; }
+      .inscripcion-phone-prefix { padding:11px 0 11px 11px; color:#12233f; font-weight:700; }
+      .inscripcion-phone input { min-width:0; border:0; border-radius:0; }
+      .inscripcion-phone input:focus { outline:0; }
+      .inscripcion-section-title { grid-column:1 / -1; margin:8px 0 -3px; padding-bottom:8px; border-bottom:1px solid #dbe7ed; color:#168044; font-size:1rem; }
+      .inscripcion-personal-fields { display:grid; grid-template-columns:minmax(0,1fr) 280px; grid-column:1 / -1; gap:15px; align-items:start; }
+      .inscripcion-fields-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; }
+      .inscripcion-photo-box { display:grid; gap:8px; justify-items:center; padding:16px; border:2px dashed #168044; border-radius:10px; background:#f7fcf8; color:#12233f; text-align:center; }
+      .inscripcion-photo-preview { display:grid; place-items:center; width:220px; height:260px; overflow:hidden; border:1px solid #cbd5e1; border-radius:7px; background:#e8f1eb; color:#65748b; font-size:.82rem; }
+      .inscripcion-photo-preview img { width:100%; height:100%; object-fit:cover; }
+      .inscripcion-photo-box input { width:100%; font:inherit; font-size:.78rem; }
+      .inscripcion-photo-box { cursor:pointer; }
+      .inscripcion-photo-box input { cursor:pointer; }
+      .photo-guide-modal { display:none; position:fixed; inset:0; z-index:100; place-items:center; padding:20px; background:rgba(15,23,42,.6); }
+      .photo-guide-modal.visible { display:grid; }
+      .ubigeo-guide-modal { display:none; position:fixed; inset:0; z-index:100; place-items:center; padding:20px; background:rgba(15,23,42,.6); }
+      .ubigeo-guide-modal.visible { display:grid; }
+      .photo-guide-content { position:relative; width:min(480px, 100%); padding:22px; border-radius:10px; background:#fff; color:#12233f; text-align:center; box-shadow:0 18px 45px rgba(15,23,42,.28); }
+      .photo-guide-content h2 { margin:0 0 14px; color:#168044; font-size:1.15rem; }
+      .photo-guide-image { display:block; width:min(360px, 100%); max-height:420px; margin:0 auto 16px; object-fit:contain; border:1px solid #dbe7ed; border-radius:7px; }
+      .photo-guide-close { padding:9px 16px; border:0; border-radius:7px; background:#168044; color:#fff; cursor:pointer; font:inherit; font-weight:700; }
+      .inscripcion-next { grid-column:1 / -1; justify-self:end; padding:11px 18px; border:0; border-radius:7px; background:#168044; color:#fff; cursor:pointer; font:inherit; font-weight:700; }
+      .inscripcion-next:hover { background:#0d6334; }
+      .inscripcion-payment-step { display:none; grid-column:1 / -1; }
+      .inscripcion-payment-step.visible { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; }
+      .inscripcion-payment-step .inscripcion-section-title, .inscripcion-payment-step .inscripcion-qr, .inscripcion-payment-step .inscripcion-total, .inscripcion-payment-step .inscripcion-submit { grid-column:1 / -1; }
+      .inscripcion-qr { display:flex; flex-direction:column; align-items:center; grid-column:1 / -1; gap:8px; padding:14px; border:1px solid #dbe7ed; border-radius:7px; background:#f8fbfc; color:#65748b; font-size:.82rem; text-align:center; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; }
+      .inscripcion-qr img { width:min(220px, 100%); height:auto; border:8px solid #fff; box-shadow:0 2px 8px rgba(15,41,80,.12); user-select:none; -webkit-user-select:none; -webkit-user-drag:none; pointer-events:none; }
+      .inscripcion-total { display:flex; align-items:center; justify-content:space-between; grid-column:1 / -1; padding:14px; border-radius:7px; background:#eaf8ef; color:#12233f; }
+      .inscripcion-total strong { color:#0d8f36; font-size:1.15rem; }
+      .inscripcion-submit { grid-column:1 / -1; width:fit-content; padding:12px 18px; border:0; border-radius:7px; background:#0d8f36; color:#fff; cursor:pointer; font:inherit; font-weight:700; }
+      .inscripcion-submit:hover { background:#0a6c27; }
+      .inscripcion-message { min-height:20px; margin:18px 0 0; color:#0d8f36; font-size:.85rem; font-weight:700; }
+      .inscripcion-receipt { display:none; margin-top:18px; padding:16px; border:1px solid #b8dfc3; border-radius:7px; background:#f2fbf4; color:#12233f; }
+      .inscripcion-receipt.visible { display:block; }
+      .inscripcion-receipt strong { color:#0d8f36; }
+      .inscripcion-locked { display:none; margin:18px 0; padding:18px; border:1px solid #b8dfc3; border-radius:7px; background:#f2fbf4; color:#12233f; line-height:1.55; }
+      .inscripcion-locked.visible { display:block; }
+      .inscripcion-success-title { margin:0 0 12px; color:#0d8f36; font-size:1.15rem; }
+      .inscripcion-success-copy { margin:0 0 11px; line-height:1.55; }
+      .inscripcion-success-signature { margin:18px 0 0; line-height:1.55; }
+      @media (max-width:700px) { .inscripcion-page { padding:22px 14px 35px; } .inscripcion-card { padding:18px; } .inscripcion-form, .inscripcion-payment-step.visible, .inscripcion-personal-fields, .inscripcion-fields-grid { grid-template-columns:1fr; } .inscripcion-section-title, .inscripcion-total, .inscripcion-submit, .inscripcion-next, .inscripcion-personal-fields { grid-column:auto; } .inscripcion-submit, .inscripcion-next { width:100%; } }
+    </style>
+  <link rel="stylesheet" href="tarjetas/inscripcion/registro.css" /></head>
+  <body>
+    <main class="inscripcion-page">
+      <section class="inscripcion-card">
+        <img class="inscripcion-logo" src="ChatGPT%20Image%2021%20jul%202026%2C%2018_36_22.png" alt="Logo de MateCiencias" draggable="false" oncontextmenu="return false;" oncopy="return false;" oncut="return false;" onselectstart="return false;" ondragstart="return false;" />
+        <h1>PRE INSCRIPCION "MATECIENCIAS"</h1>
+        <p>Completa tus datos y registra el pago de tu Pre-inscripción.</p>
+        <div class="inscripcion-locked" id="inscripcionLocked"></div>
+        <form class="inscripcion-form" id="inscripcionForm">
+          <h2 class="inscripcion-section-title">Datos del postulante</h2>
+          <div class="inscripcion-personal-fields">
+            <div class="inscripcion-fields-grid">
+              <label for="inscripcionApellidoPaterno">Apellido paterno<input id="inscripcionApellidoPaterno" required /></label>
+              <label for="inscripcionApellidoMaterno">Apellido materno<input id="inscripcionApellidoMaterno" required /></label>
+              <label for="inscripcionNombres">Nombres<input id="inscripcionNombres" required /></label>
+              <label for="inscripcionSexo">Sexo<select id="inscripcionSexo" required><option value="">Selecciona una opción</option><option>Masculino</option><option>Femenino</option></select></label>
+              <label for="inscripcionDni">Documento de identidad (DNI)<input id="inscripcionDni" inputmode="numeric" maxlength="8" pattern="[0-9]{8}" required /></label>
+              <label for="inscripcionFechaNacimiento">Fecha de nacimiento<input id="inscripcionFechaNacimiento" type="date" required /></label>
+              <label for="inscripcionEdad">Edad<input id="inscripcionEdad" type="number" min="1" max="120" required /></label>
+              <label for="inscripcionCorreo">Correo electrónico<input id="inscripcionCorreo" type="email" required /></label>
+              <label for="inscripcionTelefono">Teléfono del postulante<div class="inscripcion-phone"><span class="inscripcion-phone-prefix">+51</span><input id="inscripcionTelefono" type="tel" inputmode="numeric" maxlength="9" pattern="[0-9]{9}" placeholder="999 999 999" aria-label="Número de teléfono del postulante" required /></div></label>
+              <label for="inscripcionTelefonoApoderado">Teléfono del apoderado<div class="inscripcion-phone"><span class="inscripcion-phone-prefix">+51</span><input id="inscripcionTelefonoApoderado" type="tel" inputmode="numeric" maxlength="9" pattern="[0-9]{9}" placeholder="999 999 999" aria-label="Número de teléfono del apoderado" /></div></label>
+              <label for="inscripcionApoderado">Apellidos y nombres del padre o apoderado<input id="inscripcionApoderado" /></label>
+              <label for="inscripcionEstudioAnterior">¿Estudió anteriormente en MateCiencias?<select id="inscripcionEstudioAnterior" required><option value="">Selecciona una opción</option><option>Sí</option><option>No</option></select></label>
+              <label for="inscripcionCarrera">Carrera a la que postula<select id="inscripcionCarrera" required><option value="">Selecciona una carrera</option><option>Agronomía</option><option>Ingeniería Agrícola</option><option>Arquitectura y Urbanismo</option><option>Ciencias Administrativas</option><option>Ciencias Contables y Financieras</option><option>Ciencias Biológicas</option><option>Estadística</option><option>Física</option><option>Ingeniería Electrónica y Telecomunicaciones</option><option>Matemática</option><option>Enfermería</option><option>Estomatología</option><option>Medicina Humana</option><option>Obstetricia</option><option>Psicología</option><option>Ciencias de la Comunicación</option><option>Educación Inicial</option><option>Educación Primaria</option><option>Historia y Geografía</option><option>Lengua y Literatura</option><option>Derecho y Ciencias Políticas</option><option>Economía</option><option>Ingeniería Civil</option><option>Ingeniería Agroindustrial e Industrias Alimentarias</option><option>Ingeniería Industrial</option><option>Ingeniería Informática</option><option>Ingeniería Mecatrónica</option><option>Ingeniería Ambiental y Seguridad Industrial</option><option>Ingeniería de Minas</option><option>Ingeniería de Petróleo</option><option>Ingeniería Geológica</option><option>Ingeniería Química</option><option>Ingeniería Pesquera</option><option>Ingeniería Zootecnia</option><option>Medicina Veterinaria</option><option>Ciencias Políticas y Gobernabilidad</option></select></label>
+              <label for="inscripcionUniversidad">Universidad<input id="inscripcionUniversidad" required /></label>
+              <label for="inscripcionCiclo">Proceso de admisión<select id="inscripcionCiclo" required>
+                <option value="">Seleccione un proceso de admisión</option>
+                <option>CICLO ADES</option>
+                <option>Ciclo PREU Verano 2027</option>
+                <option>Ciclo PREU Primavera 2027</option>
+                <option>Ciclo PREU Otoño 2027</option>
+                <option>Amanecida</option>
+                <option>Repaso</option>
+                <option>Reforzamiento</option>
+                <option>Ciclo Intensivo</option>
+                <option>Ciclo IDEPUNP Setiembre – Diciembre 2026</option>
+                <option>Ciclo IDEPUNP Enero – Marzo 2027</option>
+                <option>Ciclo IDEPUNP Abril – Julio 2027</option>
+                <option>Ciclo UNC</option>
+                <option>Ciclo UNF</option>
+                <option>Ciclo COAR</option>
+                <option>Ciclo Beca 18</option>
+                <option>Ciclo UNI</option>
+                <option>Ciclo UNT</option>
+                <option>Ciclo UNTUMBES</option>
+                <option>Ciclo UNSA</option>
+                <option>Ciclo UNSAAC</option>
+                <option>Ciclo UNMSM</option>
+                <option>Ciclo UNCP</option>
+                <option>Ciclo UDEP PAE</option>
+                <option>Ciclo UDEP TAE</option>
+                <option>Maratón</option>
+              </select></label>
+              <label for="inscripcionModalidad">Modalidad<select id="inscripcionModalidad" required><option value="">Selecciona una modalidad</option><option>Virtual</option></select></label>
+              <label for="inscripcionDireccion">Dirección del postulante<input id="inscripcionDireccion" required /></label>
+              <div class="inscripcion-ubigeo-wrapper">
+                <label for="inscripcionUbigeo">Ubigeo<input id="inscripcionUbigeo" placeholder="Ej: 150131" required /></label>
+                <button class="ubigeo-help-button" type="button" id="ubigeoHelpButton" aria-label="Ver ejemplo de Ubigeo" title="Ver ejemplo">?</button>
+              </div>
+            </div>
+            <div class="inscripcion-photo-box">
+              <strong>Foto del postulante</strong>
+              <div class="inscripcion-photo-preview" id="inscripcionPhotoPreview" tabindex="0" role="button" aria-label="Ver ejemplo de foto">Selecciona una foto</div>
+              <input id="inscripcionFoto" type="file" accept="image/*" required />
+            </div>
+          </div>
+          <h2 class="inscripcion-section-title">Nacimiento</h2>
+          <label for="inscripcionNacimientoDepartamento">Departamento<input id="inscripcionNacimientoDepartamento" required /></label>
+          <label for="inscripcionNacimientoProvincia">Provincia<input id="inscripcionNacimientoProvincia" required /></label>
+          <label for="inscripcionNacimientoDistrito">Distrito<input id="inscripcionNacimientoDistrito" required /></label>
+          <h2 class="inscripcion-section-title">Dirección del DNI</h2>
+          <label for="inscripcionDniDepartamento">Departamento<input id="inscripcionDniDepartamento" required /></label>
+          <label for="inscripcionDniProvincia">Provincia<input id="inscripcionDniProvincia" required /></label>
+          <label for="inscripcionDniDistrito">Distrito<input id="inscripcionDniDistrito" required /></label>
+          <label for="inscripcionDniDireccion">Calle/Av./Jr.<input id="inscripcionDniDireccion" required /></label>
+          <h2 class="inscripcion-section-title">Institución educativa</h2>
+          <label for="inscripcionIeDepartamento">Departamento<input id="inscripcionIeDepartamento" required /></label>
+          <label for="inscripcionIeProvincia">Provincia<input id="inscripcionIeProvincia" required /></label>
+          <label for="inscripcionIeDistrito">Distrito<input id="inscripcionIeDistrito" required /></label>
+          <label for="inscripcionIeNombre">Nombre de la I.E.<input id="inscripcionIeNombre" required /></label>
+          <button class="inscripcion-next" id="inscripcionNext" type="button">Siguiente</button>
+          <div class="inscripcion-payment-step" id="inscripcionPaymentStep">
+            <h2 class="inscripcion-section-title">Datos del pago</h2>
+            <div class="inscripcion-qr" oncontextmenu="return false;" oncopy="return false;" oncut="return false;" onselectstart="return false;" ondragstart="return false;"><span>Escanea este código QR para realizar el pago</span><img src="QR.jpeg" alt="Código QR para realizar el pago" draggable="false" ondragstart="return false;" /></div>
+            <label for="inscripcionMetodo">Medio de pago<select id="inscripcionMetodo" required><option value="">Selecciona un medio de pago</option><option>Yape</option><option>Plin</option><option>Transferencia bancaria</option><option>Depósito bancario</option></select></label>
+            <label for="inscripcionOperacion">N° de operación<input id="inscripcionOperacion" required /></label>
+            <label for="inscripcionFechaPago">Fecha de pago<input id="inscripcionFechaPago" type="date" required /></label>
+            <label for="inscripcionMonto">Monto pagado (S/)<input id="inscripcionMonto" type="number" min="1" step="0.01" value="00.00" required /></label>
+            <div class="inscripcion-total"><span>Total de inscripción</span><strong id="inscripcionTotal">S/ 50.00</strong></div>
+            <button class="inscripcion-submit" type="submit">Enviar inscripción y pago</button>
+          </div>
+        </form>
+        <p class="inscripcion-message" id="inscripcionMessage" role="status"></p>
+        <div class="inscripcion-receipt" id="inscripcionReceipt"></div>
+      </section>
+    </main>
+    <div class="photo-guide-modal" id="photoGuideModal" role="dialog" aria-modal="true" aria-labelledby="photoGuideTitle">
+      <div class="photo-guide-content">
+        <h2 id="photoGuideTitle">Ejemplo de foto del postulante</h2>
+        <img class="photo-guide-image" src="foto.png" alt="Ejemplo de cómo debe ser la foto del postulante" draggable="false" oncontextmenu="return false;" />
+        <button class="photo-guide-close" id="photoGuideClose" type="button">Cerrar</button>
+      </div>
+    </div>
+    <div class="ubigeo-guide-modal" id="ubigeoGuideModal" role="dialog" aria-modal="true" aria-labelledby="ubigeoGuideTitle">
+      <div class="photo-guide-content">
+        <h2 id="ubigeoGuideTitle">Ejemplo de Ubigeo</h2>
+        <img class="photo-guide-image" src="UBIGEO.webp" alt="Ejemplo de Ubigeo" draggable="false" oncontextmenu="return false;" />
+        <button class="photo-guide-close" id="ubigeoGuideClose" type="button">Cerrar</button>
+      </div>
+    </div>
+    <script>
+      const inscripcionKey = 'matecienciasInscripciones';
+      const inscripcionForm = document.getElementById('inscripcionForm');
+      const inscripcionMessage = document.getElementById('inscripcionMessage');
+      const inscripcionReceipt = document.getElementById('inscripcionReceipt');
+      const inscripcionLocked = document.getElementById('inscripcionLocked');
+      const inscripcionPaymentStep = document.getElementById('inscripcionPaymentStep');
+      const inscripcionFoto = document.getElementById('inscripcionFoto');
+      const inscripcionPhotoPreview = document.getElementById('inscripcionPhotoPreview');
+      const photoGuideModal = document.getElementById('photoGuideModal');
+      const photoGuideClose = document.getElementById('photoGuideClose');
+      const inscripcionFechaPago = document.getElementById('inscripcionFechaPago');
+      const inscripcionMonto = document.getElementById('inscripcionMonto');
+      const inscripcionTotal = document.getElementById('inscripcionTotal');
+      const showInscripcionError = (message) => {
+        inscripcionMessage.textContent = message;
+        inscripcionMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      };
+      inscripcionForm.addEventListener('invalid', (event) => {
+        const field = event.target;
+        if (inscripcionPaymentStep.contains(field)) inscripcionPaymentStep.classList.add('visible');
+        const label = field.closest('label');
+        inscripcionMessage.textContent = `Revisa ${label ? label.firstChild.textContent.trim() : 'la foto del postulante'}: ${field.validationMessage}`;
+      }, true);
+      const updateInscripcionTotal = () => {
+        const amount = Number(inscripcionMonto.value);
+        inscripcionTotal.textContent = `S/ ${Number.isFinite(amount) && amount > 0 ? amount.toFixed(2) : '0.00'}`;
+      };
+      inscripcionFechaPago.value = new Date().toISOString().slice(0, 10);
+      inscripcionMonto.addEventListener('input', updateInscripcionTotal);
+      updateInscripcionTotal();
+      const showPhotoGuide = () => photoGuideModal.classList.add('visible');
+      const hidePhotoGuide = () => photoGuideModal.classList.remove('visible');
+      const showUbigeoGuide = () => document.getElementById('ubigeoGuideModal').classList.add('visible');
+      const hideUbigeoGuide = () => document.getElementById('ubigeoGuideModal').classList.remove('visible');
+      inscripcionPhotoPreview.addEventListener('click', showPhotoGuide);
+      inscripcionPhotoPreview.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          showPhotoGuide();
+        }
+      });
+      photoGuideClose.addEventListener('click', hidePhotoGuide);
+      photoGuideModal.addEventListener('click', (event) => {
+        if (event.target === photoGuideModal) hidePhotoGuide();
+      });
+      document.getElementById('ubigeoHelpButton').addEventListener('click', (event) => {
+        event.preventDefault();
+        showUbigeoGuide();
+      });
+      document.getElementById('ubigeoGuideClose').addEventListener('click', hideUbigeoGuide);
+      document.getElementById('ubigeoGuideModal').addEventListener('click', (event) => {
+        if (event.target === document.getElementById('ubigeoGuideModal')) hideUbigeoGuide();
+      });
+      let inscripcionFotoData = '';
+      let inscripcionFotoLoading = false;
+      let inscripcionAlreadyRegistered = false;
+      const readInscripciones = () => {
+        try {
+          const records = JSON.parse(localStorage.getItem(inscripcionKey) || '[]');
+          return Array.isArray(records) ? records : [];
+        } catch (error) { return []; }
+      };
+      const checkExistingInscripcion = () => {
+        const dni = document.getElementById('inscripcionDni').value.trim();
+        const record = dni ? readInscripciones().find((item) => item.dni === dni && item.ciclo === document.getElementById('inscripcionCiclo').value && (item.tipoDocumento || 'DNI') === document.getElementById('registroTipo').value) : null;
+        if (!record) return;
+        inscripcionAlreadyRegistered = true;
+        inscripcionForm.style.display = 'none';
+        inscripcionLocked.textContent = 'Esta preinscripción ya fue registrada. ' + (record.mensajeEstudiante || 'Su información se encuentra en proceso de evaluación y validación.');
+        inscripcionLocked.classList.add('visible');
+      };
+      document.getElementById('inscripcionDni').addEventListener('input', checkExistingInscripcion);
+      window.addEventListener('storage', (event) => {
+        if (event.key === inscripcionKey) checkExistingInscripcion();
+      });
+      inscripcionFoto.addEventListener('change', () => {
+        const file = inscripcionFoto.files[0];
+        inscripcionFotoData = '';
+        inscripcionFotoLoading = false;
+        if (!file) {
+          inscripcionFotoData = '';
+          inscripcionPhotoPreview.textContent = 'Selecciona una foto';
+          return;
+        }
+        const reader = new FileReader();
+        inscripcionFotoLoading = true;
+        reader.addEventListener('load', () => {
+          if (inscripcionFoto.files[0] !== file) return;
+          inscripcionFotoLoading = false;
+          inscripcionFotoData = reader.result;
+          inscripcionPhotoPreview.innerHTML = `<img src="${inscripcionFotoData}" alt="Vista previa de la foto del postulante" />`;
+        });
+        reader.addEventListener('error', () => {
+          if (inscripcionFoto.files[0] !== file) return;
+          inscripcionFotoLoading = false;
+          showInscripcionError('No se pudo leer la foto. Selecciona otra imagen e intenta nuevamente.');
+        });
+        reader.readAsDataURL(file);
+      });
+      document.getElementById('inscripcionNext').addEventListener('click', () => {
+        const applicantFieldIds = ['inscripcionApellidoPaterno', 'inscripcionApellidoMaterno', 'inscripcionNombres', 'inscripcionSexo', 'inscripcionDni', 'inscripcionFechaNacimiento', 'inscripcionEdad', 'inscripcionCorreo', 'inscripcionTelefono', 'inscripcionEstudioAnterior', 'inscripcionCarrera', 'inscripcionUniversidad', 'inscripcionCiclo', 'inscripcionModalidad', 'inscripcionDireccion', 'inscripcionUbigeo', 'inscripcionNacimientoDepartamento', 'inscripcionNacimientoProvincia', 'inscripcionNacimientoDistrito', 'inscripcionDniDepartamento', 'inscripcionDniProvincia', 'inscripcionDniDistrito', 'inscripcionDniDireccion', 'inscripcionIeDepartamento', 'inscripcionIeProvincia', 'inscripcionIeDistrito', 'inscripcionIeNombre'];
+        const applicantFields = applicantFieldIds.map((id) => document.getElementById(id));
+        applicantFields.push(inscripcionFoto);
+        if (!applicantFields.every((field) => field.reportValidity())) return;
+        inscripcionPaymentStep.classList.add('visible');
+        document.getElementById('inscripcionMetodo').focus();
+      });
+      const createCode = () => `MC-${Date.now().toString(36).toUpperCase()}`;
+      inscripcionForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (inscripcionAlreadyRegistered) return;
+        if (inscripcionFotoLoading || !inscripcionFotoData) {
+          showInscripcionError(inscripcionFotoLoading ? 'La foto todavía se está cargando. Espera un momento y vuelve a enviar.' : 'Selecciona una foto válida antes de enviar la inscripción.');
+          return;
+        }
+        let records = [];
+        try {
+          records = JSON.parse(localStorage.getItem(inscripcionKey) || '[]');
+          if (!Array.isArray(records)) throw new Error('Invalid records');
+        } catch (error) {
+          showInscripcionError('No se pudieron leer las inscripciones guardadas. Tus datos siguen en el formulario. Intenta nuevamente o contacta a Secretaría.');
+          return;
+        }
+        const dni = document.getElementById('inscripcionDni').value.trim();
+        if (records.some((record) => record.dni === dni && record.ciclo === document.getElementById('inscripcionCiclo').value && (record.tipoDocumento || 'DNI') === document.getElementById('registroTipo').value)) {
+          checkExistingInscripcion();
+          return;
+        }
+        const code = createCode();
+        records.push({
+          ...window.datosRegistroCompleto(),
+          codigo: code,
+          apellidoPaterno: document.getElementById('inscripcionApellidoPaterno').value.trim(),
+          apellidoMaterno: document.getElementById('inscripcionApellidoMaterno').value.trim(),
+          nombres: document.getElementById('inscripcionNombres').value.trim(),
+          nombreCompleto: `${document.getElementById('inscripcionApellidoPaterno').value.trim()} ${document.getElementById('inscripcionApellidoMaterno').value.trim()} ${document.getElementById('inscripcionNombres').value.trim()}`,
+          sexo: document.getElementById('inscripcionSexo').value.trim(),
+          dni: document.getElementById('inscripcionDni').value.trim(),
+          fechaNacimiento: document.getElementById('inscripcionFechaNacimiento').value,
+          edad: document.getElementById('inscripcionEdad').value,
+          correo: document.getElementById('inscripcionCorreo').value.trim(),
+          telefonoPostulante: `+51 ${document.getElementById('inscripcionTelefono').value.trim()}`,
+          telefonoApoderado: document.getElementById('inscripcionTelefonoApoderado').value.trim() ? `+51 ${document.getElementById('inscripcionTelefonoApoderado').value.trim()}` : '',
+          apoderado: document.getElementById('inscripcionApoderado').value.trim(),
+          estudiosAnteriores: document.getElementById('inscripcionEstudioAnterior').value.trim(),
+          carrera: document.getElementById('inscripcionCarrera').value.trim(),
+          universidad: document.getElementById('inscripcionUniversidad').value.trim(),
+          ciclo: document.getElementById('inscripcionCiclo').value,
+          modalidad: document.getElementById('inscripcionModalidad').value,
+          direccion: document.getElementById('inscripcionDireccion').value.trim(),
+          ubigeo: document.getElementById('inscripcionUbigeo').value.trim(),
+          foto: inscripcionFotoData,
+          nacimiento: {
+            departamento: document.getElementById('inscripcionNacimientoDepartamento').value.trim(),
+            provincia: document.getElementById('inscripcionNacimientoProvincia').value.trim(),
+            distrito: document.getElementById('inscripcionNacimientoDistrito').value.trim()
+          },
+          direccionDni: {
+            departamento: document.getElementById('inscripcionDniDepartamento').value.trim(),
+            provincia: document.getElementById('inscripcionDniProvincia').value.trim(),
+            distrito: document.getElementById('inscripcionDniDistrito').value.trim(),
+            calle: document.getElementById('inscripcionDniDireccion').value.trim()
+          },
+          institucionEducativa: {
+            departamento: document.getElementById('inscripcionIeDepartamento').value.trim(),
+            provincia: document.getElementById('inscripcionIeProvincia').value.trim(),
+            distrito: document.getElementById('inscripcionIeDistrito').value.trim(),
+            nombre: document.getElementById('inscripcionIeNombre').value.trim()
+          },
+          metodoPago: document.getElementById('inscripcionMetodo').value,
+          operacion: document.getElementById('inscripcionOperacion').value.trim(),
+          fechaPago: inscripcionFechaPago.value,
+          monto: document.getElementById('inscripcionMonto').value,
+          estadoPago: 'Pendiente de verificación',
+          fecha: new Date().toISOString()
+        });
+        try {
+          localStorage.setItem(inscripcionKey, JSON.stringify(records));
+        } catch (error) {
+          showInscripcionError(error.name === 'QuotaExceededError'
+            ? 'No hay espacio suficiente para guardar la inscripción. Selecciona una foto de menor tamaño y vuelve a enviar. Si persiste, contacta a Secretaría. Tus datos siguen en el formulario.'
+            : 'El navegador no permitió guardar la inscripción. Tus datos siguen en el formulario. Revisa los permisos de almacenamiento e intenta nuevamente.');
+          return;
+        }
+        inscripcionForm.reset();
+        inscripcionFotoData = '';
+        inscripcionPhotoPreview.textContent = 'Selecciona una foto';
+        inscripcionFechaPago.value = new Date().toISOString().slice(0, 10);
+        inscripcionMonto.value = '50.00';
+        updateInscripcionTotal();
+        inscripcionMessage.textContent = 'Preinscripción registrada correctamente.';
+        inscripcionReceipt.innerHTML = `<h2 class="inscripcion-success-title">✅ ¡INSCRIPCIÓN REGISTRADA CON ÉXITO!</h2><p class="inscripcion-success-copy">Su inscripción ha sido recibida correctamente y actualmente se encuentra en proceso de evaluación y validación por parte de la Secretaría Académica de <strong>MateCiencias</strong>.</p><p class="inscripcion-success-copy">En un plazo máximo de <strong>24 horas</strong>, nuestro equipo verificará la información proporcionada. Una vez aprobada su inscripción, le enviaremos su <strong>código de estudiante</strong>, el cual le permitirá ingresar a la intranet de MateCiencias y acceder a los servicios académicos correspondientes.</p><p class="inscripcion-success-copy">Le recomendamos estar atento al número de teléfono o medio de contacto que registró durante su inscripción. Recuerde que su código de estudiante es personal y deberá conservarlo para realizar futuros accesos.</p><p class="inscripcion-success-copy">Agradecemos su confianza y paciencia durante este proceso.</p><p class="inscripcion-success-signature"><strong>Atentamente,<br>Secretaría Académica de MateCiencias</strong></p><p><strong>Código de inscripción:</strong> ${code}<br><strong>Estado del pago:</strong> Pendiente de verificación</p>`;
+        inscripcionReceipt.classList.add('visible');
+        inscripcionAlreadyRegistered = true;
+        inscripcionForm.style.display = 'none';
+        inscripcionLocked.innerHTML = '<strong>Tu preinscripción ya fue registrada.</strong>';
+        inscripcionLocked.classList.add('visible');
+        inscripcionReceipt.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    </script>
+  <script src="tarjetas/inscripcion/registro.js"></script></body>
+</html>

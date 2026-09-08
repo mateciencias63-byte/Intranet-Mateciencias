@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MateCiencias | Aula Virtual</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="logo.png" />
+    <style>
+      .aula-header { min-height:78px; padding:12px 24px; }
+      .aula-header { flex-direction:row !important; align-items:center !important; }
+      .aula-header .internal-header-right { width:auto !important; justify-content:flex-end; }
+      .aula-header .internal-title { font-size:1.75rem; }
+      .aula-header .internal-title, .aula-header .welcome-tagline { white-space:nowrap; line-height:1.1; }
+      .aula-header .welcome-tagline { font-size:.85rem !important; }
+      .aula-header .profile-panel-summary .internal-user-info { padding:7px 11px; }
+      .aula-main { min-height:calc(100vh - 90px); padding:0 !important; }
+      .aula-cards-section { width:100%; max-width:none; margin:0; padding:0; }
+      .aula-layout { display:grid; grid-template-columns:220px minmax(0,1fr); min-height:calc(100vh - 90px); width:100%; }
+      .aula-ribbon { padding:24px 16px; background:#102a43; color:#fff; }
+      .aula-ribbon h2 { margin:0 10px 22px; color:#9bd5ad; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; }
+      .aula-nav { display:grid; gap:6px; }
+      .aula-nav button { display:flex; align-items:center; gap:12px; width:100%; padding:12px 13px; border:0; border-radius:8px; background:transparent; color:#d9e5f1; cursor:pointer; font:inherit; font-size:.88rem; text-align:left; }
+      .aula-nav button:hover, .aula-nav button.active { background:#1d3859; color:#fff; }
+      .aula-nav-icon { width:20px; color:#7ed99a; font-size:1rem; text-align:center; }
+      .aula-workspace { padding:34px clamp(22px,4vw,56px); color:#102a43; }
+      .aula-workspace-header { display:flex; align-items:end; justify-content:space-between; gap:20px; margin-bottom:26px; }
+      .aula-eyebrow { margin:0 0 8px; color:#000; font-size:.74rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+      .aula-workspace h1 { margin:0; color:#000; font-size:clamp(1.8rem,3vw,2.6rem); }
+      .aula-date { color:#60758a; font-size:.86rem; }
+      .aula-view { display:none; animation:aulaReveal .25s ease both; }
+      .aula-view.active { display:block; }
+      .aula-overview { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-bottom:22px; }
+      .aula-stat, .aula-panel { background:rgba(255,255,255,.94); border:1px solid rgba(16,42,67,.1); border-radius:10px; box-shadow:0 12px 28px rgba(16,42,67,.08); }
+      .aula-stat { display:block; width:100%; padding:18px; border:0; color:#102a43; cursor:pointer; font:inherit; text-align:left; }
+      .aula-stat:hover { background:#f0faef; }
+      .aula-stat span { color:#60758a; font-size:.8rem; }
+      .aula-stat strong { display:block; margin-top:8px; color:#168044; font-size:1.6rem; }
+      .aula-quick-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px; margin-bottom:22px; }
+      .aula-quick-card { display:flex; flex-direction:column; align-items:flex-start; gap:10px; min-height:92px; padding:16px; border:1px solid #dbe7ed; border-radius:10px; background:#f8fbfc; color:#102a43; cursor:pointer; font:inherit; font-weight:700; text-align:left; }
+      .aula-quick-card:hover { border-color:#168044; background:#f0faef; }
+      .aula-quick-icon { color:#168044; font-size:1.2rem; }
+      .aula-panel { padding:22px; }
+      .aula-panel h2 { margin:0 0 7px; font-size:1.15rem; }
+      .aula-panel p { margin:0; color:#60758a; line-height:1.6; }
+      .aula-list { display:grid; gap:10px; margin-top:18px; }
+      .aula-list-item { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:14px; border:1px solid #dbe7ed; border-radius:8px; background:#f8fbfc; }
+      .aula-list-item strong { display:block; color:#102a43; }
+      .aula-list-item small { display:block; margin-top:4px; color:#60758a; }
+      .aula-form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:18px; }
+      .aula-form-field { display:grid; gap:6px; color:#102a43; font-size:.82rem; font-weight:700; }
+      .aula-form-field input, .aula-form-field select, .aula-form-field textarea { width:100%; padding:10px 11px; border:1px solid #cbdbe2; border-radius:7px; background:#fff; color:#102a43; font:inherit; box-sizing:border-box; }
+      .aula-form-field textarea { min-height:82px; resize:vertical; }
+      .aula-form-field.full { grid-column:1 / -1; }
+      .aula-submit { margin-top:16px; padding:11px 17px; border:0; border-radius:7px; background:#168044; color:#fff; cursor:pointer; font:inherit; font-weight:700; }
+      .aula-submit:hover { background:#0d6334; }
+      .aula-attendance-result { margin-top:16px; color:#168044; font-weight:700; }
+      .aula-chat { display:grid; gap:14px; }
+      .aula-chat-messages { display:grid; gap:10px; max-height:420px; overflow:auto; padding:4px; }
+      .aula-chat-message { max-width:78%; padding:11px 14px; border-radius:10px; background:#e8eef1; color:#102a43; }
+      .aula-chat-message.student { justify-self:end; background:#dff3e5; }
+      .aula-chat-message small { display:block; margin-bottom:4px; color:#60758a; font-size:.7rem; font-weight:700; }
+      .aula-chat-form { display:flex; gap:10px; }
+      .aula-chat-form input { flex:1; padding:11px; border:1px solid #cbdbe2; border-radius:7px; font:inherit; }
+      .aula-class-link { color:inherit; text-decoration:none; }
+      .aula-class-link:hover { border-color:#168044; background:#f0faef; }
+      .aula-badge { padding:5px 9px; border-radius:999px; background:#e0f3e6; color:#168044; font-size:.73rem; font-weight:700; white-space:nowrap; }
+      .aula-material-list { display:grid; gap:10px; margin-top:18px; }
+      .aula-material-item { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:14px; border:1px solid #dbe7ed; border-radius:8px; background:#f8fbfc; }
+      .aula-material-item strong { display:block; color:#102a43; }
+      .aula-material-item small { display:block; margin-top:4px; color:#60758a; }
+      .aula-material-download { padding:7px 10px; border-radius:6px; background:#e0f3e6; color:#168044; font-size:.75rem; font-weight:700; text-decoration:none; white-space:nowrap; }
+      .aula-recording-list { display:grid; gap:18px; margin-top:18px; }
+      .aula-recording-card { overflow:hidden; border:1px solid #dbe7ed; border-radius:10px; background:#f8fbfc; }
+      .aula-recording-video { display:block; width:100%; aspect-ratio:16/9; border:0; background:#102a43; }
+      .aula-recording-info { padding:14px 16px; }
+      .aula-recording-info h3 { margin:0; color:#102a43; font-size:1rem; }
+      .aula-recording-info p { margin:5px 0 0; color:#60758a; font-size:.8rem; }
+      .aula-calendar-toolbar { display:flex; align-items:center; justify-content:center; gap:22px; margin:12px 0 16px; color:#102a43; }
+      .aula-calendar-toolbar button { width:34px; height:32px; border:0; border-radius:6px; background:#e0f3e6; color:#168044; cursor:pointer; font-size:1.1rem; font-weight:700; }
+      .aula-calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(80px,1fr)); overflow:auto; border-top:1px solid #dbe7ed; border-left:1px solid #dbe7ed; }
+      .aula-calendar-weekday, .aula-calendar-day { border-right:1px solid #dbe7ed; border-bottom:1px solid #dbe7ed; }
+      .aula-calendar-weekday { padding:10px; background:#e0f3e6; color:#102a43; font-size:.75rem; font-weight:800; text-align:center; }
+      .aula-calendar-day { min-height:92px; padding:8px; background:#fff; }
+      .aula-calendar-day.empty { background:#f8fbfc; }
+      .aula-calendar-event { margin-top:7px; padding:6px; border-radius:5px; background:#dff3e5; color:#08652b; font-size:.7rem; font-weight:700; line-height:1.25; }
+      .aula-calendar-event small { display:block; margin-top:3px; color:#376b4a; font-weight:400; }
+      .aula-payment-list { display:grid; gap:10px; margin-top:18px; }
+      .aula-payment-item { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:14px; border:1px solid #dbe7ed; border-radius:8px; background:#f8fbfc; }
+      .aula-payment-item strong { display:block; color:#102a43; }
+      .aula-payment-item small { display:block; margin-top:4px; color:#60758a; }
+      .aula-payment-status { padding:6px 9px; border-radius:999px; background:#fde8e8; color:#b4232f; font-size:.73rem; font-weight:700; white-space:nowrap; }
+      .aula-payment-status.paid { background:#e0f3e6; color:#168044; }
+      .aula-task-list { display:grid; gap:14px; margin-top:18px; }
+      .aula-task-card { padding:18px; border:1px solid #dbe7ed; border-radius:10px; background:#f8fbfc; }
+      .aula-task-header { display:flex; align-items:start; justify-content:space-between; gap:14px; }
+      .aula-task-card h3 { margin:0; color:#102a43; font-size:1rem; }
+      .aula-task-meta { margin-top:6px !important; font-size:.8rem; }
+      .aula-task-instructions { margin-top:12px !important; white-space:pre-wrap; }
+      .aula-task-attachment { display:inline-block; margin-top:12px; color:#168044; font-size:.82rem; font-weight:700; }
+      .aula-task-form { display:grid; gap:10px; margin-top:16px; padding-top:14px; border-top:1px solid #dbe7ed; }
+      .aula-task-form label { display:grid; gap:6px; color:#102a43; font-size:.82rem; font-weight:700; }
+      .aula-task-form textarea, .aula-task-form input[type=file] { width:100%; padding:10px; border:1px solid #cbdbe2; border-radius:7px; background:#fff; color:#102a43; font:inherit; box-sizing:border-box; }
+      .aula-task-form textarea { min-height:78px; resize:vertical; }
+      .aula-task-result { color:#168044; font-size:.82rem; font-weight:700; }
+      .aula-announcement-panel { user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; touch-action:none; }
+      .aula-announcement-image { display:block; width:100%; max-height:560px; object-fit:contain; border-radius:8px; user-select:none; -webkit-user-select:none; -webkit-user-drag:none; pointer-events:none; }
+      .aula-course-grid { display:grid; grid-template-columns:1fr; gap:14px; margin-top:18px; }
+      .aula-course-card { min-width:0; padding:18px; border:1px solid #dbe7ed; border-radius:10px; background:#f8fbfc; }
+      .aula-course-card h3 { min-height:42px; margin:0 0 14px; color:#102a43; font-size:1rem; }
+      .aula-week-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:6px; min-width:0; }
+      .aula-week-link { min-width:0; overflow:hidden; padding:8px 2px; border-radius:6px; background:#168044; color:#fff; font-size:.7rem; font-weight:700; text-align:center; text-decoration:none; }
+      .aula-week-link:hover { background:#0d6334; }
+      .aula-table { width:100%; margin-top:18px; border-collapse:collapse; font-size:.9rem; }
+      .aula-table th, .aula-table td { padding:13px 10px; border-bottom:1px solid #dbe7ed; text-align:left; }
+      .aula-table th { color:#60758a; font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; }
+      .aula-schedule-wrap { margin-top:20px; overflow:auto; }
+      .aula-schedule { width:100%; min-width:760px; border-collapse:collapse; table-layout:fixed; background:#fff; color:#102a43; font-size:.7rem; }
+      .aula-schedule th, .aula-schedule td { height:25px; padding:4px 6px; border:1px solid #18232b; text-align:center; }
+      .aula-schedule thead th { height:25px; background:#dfff00; color:#000; font-size:.68rem; font-weight:800; text-transform:uppercase; }
+      .aula-schedule th:first-child, .aula-schedule td:first-child { width:82px; background:#f4f6f7; font-size:.63rem; font-weight:700; }
+      .aula-schedule td:not(:first-child) { background:#fff; cursor:default; }
+      @keyframes aulaReveal { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+      @media (max-width:700px) {
+        .aula-layout { display:block; }
+        .aula-ribbon { padding:14px 12px; }
+        .aula-ribbon h2 { display:none; }
+        .aula-nav { display:flex; overflow-x:auto; gap:6px; }
+        .aula-nav button { flex:0 0 auto; width:auto; padding:10px 12px; }
+        .aula-nav-icon { width:auto; }
+        .aula-workspace { padding:24px 16px; }
+        .aula-workspace-header { display:block; }
+        .aula-date { display:block; margin-top:10px; }
+        .aula-overview { grid-template-columns:1fr; }
+        .aula-quick-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        .aula-course-grid { grid-template-columns:1fr; }
+        .aula-form-grid { grid-template-columns:1fr; }
+        .aula-form-field.full { grid-column:auto; }
+        .aula-table { display:block; overflow-x:auto; white-space:nowrap; }
+        .aula-schedule-wrap { margin-left:-6px; margin-right:-6px; }
+      }
+    </style>
+  </head>
+  <body class="internal-page">
+    <header class="internal-header aula-header">
+      <div class="internal-header-left">
+        <div>
+          <div class="internal-title">Aula Virtual - Intranet</div>
+          <div class="welcome-tagline" style="color:#4f6b7b; font-size:1rem;">Bienvenido al Aula Virtual.</div>
+        </div>
+      </div>
+      <div class="internal-header-right profile-panel-summary">
+        <div class="internal-user-info">
+          <div class="profile-avatar" id="aulaAvatar"></div>
+          <div>
+            <div class="internal-user" id="aulaName">Estudiante</div>
+            <div style="font-size:0.85rem;color:#6b7280;">Perfil</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="aula-main">
+      <section class="aula-cards-section">
+        <div class="aula-layout"> 
+          <aside class="aula-ribbon" aria-label="Navegación del aula virtual">
+            <h2>Mi aula</h2>
+            <nav class="aula-nav" id="aulaNav">
+              <button class="active" type="button" data-view="inicio"><span class="aula-nav-icon">⌂</span>Panel principal</button>
+              <button type="button" data-view="clases"><span class="aula-nav-icon">▣</span>Clases virtuales</button>
+              <button type="button" data-view="horario"><span class="aula-nav-icon">◷</span>Mi horario</button>
+              <button type="button" data-view="calendario"><span class="aula-nav-icon">▦</span>Agenda académica</button>
+              <button type="button" data-view="anuncios"><span class="aula-nav-icon">!</span>Avisos</button>
+              <button type="button" data-view="materiales"><span class="aula-nav-icon">▤</span>Recursos académicos</button>
+              <button type="button" data-view="tareas"><span class="aula-nav-icon">✓</span>Actividades</button>
+              <button type="button" data-view="grabaciones"><span class="aula-nav-icon">▶</span>Clases grabadas</button>
+              <button type="button" data-view="pagos"><span class="aula-nav-icon">$</span>Pagos</button>
+              <button type="button" data-view="examenes"><span class="aula-nav-icon">✓</span>Evaluaciones</button>
+              <button type="button" data-view="asistencias"><span class="aula-nav-icon">◉</span>Control de asistencia</button>
+              <button type="button" data-view="chat"><span class="aula-nav-icon">◌</span>Mensajes</button>
+              <button type="button" data-view="encuestas"><span class="aula-nav-icon">☷</span>Encuestas</button>
+              <button type="button" data-view="certificados"><span class="aula-nav-icon">★</span>Certificados</button>
+              <button type="button" data-view="silabo"><span class="aula-nav-icon">§</span>Sílabo</button>
+            </nav>
+          </aside>
+
+          <section class="aula-workspace" aria-live="polite">
+            <div class="aula-workspace-header">
+              <div><h1 id="aulaViewTitle">Panel principal</h1></div>
+              <div class="aula-date" id="aulaDate"></div>
+            </div>
+
+            <section class="aula-view active" data-panel="inicio">
+              <article class="aula-panel notifications-panel" aria-labelledby="aulaNotificationsTitle"><div class="notifications-header"><h2 id="aulaNotificationsTitle">Notificaciones</h2><span class="notifications-count" id="aulaNotificationsCount">0</span></div><div class="notifications-list" id="aulaNotificationsList"></div></article>
+              <div class="aula-overview">
+                <button class="aula-stat" type="button" data-view="clases"><span>Cursos activos</span><strong id="aulaClassCount">0</strong></button>
+                <button class="aula-stat" type="button" data-view="materiales"><span>Materiales disponibles</span><strong id="aulaMaterialCount">0</strong></button>
+                <button class="aula-stat" type="button" data-view="tareas"><span>Tareas pendientes</span><strong id="aulaTaskCount">0</strong></button>
+              </div>
+              <div class="aula-quick-grid" aria-label="Accesos rápidos">
+                <button class="aula-quick-card" type="button" data-view="clases"><span class="aula-quick-icon">▣</span>Clases virtuales</button>
+                <button class="aula-quick-card" type="button" data-view="horario"><span class="aula-quick-icon">◷</span>Mi horario</button>
+                <button class="aula-quick-card" type="button" data-view="calendario"><span class="aula-quick-icon">▦</span>Agenda académica</button>
+                <button class="aula-quick-card" type="button" data-view="anuncios"><span class="aula-quick-icon">!</span>Avisos</button>
+                <button class="aula-quick-card" type="button" data-view="materiales"><span class="aula-quick-icon">▤</span>Recursos académicos</button>
+                <button class="aula-quick-card" type="button" data-view="tareas"><span class="aula-quick-icon">✓</span>Actividades</button>
+                <button class="aula-quick-card" type="button" data-view="grabaciones"><span class="aula-quick-icon">▶</span>Clases grabadas</button>
+                <button class="aula-quick-card" type="button" data-view="pagos"><span class="aula-quick-icon">$</span>Pagos</button>
+                <button class="aula-quick-card" type="button" data-view="examenes"><span class="aula-quick-icon">✓</span>Evaluaciones</button>
+                <button class="aula-quick-card" type="button" data-view="asistencias"><span class="aula-quick-icon">◉</span>Control de asistencia</button>
+              </div>
+              <article class="aula-panel"><h2>Resumen de tu actividad</h2><p>Consulta tus clases, recursos y evaluaciones desde el menú lateral.</p><div class="aula-list"><div class="aula-list-item"><div><strong>Bienvenido al Aula Virtual</strong><small>Tu espacio académico está listo.</small></div><span class="aula-badge">Activo</span></div></div></article>
+            </section>
+
+            <section class="aula-view" data-panel="clases"><article class="aula-panel"><h2>Mis clases</h2><p>Accede a las clases virtuales publicadas por tus docentes.</p><div class="aula-list" id="aulaClassList"></div></article></section>
+
+            <section class="aula-view" data-panel="horario"><article class="aula-panel"><div class="aula-schedule-wrap"><table class="aula-schedule"><thead><tr><th>Hora</th><th>Lunes</th><th>Martes</th><th>Miércoles</th><th>Jueves</th><th>Viernes</th><th>Sábado</th></tr></thead><tbody><tr><td>12:00 a. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>1:00 a. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>2:00 a. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>3:00 a. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>4:00 a. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>5:00 a. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>6:00 a. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>7:00 a. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>8:00 a. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>9:00 a. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>10:00 a. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>11:00 a. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>12:00 p. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>1:00 p. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>2:00 p. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>3:00 p. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>4:00 p. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>5:00 p. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>6:00 p. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>7:00 p. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>8:00 p. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>9:00 p. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>10:00 p. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td>11:00 p. m.</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr></tbody></table></div></article></section>
+
+            <section class="aula-view" data-panel="calendario"><article class="aula-panel"><h2>Calendario</h2><div class="aula-calendar-toolbar"><button type="button" id="aulaCalendarPrevious" aria-label="Mes anterior">&larr;</button><strong id="aulaCalendarMonth"></strong><button type="button" id="aulaCalendarNext" aria-label="Mes siguiente">&rarr;</button></div><div class="aula-calendar-grid" id="aulaCalendarGrid"></div></article></section>
+
+            <section class="aula-view" data-panel="anuncios"><article class="aula-panel aula-announcement-panel" oncontextmenu="return false;" oncopy="return false;" oncut="return false;" onselectstart="return false;" ondragstart="return false;"><img class="aula-announcement-image" id="aulaAnnouncementImage" src="BIENVENIDOS%20AL%20CICLO%20PREU.png" alt="Bienvenidos al ciclo preuniversitario" draggable="false" ondragstart="return false;" onselectstart="return false;" oncopy="return false;" /></article></section>
+
+            <section class="aula-view" data-panel="materiales"><article class="aula-panel"><h2>Materiales</h2><div class="aula-material-list" id="aulaMaterialList"></div></article></section>
+
+            <section class="aula-view" data-panel="tareas"><article class="aula-panel"><h2>Tareas</h2><div class="aula-task-list" id="aulaTaskList"></div></article></section>
+
+            <section class="aula-view" data-panel="grabaciones"><article class="aula-panel"><h2>Grabaciones</h2><div class="aula-recording-list" id="aulaRecordingList"></div></article></section>
+
+            <section class="aula-view" data-panel="pagos"><article class="aula-panel"><h2>Mis pagos</h2><div class="aula-payment-list" id="aulaPaymentList"></div></article></section>
+
+            <section class="aula-view" data-panel="examenes"><article class="aula-panel"><div class="aula-course-grid" id="aulaCourseGrid"></div></article></section>
+
+            <section class="aula-view" data-panel="asistencias"><article class="aula-panel"><h2>Formulario de asistencias</h2><p>Registra la asistencia de tus clases virtuales.</p><form id="attendanceForm"><div class="aula-form-grid"><label class="aula-form-field">Nombre completo del estudiante<input id="attendanceStudent" type="text" placeholder="Nombre completo" required /></label><label class="aula-form-field">Código del estudiante<input id="attendanceCode" type="text" placeholder="Código" required /></label><label class="aula-form-field">Ciclo o Curso<select id="attendanceClass" required><option value="">Selecciona un curso</option><option>Ciclo Preu Verano 2026 - Ciencias</option><option>Ciclo Preu Verano 2026 - Medicina</option><option>Ciclo Preu Verano 2026 - Letras</option></select></label><label class="aula-form-field">Carrera<select id="attendanceCareer" required><option value="">Selecciona una carrera</option></select></label><label class="aula-form-field">Universidad<select id="attendanceUniversity" required><option value="">Selecciona una universidad</option></select></label><label class="aula-form-field">Fecha de la clase<input id="attendanceDate" type="date" required /></label><label class="aula-form-field full">Estado<select id="attendanceStatus" required><option value="Presente">Presente</option><option value="Tardanza">Tardanza</option><option value="Falta">Falta</option><option value="Justificada">Justificada</option></select></label></div><button class="aula-submit" type="submit">Guardar asistencia</button><div class="aula-attendance-result" id="attendanceResult" role="status"></div></form></article></section>
+            <section class="aula-view" data-panel="chat"><article class="aula-panel aula-chat"><div class="aula-chat-messages" id="aulaChatMessages"></div><form class="aula-chat-form" id="aulaChatForm"><input id="aulaChatInput" type="text" placeholder="Escribe tu mensaje" required /><button class="aula-submit" type="submit">Enviar</button></form></article></section>
+            <section class="aula-view" data-panel="encuestas"><article class="aula-panel"><h2>Encuestas</h2><p id="aulaSurveyAccess"></p></article></section>
+            <section class="aula-view" data-panel="certificados"><article class="aula-panel"><h2>Certificados</h2></article></section>
+            <section class="aula-view" data-panel="silabo"><article class="aula-panel"><h2>Sílabo</h2></article></section>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <script src="usuario.js?v=20260905-4"></script>
+    <script src="notificaciones.js"></script>
+    <script>
+      const renderAulaNotifications = () => {
+        const list = document.getElementById('aulaNotificationsList');
+        const count = document.getElementById('aulaNotificationsCount');
+        if (!list || !window.NotificacionesService) return;
+        const notifications = window.NotificacionesService.read();
+        count.textContent = notifications.length;
+        list.innerHTML = notifications.length ? notifications.slice(0, 8).map((item) => `<article class="notification-item"><strong>${item.title}</strong><small>${item.detail} · ${item.author} · ${new Date(item.createdAt).toLocaleString('es-PE')}</small><button class="notification-delete" type="button" data-delete-notification="${item.id}" aria-label="Eliminar notificación" title="Eliminar notificación">×</button></article>`).join('') : '<p class="notifications-empty">No hay notificaciones nuevas.</p>';
+      };
+      renderAulaNotifications();
+      document.getElementById('aulaNotificationsList')?.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-delete-notification]');
+        if (!button) return;
+        window.NotificacionesService.remove(button.dataset.deleteNotification);
+        renderAulaNotifications();
+      });
+      window.addEventListener('storage', (event) => { if (event.key === window.NotificacionesService?.key) renderAulaNotifications(); });
+      if (sessionStorage.getItem('aulaVirtualAuth') !== 'true') {
+        const next = new URLSearchParams(window.location.search).get('view');
+        window.location.replace(next === 'calendario' ? 'tarjetas/calendario/calendario-academico.html' : 'tarjetas/aula-virtual/aula-virtual.html');
+      }
+
+      const storedName = UsuarioService.getStoredUserName() || 'Estudiante';
+      const aulaName = document.getElementById('aulaName');
+      const aulaAvatar = document.getElementById('aulaAvatar');
+      const initials = UsuarioService.getInitials(storedName);
+      const classLinksKey = 'matecienciasClasesVirtuales';
+      const defaultClasses = [
+        { name: 'Ciclo Preu Verano 2026 - Ciencias', url: 'https://meet.google.com/jso-wsie-ndw' },
+        { name: 'Ciclo Preu Verano 2026 - Medicina', url: 'https://meet.google.com/jso-wsie-ndw' },
+        { name: 'Ciclo Preu Verano 2026 - Letras', url: 'https://meet.google.com/jso-wsie-ndw' }
+      ];
+      const escapeClassText = (value) => String(value || '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
+      const renderStudentClasses = () => {
+        const classList = document.getElementById('aulaClassList');
+        if (!classList) return;
+        let publishedClasses = defaultClasses;
+        try {
+          const storedClasses = JSON.parse(localStorage.getItem(classLinksKey) || 'null');
+          if (Array.isArray(storedClasses)) publishedClasses = storedClasses;
+        } catch (error) { publishedClasses = defaultClasses; }
+        document.getElementById('aulaClassCount').textContent = publishedClasses.length;
+        classList.innerHTML = publishedClasses.map((item) => `<a class="aula-list-item aula-class-link" href="${escapeClassText(item.url)}" target="_blank" rel="noopener noreferrer"><div><strong>${escapeClassText(item.name)}</strong><small>Ingresar a la clase virtual.</small></div><span class="aula-badge">Ingresar</span></a>`).join('') || '<p class="aula-empty-message">No hay clases virtuales publicadas.</p>';
+      };
+      if (aulaName) aulaName.textContent = storedName;
+      if (aulaAvatar) aulaAvatar.textContent = initials;
+      renderStudentClasses();
+      window.addEventListener('storage', (event) => { if (event.key === classLinksKey) renderStudentClasses(); });
+      window.addEventListener('focus', renderStudentClasses);
+      window.addEventListener('pageshow', renderStudentClasses);
+
+      document.getElementById('aulaDate').textContent = new Intl.DateTimeFormat('es-PE', { dateStyle: 'long' }).format(new Date());
+      const viewTitles = { inicio: 'Panel principal', clases: 'Clases virtuales', horario: 'Mi horario', calendario: 'Agenda académica', anuncios: 'Avisos', materiales: 'Recursos académicos', tareas: 'Actividades', grabaciones: 'Clases grabadas', pagos: 'Pagos', examenes: 'Evaluaciones', asistencias: 'Control de asistencia', chat: 'Mensajes', encuestas: 'Encuestas', certificados: 'Certificados', silabo: 'Sílabo' };
+      document.querySelectorAll('[data-view]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const view = button.dataset.view;
+          document.querySelectorAll('#aulaNav button').forEach((item) => item.classList.toggle('active', item.dataset.view === view));
+          document.querySelectorAll('[data-panel]').forEach((panel) => panel.classList.toggle('active', panel.dataset.panel === view));
+          document.getElementById('aulaViewTitle').textContent = viewTitles[view];
+        });
+      });
+      if (new URLSearchParams(window.location.search).get('view') === 'calendario') {
+        document.querySelector('#aulaNav [data-view="calendario"]').click();
+      }
+      const scheduleKey = 'matecienciasHorario';
+      const renderSchedule = () => {
+        let schedule = {};
+        try { schedule = JSON.parse(localStorage.getItem(scheduleKey) || '{}'); } catch (error) { schedule = {}; }
+        document.querySelectorAll('.aula-schedule tbody tr').forEach((row, rowIndex) => {
+          Array.from(row.querySelectorAll('td')).slice(1).forEach((cell, columnIndex) => {
+            cell.removeAttribute('contenteditable');
+            cell.textContent = schedule[`${rowIndex}-${columnIndex}`] || '';
+          });
+        });
+      };
+      renderSchedule();
+      window.addEventListener('storage', (event) => { if (event.key === scheduleKey) renderSchedule(); });
+
+      const aulaCourses = [
+        ['Aritmética', 'aritmetica'], ['Álgebra', 'algebra'], ['Geometría', 'geometria'], ['Trigonometría', 'trigonometria'],
+        ['Razonamiento Matemático', 'razonamiento-matematico'], ['Razonamiento Lógico', 'razonamiento-logico'], ['Aptitud Verbal', 'aptitud-verbal'],
+        ['Lengua y Literatura', 'lengua-literatura'], ['Historia del Perú', 'historia-del-peru'], ['Geografía', 'geografia'], ['Economía', 'economia'],
+        ['Física', 'fisica'], ['Química', 'quimica'], ['Biología', 'biologia'], ['Psicología', 'psicologia'], ['Cívica', 'civica'],
+        ['Filosofía', 'filosofia'], ['Historia Universal', 'historia-universal']
+      ];
+      const publishedExamsKey = 'matecienciasExamenesPublicados';
+      const renderPublishedExams = () => {
+        let publishedCourses = [];
+        try { publishedCourses = JSON.parse(localStorage.getItem(publishedExamsKey) || '[]'); } catch (error) { publishedCourses = []; }
+        if (!Array.isArray(publishedCourses)) publishedCourses = [];
+        const visibleCourses = aulaCourses.filter(([, slug]) => publishedCourses.includes(slug));
+        document.getElementById('aulaCourseGrid').innerHTML = visibleCourses.map(([name, slug]) => `<article class="aula-course-card"><h3>${name}</h3><div class="aula-week-grid">${Array.from({ length: 10 }, (_, index) => `<a class="aula-week-link" href="tarjetas/aula-virtual/cuestionario.html?curso=${encodeURIComponent(name)}&slug=${slug}&semana=${index + 1}">Semana ${index + 1}</a>`).join('')}</div></article>`).join('') || '<p class="aula-empty-message">No hay exámenes publicados.</p>';
+      };
+      renderPublishedExams();
+      window.addEventListener('storage', (event) => { if (event.key === publishedExamsKey) renderPublishedExams(); });
+
+      const careerOptions = ['Administración', 'Administración de Negocios Internacionales', 'Administración de Turismo', 'Agronomía', 'Antropología', 'Arqueología', 'Arquitectura', 'Arquitectura y Urbanismo', 'Arte', 'Bibliotecología y Ciencias de la Información', 'Ciencia de la Computación', 'Ciencia Política', 'Ciencia Política y Gobernabilidad', 'Ciencias Biológicas', 'Ciencias Contables y Financieras', 'Ciencias de la Comunicación', 'Ciencias Geográficas', 'Computación Científica', 'Comunicación Social', 'Conservación y Restauración', 'Contabilidad', 'Danza', 'Derecho', 'Economía', 'Educación', 'Educación Física', 'Educación Inicial', 'Educación Primaria', 'Educación Secundaria', 'Enfermería', 'Estadística', 'Estomatología', 'Filosofía', 'Física', 'Genética y Biotecnología', 'Geografía', 'Historia', 'Historia y Geografía', 'Ingeniería Agrícola', 'Ingeniería Agroindustrial', 'Ingeniería Agroindustrial e Industrias Alimentarias', 'Ingeniería Ambiental', 'Ingeniería Ambiental y Seguridad Industrial', 'Ingeniería Biomédica', 'Ingeniería Civil', 'Ingeniería de Ciberseguridad', 'Ingeniería de Higiene y Seguridad Industrial', 'Ingeniería de Minas', 'Ingeniería de Petróleo', 'Ingeniería de Petróleo y Gas Natural', 'Ingeniería de Seguridad y Salud en el Trabajo', 'Ingeniería de Sistemas', 'Ingeniería de Software', 'Ingeniería de Telecomunicaciones', 'Ingeniería del Agua y Tecnologías de Tratamiento', 'Ingeniería Económica', 'Ingeniería Eléctrica', 'Ingeniería Electrónica', 'Ingeniería Electrónica y Telecomunicaciones', 'Ingeniería Estadística', 'Ingeniería Física', 'Ingeniería Geográfica', 'Ingeniería Geológica', 'Ingeniería Industrial', 'Ingeniería Informática', 'Ingeniería Logística y Cadena de Suministro Digital', 'Ingeniería Mecánica', 'Ingeniería Mecánica de Fluidos', 'Ingeniería Mecánica-Eléctrica', 'Ingeniería Mecatrónica', 'Ingeniería Metalúrgica', 'Ingeniería Naval', 'Ingeniería Nuclear', 'Ingeniería Pesquera', 'Ingeniería Petroquímica', 'Ingeniería Química', 'Ingeniería Sanitaria', 'Ingeniería Textil', 'Ingeniería Textil y Confecciones', 'Ingeniería Zootecnia', 'Investigación Operativa', 'Lengua, Traducción e Interpretación', 'Lengua y Literatura', 'Lingüística', 'Literatura', 'Matemática', 'Medicina Humana', 'Medicina Veterinaria', 'Microbiología y Parasitología', 'Nutrición', 'Obstetricia', 'Psicología', 'Química', 'Sociología', 'Tecnología Médica', 'Trabajo Social', 'Urbanismo'];
+      const universityOptions = ['Universidad Nacional Mayor de San Marcos', 'Universidad Nacional de San Cristóbal de Huamanga', 'Universidad Nacional de San Antonio Abad del Cusco', 'Universidad Nacional de Trujillo', 'Universidad Nacional de San Agustín de Arequipa', 'Universidad Nacional de Ingeniería', 'Universidad Nacional Agraria La Molina', 'Universidad Nacional San Luis Gonzaga', 'Universidad Nacional del Centro del Perú', 'Universidad Nacional de la Amazonía Peruana', 'Universidad Nacional del Altiplano', 'Universidad Nacional de Piura', 'Universidad Nacional de Cajamarca', 'Universidad Nacional Federico Villarreal', 'Universidad Nacional Agraria de la Selva', 'Universidad Nacional Hermilio Valdizán', 'Universidad Nacional de Educación Enrique Guzmán y Valle', 'Universidad Nacional Daniel Alcides Carrión', 'Universidad Nacional del Callao', 'Universidad Nacional José Faustino Sánchez Carrión', 'Universidad Nacional Pedro Ruiz Gallo', 'Universidad Nacional Jorge Basadre Grohmann', 'Universidad Nacional Santiago Antúnez de Mayolo', 'Universidad Nacional de San Martín', 'Universidad Nacional de Ucayali', 'Universidad Nacional de Tumbes', 'Universidad Nacional del Santa', 'Universidad Nacional de Huancavelica', 'Universidad Nacional Amazónica de Madre de Dios', 'Universidad Nacional Toribio Rodríguez de Mendoza de Amazonas', 'Universidad Nacional Micaela Bastidas de Apurímac', 'Universidad Nacional José María Arguedas', 'Universidad Nacional de Moquegua', 'Universidad Nacional Intercultural de la Amazonía', 'Universidad Nacional Tecnológica de Lima Sur', 'Universidad Nacional de Barranca', 'Universidad Nacional de Frontera', 'Universidad Nacional de Jaén', 'Universidad Nacional Autónoma de Chota', 'Universidad Nacional Autónoma de Huanta', 'Universidad Nacional Autónoma de Tayacaja Daniel Hernández Morillo', 'Universidad Nacional Intercultural de Quillabamba', 'Universidad Nacional Intercultural de la Selva Central Juan Santos Atahualpa', 'Universidad Nacional Autónoma Altoandina de Tarma', 'Universidad Nacional Ciro Alegría', 'Universidad Nacional Daniel Alomía Robles', 'Universidad Nacional de Música', 'Universidad Nacional Tecnológica de Frontera San Ignacio de Loyola', 'Pontificia Universidad Católica del Perú', 'Universidad Peruana Cayetano Heredia', 'Universidad Católica de Santa María', 'Universidad del Pacífico', 'Universidad de Lima', 'Universidad de San Martín de Porres', 'Universidad Femenina del Sagrado Corazón', 'Universidad de Piura', 'Universidad Ricardo Palma', 'Universidad Peruana Unión', 'Universidad Andina del Cusco', 'Universidad Privada de Tacna', 'Universidad Privada Antenor Orrego', 'Universidad de Huánuco', 'Universidad Marcelino Champagnat', 'Universidad César Vallejo', 'Universidad Peruana de Ciencias Aplicadas', 'Universidad San Ignacio de Loyola', 'Universidad Científica del Sur', 'Universidad ESAN', 'Universidad Tecnológica del Perú', 'Universidad Privada del Norte', 'Universidad Católica San Pablo', 'Universidad Católica Santo Toribio de Mogrovejo', 'Universidad Señor de Sipán', 'Universidad Privada Norbert Wiener', 'Universidad Privada San Juan Bautista', 'Universidad Antonio Ruiz de Montoya', 'Universidad de Ciencias y Humanidades', 'Universidad Jaime Bausate y Meza', 'Universidad La Salle', 'Universidad Le Cordon Bleu', 'Universidad María Auxiliadora', 'Universidad de Ciencias y Artes de América Latina', 'Universidad para el Desarrollo Andino', 'Universidad Privada de Huancayo Franklin Roosevelt', 'Universidad Autónoma de Ica', 'Universidad Tecnológica de los Andes', 'Universidad Peruana Los Andes', 'Universidad Peruana del Centro', 'Universidad Privada de Trujillo', 'Universidad Politécnica del Perú', 'Universidad Católica Los Ángeles de Chimbote', 'Universidad José Carlos Mariátegui de Moquegua', 'Universidad Interamericana para el Desarrollo', 'Universidad Peruana de las Américas', 'Facultad de Teología Pontificia y Civil de Lima'];
+      const fillSelect = (id, options) => { document.getElementById(id).insertAdjacentHTML('beforeend', options.map((option) => `<option>${option}</option>`).join('')); };
+      fillSelect('attendanceCareer', careerOptions);
+      fillSelect('attendanceUniversity', universityOptions);
+      const attendanceForm = document.getElementById('attendanceForm');
+      const attendanceDate = document.getElementById('attendanceDate');
+      const attendanceKey = 'matecienciasAsistencias';
+      attendanceDate.value = new Date().toISOString().slice(0, 10);
+      attendanceForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const record = { className: document.getElementById('attendanceClass').value, career: document.getElementById('attendanceCareer').value, university: document.getElementById('attendanceUniversity').value, date: attendanceDate.value, code: document.getElementById('attendanceCode').value.trim(), student: document.getElementById('attendanceStudent').value.trim(), status: document.getElementById('attendanceStatus').value };
+        const records = JSON.parse(localStorage.getItem(attendanceKey) || '[]');
+        records.unshift(record);
+        localStorage.setItem(attendanceKey, JSON.stringify(records));
+        document.getElementById('attendanceResult').textContent = 'Asistencia guardada correctamente.';
+        attendanceForm.reset();
+        attendanceDate.value = new Date().toISOString().slice(0, 10);
+      });
+      const announcementKey = 'matecienciasComunicadoImagen';
+      const announcementImage = document.getElementById('aulaAnnouncementImage');
+      const renderAnnouncement = () => {
+        try {
+          const announcement = JSON.parse(localStorage.getItem(announcementKey) || 'null');
+          if (announcement?.image) {
+            announcementImage.src = announcement.image;
+            announcementImage.alt = 'Comunicado enviado por el docente';
+          }
+        } catch (error) {
+          return;
+        }
+      };
+      renderAnnouncement();
+      window.addEventListener('storage', (event) => { if (event.key === announcementKey) renderAnnouncement(); });
+      const materialKey = 'matecienciasMateriales';
+      const renderMaterials = () => {
+        const materialList = document.getElementById('aulaMaterialList');
+        if (!materialList) return;
+        let materials = [];
+        try { materials = JSON.parse(localStorage.getItem(materialKey) || '[]'); } catch (error) { materials = []; }
+        if (!Array.isArray(materials)) materials = [];
+        document.getElementById('aulaMaterialCount').textContent = materials.length;
+        materialList.innerHTML = materials.length ? materials.map((material) => `<article class="aula-material-item"><div><strong>${escapeClassText(material.title)}</strong><small>${escapeClassText(material.course)} · ${escapeClassText(material.description)}</small></div><a class="aula-material-download" href="${material.file.data}" download="${escapeClassText(material.file.name)}">Descargar</a></article>`).join('') : '<p>Aún no hay materiales publicados.</p>';
+      };
+      renderMaterials();
+      window.addEventListener('storage', (event) => { if (event.key === materialKey) renderMaterials(); });
+      window.addEventListener('focus', renderMaterials);
+      const taskKey = 'matecienciasTareas';
+      const taskSubmissionKey = 'matecienciasEntregasTareas';
+      const readTaskData = (key) => { try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch (error) { return []; } };
+      const escapeTaskText = (value) => String(value || '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
+      const formatTaskDate = (value) => new Intl.DateTimeFormat('es-PE', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
+      const renderTasks = () => {
+        const list = document.getElementById('aulaTaskList');
+        if (!list) return;
+        const tasks = readTaskData(taskKey).filter((task) => task.published);
+        const submissions = readTaskData(taskSubmissionKey);
+        const studentSubmissions = submissions.filter((submission) => submission.student === storedName);
+        const pendingTasks = tasks.filter((task) => {
+          const submitted = studentSubmissions.some((submission) => submission.taskId === task.id);
+          const expired = task.dueDate && new Date(task.dueDate) < new Date();
+          return !submitted && !expired;
+        });
+        document.getElementById('aulaTaskCount').textContent = pendingTasks.length;
+        list.innerHTML = tasks.length ? tasks.map((task) => {
+          const submission = studentSubmissions.find((item) => item.taskId === task.id);
+          const expired = task.dueDate && new Date(task.dueDate) < new Date() && !submission;
+          const attachment = task.attachment ? `<a class="aula-task-attachment" href="${task.attachment.data}" download="${escapeTaskText(task.attachment.name)}">Descargar archivo de apoyo</a>` : '';
+          const result = submission ? (submission.grade === null || submission.grade === undefined ? 'Entregada. Pendiente de calificación.' : `Calificación publicada: ${submission.grade}/${task.points}`) : (expired ? 'El plazo de entrega terminó.' : 'Aún no entregada.');
+          return `<article class="aula-task-card"><div class="aula-task-header"><div><h3>${escapeTaskText(task.title)}</h3><p class="aula-task-meta">${escapeTaskText(task.course)} · ${task.points} puntos · Límite: ${formatTaskDate(task.dueDate)}</p></div><span class="aula-badge">${submission ? 'Entregada' : expired ? 'Cerrada' : 'Pendiente'}</span></div><p class="aula-task-instructions">${escapeTaskText(task.instructions)}</p>${attachment}${submission || expired ? `<p class="aula-task-result">${result}</p>` : `<form class="aula-task-form" data-task-id="${task.id}">${task.type === 'encuesta' ? '<label>Tu respuesta<textarea name="response" required placeholder="Escribe tu respuesta"></textarea></label>' : '<label>Adjuntar tarea<input name="file" type="file" required /></label><label>Comentario (opcional)<textarea name="response" placeholder="Agrega un comentario para tu docente"></textarea></label>'}<button class="aula-submit" type="submit">Enviar tarea</button><span class="aula-task-result" role="status"></span></form>`}</article>`;
+        }).join('') : '<p>No hay tareas publicadas por el momento.</p>';
+        document.querySelectorAll('.aula-task-form').forEach((form) => form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const task = tasks.find((item) => item.id === form.dataset.taskId);
+          if (!task || (task.dueDate && new Date(task.dueDate) < new Date())) { form.querySelector('.aula-task-result').textContent = 'El plazo de entrega terminó.'; return; }
+          const file = form.querySelector('input[type=file]')?.files[0];
+          if (file && file.size > 4000000) { form.querySelector('.aula-task-result').textContent = 'El archivo no debe superar 4 MB.'; return; }
+          const saveSubmission = (attachment) => {
+            const updated = readTaskData(taskSubmissionKey).filter((submission) => !(submission.taskId === task.id && submission.student === storedName));
+            updated.push({ id: `entrega-${Date.now()}`, taskId: task.id, student: storedName, response: form.querySelector('[name=response]')?.value.trim() || '', attachment, fileName: attachment?.name || '', submittedAt: new Date().toISOString(), grade: null });
+            localStorage.setItem(taskSubmissionKey, JSON.stringify(updated));
+            renderTasks();
+          };
+          if (!file) { saveSubmission(null); return; }
+          const reader = new FileReader();
+          reader.onload = () => saveSubmission({ name: file.name, data: reader.result });
+          reader.readAsDataURL(file);
+        }));
+      };
+      renderTasks();
+      window.addEventListener('storage', (event) => { if (event.key === taskKey || event.key === taskSubmissionKey) renderTasks(); });
+      window.addEventListener('focus', renderTasks);
+      const renderSurvey = () => {
+        const access = document.getElementById('aulaSurveyAccess');
+        access.textContent = 'Aún no hay una encuesta publicada.';
+        try {
+          const value = localStorage.getItem('matecienciasEncuestaLink');
+          if (!value) return;
+          const url = new URL(value);
+          if (!['https:', 'http:'].includes(url.protocol)) return;
+          const link = document.createElement('a');
+          link.href = url.href;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.textContent = 'Abrir encuesta';
+          access.replaceChildren(link);
+        } catch (error) { /* Mantener el mensaje si no hay un enlace válido. */ }
+      };
+      renderSurvey();
+      window.addEventListener('storage', (event) => { if (event.key === 'matecienciasEncuestaLink' || event.key === null) renderSurvey(); });
+      window.addEventListener('focus', renderSurvey);
+      const recordingKey = 'matecienciasGrabaciones';
+      const renderRecordings = () => {
+        const list = document.getElementById('aulaRecordingList');
+        if (!list) return;
+        let recordings = [];
+        try { recordings = JSON.parse(localStorage.getItem(recordingKey) || '[]'); } catch (error) { recordings = []; }
+        if (!Array.isArray(recordings)) recordings = [];
+        list.innerHTML = recordings.length ? recordings.map((recording) => `<article class="aula-recording-card"><iframe class="aula-recording-video" src="https://www.youtube.com/embed/${encodeURIComponent(recording.youtubeId)}" title="${escapeTaskText(recording.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><div class="aula-recording-info"><h3>${escapeTaskText(recording.title)}</h3><p>${escapeTaskText(recording.course)}</p></div></article>`).join('') : '<p>Aún no hay grabaciones publicadas.</p>';
+      };
+      renderRecordings();
+      window.addEventListener('storage', (event) => { if (event.key === recordingKey) renderRecordings(); });
+      const paymentKey = 'matecienciasPagos';
+      const normalizePaymentName = (value) => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+      const renderPayments = () => {
+        const list = document.getElementById('aulaPaymentList');
+        if (!list) return;
+        let payments = [];
+        try { payments = JSON.parse(localStorage.getItem(paymentKey) || '[]'); } catch (error) { payments = []; }
+        if (!Array.isArray(payments)) payments = [];
+        const myPayments = payments.filter((payment) => normalizePaymentName(payment.student) === normalizePaymentName(storedName));
+        list.innerHTML = myPayments.length ? myPayments.map((payment) => `<article class="aula-payment-item"><div><strong>${escapeTaskText(payment.concept)} · ${escapeTaskText(payment.detail)}</strong><small>Monto: S/ ${Number(payment.amount || 0).toFixed(2)} · Fecha: ${escapeTaskText(payment.paymentDate || 'No registrada')}</small></div><span class="aula-payment-status ${payment.status === 'pagado' ? 'paid' : ''}">${payment.status === 'pagado' ? 'Pago realizado' : 'Deuda pendiente'}</span></article>`).join('') : '<p>No tienes pagos o deudas pendientes.</p>';
+      };
+      renderPayments();
+      window.addEventListener('storage', (event) => { if (event.key === paymentKey) renderPayments(); });
+      const chatKey = 'matecienciasChat';
+      const chatMessages = document.getElementById('aulaChatMessages');
+      const escapeChatText = (value) => String(value || '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
+      const renderChat = () => {
+        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        chatMessages.innerHTML = messages.map((message) => `<div class="aula-chat-message ${message.sender === 'student' ? 'student' : ''}"><small>${message.sender === 'student' ? escapeChatText(storedName) : 'Docente'}</small>${escapeChatText(message.text)}</div>`).join('');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      };
+      renderChat();
+      document.getElementById('aulaChatForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const input = document.getElementById('aulaChatInput');
+        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        messages.push({ sender: 'student', text: input.value.trim(), date: new Date().toISOString() });
+        localStorage.setItem(chatKey, JSON.stringify(messages));
+        input.value = '';
+        renderChat();
+      });
+      window.addEventListener('storage', (event) => { if (event.key === chatKey) renderChat(); });
+    </script>
+    <script src="tarjetas/calendario/calendario-aula.js?v=20260905-9"></script>
+    <script src="tarjetas/encuestas/documentos.js?v=20260905-1"></script>
+  </body>
+</html>

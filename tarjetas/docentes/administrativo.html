@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <base href="../../" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MateCiencias | Panel Docente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="icon" href="logo.png" />
+    <style>html *,html *::before,html *::after{font-family:"Space Grotesk",Arial,sans-serif!important}</style>
+    <style>
+      :root {
+        --ink: #12233f;
+        --muted: #65748b;
+        --line: #e1e8f0;
+        --paper: #f5f8fb;
+        --white: #ffffff;
+        --green: #0d8f36;
+        --green-dark: #08652b;
+        --orange: #ef7d32;
+        --red: #c83d45;
+        --blue-soft: #e9f2ff;
+        --green-soft: #eaf8ef;
+        --orange-soft: #fff2e8;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        min-width: 320px;
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "DM Sans", sans-serif;
+      }
+
+      button { font: inherit; }
+
+      .role-header { display:flex; align-items:center; justify-content:space-between; gap:20px; min-height:82px; padding:12px 24px; border-right:3px solid #1769d1; background:#fff; box-shadow:0 1px 0 rgba(18,35,63,.08); }
+      .role-header h1 { margin:0; color:#001a4d; font:700 clamp(1.55rem,3vw,2rem)/1.1 "Space Grotesk",sans-serif; }
+      .role-header p { margin:5px 0 0; color:#60758a; font-size:.82rem; font-weight:600; }
+      .role-profile { display:flex; align-items:center; gap:11px; min-width:200px; padding:8px 18px 8px 10px; border:1px solid #d8dee8; border-radius:999px; background:#f8f9fb; }
+      .role-avatar { display:grid; place-items:center; width:36px; height:36px; border:1px solid #d8dee8; border-radius:50%; background:#fff; color:#001a4d; font-weight:700; }
+      .role-profile strong,.role-profile span { display:block; }
+      .role-profile strong { color:#001a4d; font-size:.88rem; }
+      .role-profile span { margin-top:2px; color:#6b7280; font-size:.78rem; }
+
+      .docente-shell {
+        display: grid;
+        grid-template-columns: 266px minmax(0, 1fr);
+        min-height: calc(100vh - 82px);
+      }
+
+      .docente-sidebar {
+        display: flex;
+        flex-direction: column;
+        padding: 26px 18px 18px;
+        background: var(--ink);
+        color: var(--white);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 0 10px 28px;
+      }
+
+      .brand img { width: 42px; height: 42px; object-fit: contain; }
+      .brand strong { display: block; font: 700 1rem "Space Grotesk", sans-serif; letter-spacing: .04em; }
+      .brand span { display: block; margin-top: 3px; color: #a9bdd3; font-size: .72rem; }
+
+      .sidebar-label {
+        margin: 0 10px 9px;
+        color: #7f97b1;
+        font-size: .68rem;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .docente-nav { display: grid; gap: 4px; }
+      .docente-nav button {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        width: 100%;
+        padding: 10px 11px;
+        border: 0;
+        border-radius: 7px;
+        background: transparent;
+        color: #c9d6e5;
+        cursor: pointer;
+        font-size: .84rem;
+        text-align: left;
+      }
+      .docente-nav button:hover,
+      .docente-nav button.active { background: #1d3859; color: var(--white); }
+      .nav-icon { width: 18px; color: #8ab3d8; font-size: .95rem; text-align: center; }
+      .docente-nav button.active .nav-icon { color: #7ed99a; }
+
+      .sidebar-footer {
+        margin-top: auto;
+        padding: 18px 10px 0;
+        border-top: 1px solid #29415e;
+      }
+      .docente-user-mini { margin-bottom: 13px; color: #c9d6e5; font-size: .78rem; }
+      .docente-user-mini strong { display: block; margin-bottom: 3px; color: var(--white); font-size: .86rem; }
+      .logout-button {
+        width: 100%;
+        padding: 9px;
+        border: 1px solid #48617c;
+        border-radius: 7px;
+        background: transparent;
+        color: #d9e5f1;
+        cursor: pointer;
+        font-size: .8rem;
+      }
+      .logout-button:hover { border-color: #f08d8d; color: #ffb3b3; }
+
+      .docente-main { min-width: 0; padding: 32px clamp(20px, 4vw, 54px) 48px; }
+      .docente-main > * { animation: aparecer .55s ease both; }
+      .docente-main > *:nth-child(2) { animation-delay: .08s; }
+      .docente-main > *:nth-child(3) { animation-delay: .16s; }
+      .service-heading { margin: 0 0 22px; color: var(--ink); font: 700 clamp(1.7rem, 3vw, 2.35rem)/1.1 "Space Grotesk", sans-serif; }
+      h1, h2, h3 { font-family: "Space Grotesk", sans-serif; }
+      h1 { margin: 0; font-size: clamp(1.7rem, 3vw, 2.35rem); line-height: 1.1; }
+      .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 30px; }
+      .metrics.hidden { display: none; }
+      .metric { padding: 18px; border: 1px solid var(--line); border-radius: 9px; background: var(--white); }
+      .metric { animation: metricFloat 3.6s ease-in-out infinite; }
+      .metric:nth-child(2) { animation-delay: .08s; }
+      .metric:nth-child(3) { animation-delay: .16s; }
+      .metric-label { color: var(--muted); font-size: .78rem; }
+      .metric-value { display: block; margin-top: 7px; color: var(--ink); font: 700 1.75rem "Space Grotesk", sans-serif; }
+      .metric-note { display: block; margin-top: 5px; color: var(--green); font-size: .72rem; }
+      .metric:nth-child(2) { border-top: 3px solid var(--orange); }
+
+      .content-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr); gap: 18px; }
+      .panel { padding: 22px; border: 1px solid var(--line); border-radius: 9px; background: var(--white); }
+      .panel-header { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 17px; }
+      .panel-header h2 { margin: 0; font-size: 1.05rem; }
+      .panel-link { border: 0; background: transparent; color: var(--green); cursor: pointer; font-size: .78rem; font-weight: 700; }
+      .course-list { display: grid; gap: 11px; }
+      .course-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px; border: 1px solid var(--line); border-radius: 7px; }
+      .course-row { animation: subir .5s ease both; }
+      .course-row:nth-child(2) { animation-delay: .08s; }
+      .course-row:nth-child(3) { animation-delay: .16s; }
+      .course-row:nth-child(4) { animation-delay: .24s; }
+      .course-info strong { display: block; font-size: .87rem; }
+      .course-info span { display: block; margin-top: 4px; color: var(--muted); font-size: .74rem; }
+      .course-status { padding: 5px 8px; border-radius: 999px; background: var(--green-soft); color: var(--green-dark); font-size: .7rem; font-weight: 700; white-space: nowrap; }
+      .course-status.pending { background: var(--orange-soft); color: #a54e18; }
+
+      .activity-list { display: grid; gap: 14px; }
+      .activity { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: start; }
+      .activity-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 7px; background: var(--blue-soft); color: #2564a4; font-size: .8rem; font-weight: 700; }
+      .activity strong { display: block; font-size: .82rem; }
+      .activity span { display: block; margin-top: 3px; color: var(--muted); font-size: .73rem; line-height: 1.35; }
+      .activity { animation: aparecer .5s ease both; }
+      .activity:nth-child(2) { animation-delay: .1s; }
+      .activity:nth-child(3) { animation-delay: .2s; }
+
+      @keyframes aparecer {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @keyframes subir {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes metricFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .docente-main > *, .metric, .course-row, .activity { animation: none; }
+      }
+
+
+      @media (max-width: 980px) {
+        .docente-shell { grid-template-columns: 220px minmax(0, 1fr); }
+        .metrics { grid-template-columns: repeat(2, 1fr); }
+        .content-grid { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 700px) {
+        .role-header { padding:12px 16px; }
+        .role-profile { min-width:0; padding:7px; }
+        .role-profile > div:last-child { display:none; }
+        .docente-shell { display: block; }
+        .docente-sidebar { padding: 16px; }
+        .brand { padding-bottom: 17px; }
+        .docente-nav { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 4px; }
+        .docente-nav button { flex: 0 0 auto; width: auto; padding: 9px 10px; }
+        .docente-nav button span:last-child { display: none; }
+        .sidebar-label, .sidebar-footer { display: none; }
+        .docente-main { padding: 25px 16px 35px; }
+        .service-heading { margin-bottom: 18px; }
+      }
+
+      @media (max-width: 440px) {
+        .metrics { grid-template-columns: 1fr 1fr; gap: 9px; }
+        .metric { padding: 13px; }
+        .metric-value { font-size: 1.4rem; }
+        .panel { padding: 16px; }
+      }
+      /* Apariencia unificada con el Aula Virtual */
+      .docente-shell { grid-template-columns:220px minmax(0,1fr); }
+      .docente-sidebar { padding:24px 16px 18px; background:#102f4a; }
+      .sidebar-label { margin-bottom:16px; color:#8bd5a1; font-weight:800; }
+      .docente-nav { gap:6px; }
+      .docente-nav button { min-height:43px; padding:10px 12px; border-radius:8px; color:#d9e5f1; }
+      .docente-nav button:hover,.docente-nav button.active { background:#204567; }
+      .docente-main { background:linear-gradient(rgba(255,255,255,.88),rgba(255,255,255,.9)),url('fondo.png') center/cover fixed; }
+      .panel-main-header { display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:26px; }
+      .service-heading { margin:0; color:#050505; font-size:clamp(2rem,4vw,2.65rem); }
+      .panel-date { color:#60758a; font-size:.82rem; white-space:nowrap; }
+    </style>
+  </head>
+  <body>
+    <header class="role-header"><div><h1>Panel Docente - Intranet</h1><p>Bienvenido al Panel Docente.</p></div><div class="role-profile"><div class="role-avatar" id="docenteHeaderAvatar">DO</div><div><strong id="docenteHeaderName">Docente</strong><span>Perfil</span></div></div></header>
+    <div class="docente-shell">
+      <aside class="docente-sidebar" aria-label="Navegación docente">
+        <p class="sidebar-label">Gestión académica del Docente</p>
+        <nav class="docente-nav" id="docenteNav">
+          <button class="active" type="button" data-module="Inicio"><span class="nav-icon">⌂</span><span>Panel principal</span></button>
+          <button type="button" data-module="Estudiantes"><span class="nav-icon">♙</span><span>Alumnos</span></button>
+          <button type="button" data-module="Ranking"><span class="nav-icon">★</span><span>Ranking</span></button>
+          <button type="button" data-module="Materiales"><span class="nav-icon">▤</span><span>Recursos académicos</span></button>
+          <button type="button" data-module="SilaboDocente"><span class="nav-icon">§</span><span>Sílabos</span></button>
+          <button type="button" data-module="Clases"><span class="nav-icon">▣</span><span>Clases virtuales</span></button>
+          <button type="button" data-module="Calendario"><span class="nav-icon">▦</span><span>Agenda académica</span></button>
+          <button type="button" data-module="Tareas"><span class="nav-icon">✓</span><span>Actividades</span></button>
+          <button type="button" data-module="Exámenes"><span class="nav-icon">▥</span><span>Evaluaciones</span></button>
+          <button type="button" data-module="PromedioGeneral"><span class="nav-icon">▤</span><span>Calificaciones</span></button>
+          <button type="button" data-module="Asistencia"><span class="nav-icon">◷</span><span>Control de asistencia</span></button>
+          <button type="button" data-module="Comunicados"><span class="nav-icon">✉</span><span>Avisos</span></button>
+          <button type="button" data-module="Chat"><span class="nav-icon">◌</span><span>Mensajes</span></button>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="docente-user-mini"><strong id="docenteName">Docente</strong><span>Acceso docente</span></div>
+          <button class="logout-button" id="logoutButton" type="button">Cerrar sesión</button>
+        </div>
+      </aside>
+
+      <main class="docente-main">
+        <h1 class="service-heading" id="serviceHeading">Inicio</h1>
+        <section class="notifications-panel" aria-labelledby="docenteNotificationsTitle"><div class="notifications-header"><h2 id="docenteNotificationsTitle">Notificaciones</h2><span class="notifications-count" id="docenteNotificationsCount">0</span></div><div class="notifications-list" id="docenteNotificationsList"></div></section>
+
+        <div class="content-grid">
+          <section class="panel" aria-labelledby="coursesTitle">
+            <div class="panel-header"><h2 id="coursesTitle">Mis cursos</h2></div>
+            <div class="course-list">
+              <div class="course-row"><div class="course-info"><strong>Álgebra</strong><span>0 estudiantes · 0 tareas pendientes</span></div><span class="course-status">Activo</span></div>
+              <div class="course-row"><div class="course-info"><strong>Razonamiento Matemático</strong><span>0 estudiantes · 0 tareas pendientes</span></div><span class="course-status">Activo</span></div>
+              <div class="course-row"><div class="course-info"><strong>Física</strong><span>0 estudiantes · 0 tareas pendientes</span></div><span class="course-status">Activo</span></div>
+              <div class="course-row"><div class="course-info"><strong>Química</strong><span>0 estudiantes · 0 tareas pendientes</span></div><span class="course-status">Activo</span></div>
+            </div>
+          </section>
+
+          <section class="panel" aria-labelledby="activityTitle">
+            <div class="panel-header"><h2 id="activityTitle">Actividad reciente</h2></div>
+            <div class="activity-list">
+              <div class="activity"><div class="activity-mark">T</div><div><strong>Sin tareas registradas</strong><span>El panel se actualizará cuando se creen actividades.</span></div></div>
+              <div class="activity"><div class="activity-mark">E</div><div><strong>Sin exámenes programados</strong><span>Las evaluaciones aparecerán aquí.</span></div></div>
+              <div class="activity"><div class="activity-mark">M</div><div><strong>Sin comunicados nuevos</strong><span>Los mensajes recientes aparecerán aquí.</span></div></div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script src="notificaciones.js"></script>
+    <script>
+      const renderDocenteNotifications = () => {
+        const list = document.getElementById('docenteNotificationsList');
+        const count = document.getElementById('docenteNotificationsCount');
+        if (!list || !window.NotificacionesService) return;
+        const notifications = window.NotificacionesService.read();
+        count.textContent = notifications.length;
+        list.innerHTML = notifications.length ? notifications.slice(0, 8).map((item) => `<article class="notification-item"><strong>${item.title}</strong><small>${item.detail} · ${item.author} · ${new Date(item.createdAt).toLocaleString('es-PE')}</small><button class="notification-delete" type="button" data-delete-notification="${item.id}" aria-label="Eliminar notificación" title="Eliminar notificación">×</button></article>`).join('') : '<p class="notifications-empty">No hay notificaciones nuevas.</p>';
+      };
+      renderDocenteNotifications();
+      document.getElementById('docenteNotificationsList')?.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-delete-notification]');
+        if (!button) return;
+        window.NotificacionesService.remove(button.dataset.deleteNotification);
+        renderDocenteNotifications();
+      });
+      window.addEventListener('storage', (event) => { if (event.key === window.NotificacionesService?.key) renderDocenteNotifications(); });
+      const docenteUser = sessionStorage.getItem('docenteUser');
+      const docenteName = document.getElementById('docenteName');
+      const serviceHeading = document.getElementById('serviceHeading');
+      serviceHeading.textContent = 'Panel principal';
+      const docenteMainHeader = document.createElement('div');
+      docenteMainHeader.className = 'panel-main-header';
+      serviceHeading.before(docenteMainHeader);
+      docenteMainHeader.appendChild(serviceHeading);
+      const docenteDate = document.createElement('time');
+      docenteDate.className = 'panel-date';
+      docenteDate.textContent = new Intl.DateTimeFormat('es-PE', { dateStyle: 'long' }).format(new Date());
+      docenteMainHeader.appendChild(docenteDate);
+      const moduleScripts = {
+        'Inicio': 'tarjetas/docentes/docente-inicio.js',
+        'Estudiantes': 'tarjetas/docentes/docente-estudiantes.js',
+        'Ranking': 'tarjetas/administracion/admin-ranking.js',
+        'Materiales': 'tarjetas/docentes/docente-materiales.js',
+        'SilaboDocente': 'tarjetas/encuestas/documentos.js',
+        'Clases': 'tarjetas/docentes/docente-clases.js',
+        'Calendario': 'tarjetas/calendario/calendario.js',
+        'Tareas': 'tarjetas/docentes/docente-tareas.js',
+        'Exámenes': 'tarjetas/docentes/docente-examenes.js',
+        'PromedioGeneral': 'tarjetas/docentes/docente-promedio-general.js',
+        'Asistencia': 'tarjetas/docentes/docente-asistencia.js',
+        'Comunicados': 'tarjetas/docentes/docente-comunicados.js',
+        'Chat': 'tarjetas/docentes/docente-chat.js',
+      };
+      const loadedModuleScripts = new Set();
+      const pendingModuleScripts = new Map();
+      let activeModuleName = 'Inicio';
+      const loadModuleScript = (moduleName) => {
+        const scriptName = moduleScripts[moduleName];
+        if (!scriptName) return Promise.resolve();
+        if (loadedModuleScripts.has(scriptName)) {
+          window.DocenteModules?.[moduleName]?.render?.();
+          return Promise.resolve();
+        }
+        if (pendingModuleScripts.has(scriptName)) return pendingModuleScripts.get(scriptName);
+        const script = document.createElement('script');
+        script.src = `${scriptName}?v=${Date.now()}`;
+        script.dataset.docenteModule = moduleName;
+        const loading = new Promise((resolve) => {
+          script.onload = () => {
+            loadedModuleScripts.add(scriptName);
+            pendingModuleScripts.delete(scriptName);
+            resolve();
+          };
+          script.onerror = () => {
+            pendingModuleScripts.delete(scriptName);
+            resolve();
+          };
+          document.body.appendChild(script);
+        });
+        pendingModuleScripts.set(scriptName, loading);
+        return loading;
+      };
+      if (!docenteUser) {
+        window.location.replace('tarjetas/docentes/docente-login.html');
+      } else {
+        docenteName.textContent = docenteUser;
+        document.getElementById('docenteHeaderName').textContent = docenteUser;
+        document.getElementById('docenteHeaderAvatar').textContent = docenteUser.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join('').toUpperCase() || 'DO';
+      }
+      document.querySelectorAll('[data-module]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const moduleName = button.dataset.module;
+          if (moduleName === 'Inicio') { window.location.reload(); return; }
+          activeModuleName = moduleName;
+          loadModuleScript(moduleName).then(() => {
+            if (activeModuleName !== moduleName) return;
+            window.DocenteModules?.[moduleName]?.render?.();
+          });
+          document.querySelectorAll('.docente-nav button').forEach((item) => item.classList.toggle('active', item.dataset.module === moduleName));
+          document.querySelector('.notifications-panel')?.classList.toggle('hidden', moduleName !== 'Inicio');
+          const moduleTitles = { Inicio: 'Panel principal', Estudiantes: 'Alumnos', Ranking: 'Ranking', Materiales: 'Recursos académicos', SilaboDocente: 'Sílabos', Clases: 'Clases virtuales', Calendario: 'Agenda académica', Tareas: 'Actividades', 'Exámenes': 'Evaluaciones', PromedioGeneral: 'Calificaciones', Asistencia: 'Control de asistencia', Comunicados: 'Avisos', Chat: 'Mensajes' };
+          serviceHeading.textContent = moduleTitles[moduleName] || moduleName;
+        });
+      });
+
+      document.getElementById('logoutButton').addEventListener('click', () => {
+        sessionStorage.removeItem('docenteUser');
+        window.location.assign('tarjetas/docentes/docente-login.html');
+      });
+    </script>
+  </body>
+</html>

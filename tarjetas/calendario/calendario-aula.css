@@ -1,0 +1,9 @@
+.aula-calendar-toolbar { display:flex; align-items:center; justify-content:center; gap:22px; margin:12px 0 16px; color:#102a43; }
+.aula-calendar-toolbar button { width:34px; height:32px; border:0; border-radius:6px; background:#e0f3e6; color:#168044; cursor:pointer; font-size:1.1rem; font-weight:700; }
+.aula-calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(80px,1fr)); overflow:auto; border-top:1px solid #dbe7ed; border-left:1px solid #dbe7ed; }
+.aula-calendar-weekday, .aula-calendar-day { border-right:1px solid #dbe7ed; border-bottom:1px solid #dbe7ed; }
+.aula-calendar-weekday { padding:10px; background:#e0f3e6; color:#102a43; font-size:.75rem; font-weight:800; text-align:center; }
+.aula-calendar-day { min-height:92px; padding:8px; background:#fff; }
+.aula-calendar-day.empty { background:#f8fbfc; }
+.aula-calendar-event { margin-top:7px; padding:6px; border-radius:5px; background:#dff3e5; color:#08652b; font-size:.7rem; font-weight:700; line-height:1.25; }
+.aula-calendar-event small { display:block; margin-top:3px; color:#376b4a; font-weight:400; }

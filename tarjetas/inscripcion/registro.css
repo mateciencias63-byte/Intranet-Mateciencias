@@ -1,0 +1,42 @@
+body { background:#e3edf5; background-image:none; }
+.inscripcion-card { max-width:1180px; border-radius:2px; padding:24px; }
+.inscripcion-card h1 { font-size:1.25rem; color:#164d7c; }
+.inscripcion-logo { width:72px; }
+.inscripcion-section-title { color:#164d7c; text-transform:uppercase; font-size:.85rem; margin-top:24px; }
+.inscripcion-form label { font-size:.8rem; font-weight:500; }
+.inscripcion-form input,.inscripcion-form select { font-size:.85rem; }
+.registro-inicio { box-sizing:border-box; width:100%; max-width:500px; margin:65px auto; padding:0; background:white; border:1px solid #e9edf1; color:#737373; }
+.registro-inicio h1 { margin:0; padding:29px 16px 35px; border-bottom:1px solid #f0f0f0; font-size:16px; font-weight:700; line-height:20px; text-align:center; color:#333; }
+.registro-inicio label, .registro-dialog label { display:grid; gap:7px; margin:14px 0; font-size:.85rem; }
+.registro-inicio input,.registro-inicio select,.registro-dialog input,.registro-dialog select { box-sizing:border-box; width:100%; padding:10px; border:1px solid #ccd6e2; border-radius:4px; font:inherit; }
+.registro-inicio form { padding:22px 28px 30px; }
+.registro-inicio label { margin:0 0 14px; gap:8px; font-size:13px; line-height:19px; font-weight:400; }
+.registro-inicio input,.registro-inicio select { height:40px; padding:9px 14px; border:1px solid #ededed; border-radius:2px; background:#fff; color:#777; font-size:13px; }
+.registro-inicio input::placeholder { color:#929292; }
+.registro-inicio .registro-pago label { margin-bottom:6px; }
+.registro-pago-control { display:flex; }
+.registro-pago-control #registroTotal { flex:1; min-width:0; background:#f2f3f8; border-color:#f2f3f8; border-radius:2px 0 0 2px; }
+.registro-inicio #registroPagos { flex-shrink:0; padding:9px 16px; border-radius:0 2px 2px 0; background:#68bdf3; font-size:13px; }
+.registro-inicio .registro-actions { justify-content:center; margin-top:15px; }
+.registro-inicio .registro-actions button { padding:10px 18px; min-height:40px; border-radius:2px; background:#2eb89e; font-size:13px; }
+.registro-inicio .registro-error:empty { display:none; }
+.registro-inicio button:hover { filter:brightness(.95); }
+.registro-inicio :focus-visible { outline:2px solid #268bbb; outline-offset:2px; }
+.registro-button { background:#1765a5; color:white; border:0; border-radius:4px; padding:10px 16px; cursor:pointer; font:inherit; }
+.registro-button.secondary { background:#e9eff5; color:#153a59; }
+.registro-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; flex-wrap:wrap; }
+.registro-dialog { border:0; border-radius:6px; width:min(720px,calc(100% - 40px)); padding:24px; max-height:85vh; overflow:auto; color:#12233f; }
+.registro-dialog::backdrop { background:#10233299; }
+.registro-dialog h2 { font-size:1.1rem; margin-top:0; }
+.registro-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.registro-table { width:100%; border-collapse:collapse; font-size:.8rem; margin-top:20px; }
+.registro-table th,.registro-table td { padding:10px 6px; text-align:left; border-bottom:1px solid #dce4eb; overflow-wrap:anywhere; }
+.registro-table th { background:#eff3f8; }
+.registro-notice { background:#eef6fd; color:#24577e; padding:14px; font-size:.85rem; line-height:1.6; }
+.registro-error { color:#a12222; font-size:.85rem; }
+.registro-wide { grid-column:1/-1; }
+.inscripcion-photo-preview { border-radius:50%; width:160px; height:160px; }
+.inscripcion-photo-box { border:1px solid #dce5ee; background:#fafcfe; }
+.registro-crop { display:block; max-width:100%; margin:auto; background:#eee; }
+[hidden] { display:none !important; }
+@media(max-width:700px) { .registro-grid { grid-template-columns:1fr; } .registro-inicio { margin:25px auto; } .registro-dialog { padding:16px; } }

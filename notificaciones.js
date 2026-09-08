@@ -9,10 +9,11 @@
       return Array.isArray(notifications) ? notifications : [];
     } catch (error) { return []; }
   };
-  const add = ({ title, detail, author = 'Administrador' }) => {
+  const add = ({ title, detail, image = '', author = 'Administrador' }) => {
     const notifications = read();
-    notifications.unshift({ id: `notificacion-${Date.now()}-${Math.random().toString(36).slice(2)}`, title, detail, author, createdAt: new Date().toISOString() });
+    notifications.unshift({ id: `notificacion-${Date.now()}-${Math.random().toString(36).slice(2)}`, title, detail, image, author, createdAt: new Date().toISOString() });
     localStorage.setItem(notificationKey, JSON.stringify(notifications.slice(0, 50)));
+    window.dispatchEvent(new Event('comunicados-updated'));
   };
   const remove = (id) => {
     const notifications = read().filter((notification) => notification.id !== id);

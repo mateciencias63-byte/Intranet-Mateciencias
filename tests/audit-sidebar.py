@@ -31,6 +31,21 @@ let style=frame.contentWindow.getComputedStyle(button);assert(style.flexDirectio
 button.querySelector('svg path,svg rect,svg circle').dispatchEvent(new MouseEvent('click',{bubbles:true}));await delay(150);assert(button.classList.contains('active'),page+' icon opens module');
 assert(!doc.querySelector('.portal-home')||doc.querySelector('.portal-home').hidden,page+' summary hides on module navigation');
 frame.style.width='390px';await delay(100);style=frame.contentWindow.getComputedStyle(nav);assert(style.flexDirection==='column',page+' mobile vertical menu');assert(nav.getBoundingClientRect().width<=110,page+' mobile compact width');frame.style.width='1200px';
+if(page.startsWith('administracion/')){
+nav.querySelector('[data-module="Comunicados"]').click();await delay(400);
+const form=doc.querySelector('#comunicadoForm');assert(!!form,'Admin announcement form opens');
+const count=JSON.parse(localStorage.getItem('matecienciasNotificaciones')).length;
+form.requestSubmit();assert(JSON.parse(localStorage.getItem('matecienciasNotificaciones')).length===count,'Empty announcement blocked');
+doc.querySelector('#comunicadoText').value='Texto publicado de prueba';form.requestSubmit();
+assert(JSON.parse(localStorage.getItem('matecienciasNotificaciones'))[0].detail==='Texto publicado de prueba','Text-only announcement saved');
+const canvas=doc.createElement('canvas');canvas.width=10;canvas.height=10;
+const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
+const transfer=new DataTransfer();transfer.items.add(new File([blob],'prueba.png',{type:'image/png'}));
+doc.querySelector('#comunicadoFile').files=transfer.files;doc.querySelector('#comunicadoFile').dispatchEvent(new Event('change'));await delay(300);
+assert(!doc.querySelector('#comunicadoPreview').hidden,'Image preview works');form.requestSubmit();
+assert(JSON.parse(localStorage.getItem('matecienciasNotificaciones'))[0].image.startsWith('data:image/png'),'Image-only announcement saved');
+assert(doc.querySelector('.portal-notice img'),'Image renders in home announcements');
+}
 }
 document.getElementById('result').textContent=JSON.stringify({checks});}catch(e){document.getElementById('result').textContent=JSON.stringify({error:e.message,checks});}})();
 </script>'''

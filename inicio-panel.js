@@ -15,12 +15,18 @@
     const options = aula ? [['Mis actividades','document',['tareas']],['Mis evaluaciones','book',['examenes']],['Mis pagos','money',['pagos']]] : [['Actividades','document',['Tareas','tramites','matriculas']],['Calificaciones','book',['PromedioGeneral','notas']],['Asistencias','document',['Asistencia','asistencia']]];
     home.innerHTML=`<article class="portal-card"><header class="portal-bar"><h2>${svg('bell')}Comunicados</h2><button type="button" class="portal-collapse" aria-label="Contraer comunicados" aria-expanded="true">⌃</button></header><div class="portal-notices"></div></article><div class="portal-columns"><div><div class="portal-shortcuts"></div><button type="button" class="portal-green"></button></div><article class="portal-card"><header class="portal-bar"><h2>${aula?'Mis inasistencias':'Resumen de asistencias'}</h2><button type="button" class="portal-detail">Ver detalle</button></header><div class="portal-table-wrap"><table class="portal-table"><thead><tr><th>Curso</th><th>Registros</th><th>Faltas</th><th>% faltas</th></tr></thead><tbody></tbody></table></div></article></div>`;
     const noticesEl=home.querySelector('.portal-notices');
+    if(document.querySelector('.admin-main')){
+      const create=document.createElement('button');create.type='button';create.className='portal-detail';create.textContent='Publicar comunicado';create.onclick=()=>open('Comunicados');home.querySelector('.portal-bar').insertBefore(create,home.querySelector('.portal-collapse'));
+    }
     if (!notices.length) noticesEl.innerHTML='<p class="portal-empty">No hay comunicados publicados.</p>';
     notices.slice(0,3).forEach(item=>{
       const article=document.createElement('article');article.className='portal-notice';
       article.innerHTML=`<header><span class="portal-person">${svg('person')}</span><strong></strong><time></time></header><p></p>`;
       article.querySelector('strong').textContent=item.title||'Comunicado';
       article.querySelector('p').textContent=item.detail||'';
+      if (/^data:image\/(png|jpeg|webp);base64,/.test(item.image || '')) {
+        const image=document.createElement('img');image.src=item.image;image.alt=item.title||'Imagen del comunicado';image.style.cssText='display:block;max-width:100%;max-height:420px;object-fit:contain;margin-top:14px';article.append(image);
+      }
       const date=new Date(item.createdAt); if(!Number.isNaN(date.getTime()))article.querySelector('time').textContent=date.toLocaleString('es-PE');
       noticesEl.append(article);
     });
@@ -43,4 +49,5 @@
   new MutationObserver(sync).observe(nav,{attributes:true,subtree:true,attributeFilter:['class']});
   window.addEventListener('storage',render);
   window.addEventListener('focus',render);
+  window.addEventListener('comunicados-updated',render);
 })();

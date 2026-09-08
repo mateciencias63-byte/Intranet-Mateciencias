@@ -16,12 +16,20 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
 const assert=(ok,msg)=>{if(!ok)throw Error(msg);checks.push(msg);};
 (async()=>{try{
 Object.entries({dashboardUser:'MateCiencias Adm',dashboardAuthenticated:'true',adminAutenticado:'true',adminUsuario:'MateCiencias Adm',adminTimestamp:String(Date.now()),docenteUser:'Steven Aponte Ramirez',secretariaUsuario:'MateCiencias Adm',aulaVirtualAuth:'true'}).forEach(([k,v])=>sessionStorage.setItem(k,v));
+localStorage.setItem('matecienciasNotificaciones',JSON.stringify([{title:'Comunicado de prueba',detail:'Contenido de prueba',createdAt:'2026-09-08T12:00:00Z'}]));
+localStorage.setItem('matecienciasAsistencias',JSON.stringify([{student:'MateCiencias Adm',className:'Curso propio',status:'Falta'},{student:'Otro alumno',className:'Curso ajeno',status:'Presente'}]));
 for(const [page,selector] of [['administracion/admin-panel.html','[data-module="Estudiantes"]'],['docentes/administrativo.html','[data-module="Estudiantes"]'],['aula-virtual/aula-virtual-contenido.html','[data-view="pagos"]'],['secretaria/secretaria-academica.html','[data-module="estudiantes"]']]){
 await new Promise(r=>{frame.onload=r;frame.src='/tarjetas/'+page;setTimeout(r,1800);});await delay(250);
 const doc=frame.contentDocument,nav=doc.querySelector('.menu-lateral');assert(!!nav,page+' menu loaded');
+const home=doc.querySelector('.portal-home');assert(home&&!home.hidden,page+' initial summary visible');
+assert(home.querySelector('.portal-notices').textContent.includes('Comunicado de prueba'),page+' real notices');
+home.querySelector('.portal-collapse').click();assert(home.querySelector('.portal-notices').hidden,page+' notices collapse');home.querySelector('.portal-collapse').click();
+assert(home.querySelectorAll('.portal-shortcut').length===3,page+' three working shortcuts');
+if(page.includes('aula-virtual'))assert(home.querySelector('tbody').textContent.includes('Curso propio')&&!home.querySelector('tbody').textContent.includes('Curso ajeno'),'Student attendance is filtered');
 const button=nav.querySelector(selector)||nav.querySelectorAll('button')[1];assert(nav.querySelectorAll('button').length===nav.querySelectorAll('.menu-lateral-icon svg').length,page+' all icons');
 let style=frame.contentWindow.getComputedStyle(button);assert(style.flexDirection==='column'&&style.color==='rgb(255, 255, 255)',page+' white vertical layout');
 button.querySelector('svg path,svg rect,svg circle').dispatchEvent(new MouseEvent('click',{bubbles:true}));await delay(150);assert(button.classList.contains('active'),page+' icon opens module');
+assert(!doc.querySelector('.portal-home')||doc.querySelector('.portal-home').hidden,page+' summary hides on module navigation');
 frame.style.width='390px';await delay(100);style=frame.contentWindow.getComputedStyle(nav);assert(style.flexDirection==='column',page+' mobile vertical menu');assert(nav.getBoundingClientRect().width<=110,page+' mobile compact width');frame.style.width='1200px';
 }
 document.getElementById('result').textContent=JSON.stringify({checks});}catch(e){document.getElementById('result').textContent=JSON.stringify({error:e.message,checks});}})();

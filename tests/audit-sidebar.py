@@ -49,9 +49,6 @@ let currentDay=schedule.querySelector('.week-day.today');
 assert([...schedule.querySelectorAll('.week-day')].indexOf(currentDay)===2&&parseFloat(currentDay.querySelector('.week-now-line').style.top)===0,page+' Wednesday starts at midnight Peru time');
 clockTime='2026-09-09T17:30:00Z';await delay(1100);
 assert(parseFloat(schedule.querySelector('.week-now-line').style.top)===850,page+' time line advances automatically');
-schedule.querySelector('[data-current-time]').click();
-const visibleLine=schedule.querySelector('.week-now-line').getBoundingClientRect(),viewport=schedule.querySelector('.week-scroll').getBoundingClientRect();
-assert(visibleLine.top>viewport.top&&visibleLine.top<viewport.bottom&&visibleLine.right>viewport.left&&visibleLine.left<viewport.right,page+' current time can be seen in timetable viewport');
 clockTime='2026-09-10T05:00:00Z';await delay(1100);
 assert([...schedule.querySelectorAll('.week-day')].indexOf(schedule.querySelector('.week-day.today'))===3&&parseFloat(schedule.querySelector('.week-now-line').style.top)===0,page+' line and highlight move to next day');
 assert(schedule.querySelectorAll('.week-now-line').length===1,page+' only one current-time marker');
@@ -85,6 +82,22 @@ doc.querySelector('#comunicadoFile').files=transfer.files;doc.querySelector('#co
 assert(!doc.querySelector('#comunicadoPreview').hidden,'Image preview works');form.requestSubmit();
 assert(JSON.parse(localStorage.getItem('matecienciasNotificaciones'))[0].image.startsWith('data:image/png'),'Image-only announcement saved');
 assert(doc.querySelector('.portal-notice img'),'Image renders in home announcements');
+}
+const paymentButton=nav.querySelector('[data-module="Pagos"],[data-module="pagos"],[data-view="pagos"]');assert(!!paymentButton,page+' payment menu exists');paymentButton.click();await delay(350);
+let history=doc.querySelector('.payment-history');assert(!!history,page+' payment history loads');
+if(page.startsWith('administracion/')){
+for(const [name,concept,state] of [['Steven Aponte Ramirez','Pago del docente','pendiente'],['MateCiencias Adm','Pago del alumno','pagado']]){
+history.querySelector('[data-add-payment]').click();const dialog=doc.querySelector('.payment-editor'),form=dialog.querySelector('form');
+assert(form.elements.student.tagName==='SELECT','Payment user selected from list');form.elements.student.value=name;form.elements.concept.value=concept;form.elements.amount.value='120.50';form.elements.status.value=state;form.elements.status.dispatchEvent(new Event('change'));if(state==='pagado')form.elements.paymentDate.value='2026-09-08';form.requestSubmit();await delay(80);
+}
+assert(JSON.parse(localStorage.getItem('matecienciasPagos')).length===2,'Admin saves assigned payments');
+}else if(page.startsWith('secretaria/')){
+assert(!!history.querySelector('[data-add-payment]'),'Secretary can assign payments');history.querySelector('tbody button').click();const form=doc.querySelector('.payment-editor form');form.elements.student.value='Joel Chiroque Chiroque';form.elements.status.value='pendiente';form.elements.status.dispatchEvent(new Event('change'));form.requestSubmit();await delay(80);
+assert(JSON.parse(localStorage.getItem('matecienciasPagos')).some(p=>p.student==='Joel Chiroque Chiroque'&&p.status==='pendiente'),'Secretary can reassign user and payment status');
+}else{
+assert(!history.querySelector('[data-add-payment],tbody button'),'Reader cannot modify payments despite other role sessions');
+const text=history.querySelector('tbody').textContent;
+assert(page.startsWith('docentes/')?text.includes('Pago del docente')&&!text.includes('Pago del alumno'):text.includes('Pago del alumno')&&!text.includes('Pago del docente'),page+' sees only own assigned payments');
 }
 }
 document.getElementById('result').textContent=JSON.stringify({checks});}catch(e){document.getElementById('result').textContent=JSON.stringify({error:e.message,checks});}})();

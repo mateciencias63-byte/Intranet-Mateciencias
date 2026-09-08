@@ -141,7 +141,7 @@
         .aula-schedule-wrap { margin-left:-6px; margin-right:-6px; }
       }
     </style>
-  <link rel="stylesheet" href="menu-lateral.css?v=20260908-1" /><link rel="stylesheet" href="inicio-panel.css?v=20260908-1" /><link rel="stylesheet" href="horario-semanal.css?v=20260908-4" /><script src="horario-semanal.js?v=20260908-4"></script></head>
+  <link rel="stylesheet" href="menu-lateral.css?v=20260908-1" /><link rel="stylesheet" href="inicio-panel.css?v=20260908-1" /><link rel="stylesheet" href="horario-semanal.css?v=20260908-4" /><script src="horario-semanal.js?v=20260908-4"></script><link rel="stylesheet" href="pagos-historial.css?v=20260908-1" /><script src="usuarios-docente.js"></script><script src="pagos-historial.js?v=20260908-1"></script></head>
   <body class="internal-page">
     <header class="internal-header aula-header">
       <div class="internal-header-left">
@@ -227,7 +227,7 @@
 
             <section class="aula-view" data-panel="grabaciones"><article class="aula-panel"><h2>Grabaciones</h2><div class="aula-recording-list" id="aulaRecordingList"></div></article></section>
 
-            <section class="aula-view" data-panel="pagos"><article class="aula-panel"><h2>Mis pagos</h2><div class="aula-payment-list" id="aulaPaymentList"></div></article></section>
+            <section class="aula-view" data-panel="pagos"><div id="aulaPaymentList"></div></section>
 
             <section class="aula-view" data-panel="examenes"><article class="aula-panel"><div class="aula-course-grid" id="aulaCourseGrid"></div></article></section>
 
@@ -446,19 +446,7 @@
       };
       renderRecordings();
       window.addEventListener('storage', (event) => { if (event.key === recordingKey) renderRecordings(); });
-      const paymentKey = 'matecienciasPagos';
-      const normalizePaymentName = (value) => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
-      const renderPayments = () => {
-        const list = document.getElementById('aulaPaymentList');
-        if (!list) return;
-        let payments = [];
-        try { payments = JSON.parse(localStorage.getItem(paymentKey) || '[]'); } catch (error) { payments = []; }
-        if (!Array.isArray(payments)) payments = [];
-        const myPayments = payments.filter((payment) => normalizePaymentName(payment.student) === normalizePaymentName(storedName));
-        list.innerHTML = myPayments.length ? myPayments.map((payment) => `<article class="aula-payment-item"><div><strong>${escapeTaskText(payment.concept)} · ${escapeTaskText(payment.detail)}</strong><small>Monto: S/ ${Number(payment.amount || 0).toFixed(2)} · Fecha: ${escapeTaskText(payment.paymentDate || 'No registrada')}</small></div><span class="aula-payment-status ${payment.status === 'pagado' ? 'paid' : ''}">${payment.status === 'pagado' ? 'Pago realizado' : 'Deuda pendiente'}</span></article>`).join('') : '<p>No tienes pagos o deudas pendientes.</p>';
-      };
-      renderPayments();
-      window.addEventListener('storage', (event) => { if (event.key === paymentKey) renderPayments(); });
+      PagosHistorial.mount(document.getElementById('aulaPaymentList'));
       const chatKey = 'matecienciasChat';
       const chatMessages = document.getElementById('aulaChatMessages');
       const escapeChatText = (value) => String(value || '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);

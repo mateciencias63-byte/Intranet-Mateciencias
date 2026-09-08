@@ -1,0 +1,28 @@
+.payment-history { grid-column:1/-1; min-width:0; background:#fff; padding:22px; color:#29455f; font:13px/1.5 Arial,sans-serif; }
+.payment-history h2 { font-size:18px; font-weight:500; margin:0 0 26px; padding-bottom:18px; border-bottom:1px solid #ececf3; }
+.payment-controls { display:flex; gap:12px; flex-wrap:wrap; justify-content:space-between; margin:28px 0; }
+.payment-controls input,.payment-controls select { padding:11px 16px; border:0; border-radius:22px; background:#f5f5f9; color:#29455f; max-width:100%; box-sizing:border-box; }
+.payment-count { color:#718096; margin:18px 0 12px; }
+.payment-table-scroll { overflow:auto; }
+.payment-history table { width:100%; min-width:760px; border-collapse:collapse; font:inherit; }
+.payment-history th,.payment-history td { padding:15px 12px; border-bottom:1px solid #f0f0f5; text-align:left; }
+.payment-history th { background:#f5f4f9; font-weight:500; }
+.payment-history tbody tr:nth-child(even) { background:#faf9fc; }
+.payment-pill { display:inline-block; padding:3px 11px; border-radius:20px; font-size:11px; background:#7668d2; color:white; }
+.payment-pill.paid { background:#e4f6e9; color:#157d3a; }
+.payment-pill.pending { background:#fff0dc; color:#985f0c; }
+.payment-history button,.payment-editor button { padding:9px 14px; border:0; border-radius:5px; background:#0867ad; color:white; cursor:pointer; font:inherit; }
+.payment-pages { display:flex; justify-content:flex-end; gap:8px; margin-top:16px; align-items:center; }
+.payment-pages button { border-radius:50%; min-width:32px; background:#f3f2f8; color:#315da2; }
+.payment-pages button:disabled { opacity:.4; cursor:default; }
+.payment-editor { border:0; border-radius:8px; padding:24px; width:min(650px,calc(100% - 48px)); max-height:85vh; overflow:auto; color:#29455f; }
+.payment-editor::backdrop { background:#102a4377; }
+.payment-editor form { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.payment-editor label { display:grid; gap:7px; font-size:13px; }
+.payment-editor input,.payment-editor select { padding:10px; width:100%; box-sizing:border-box; border:1px solid #d3dbe5; border-radius:4px; font:inherit; }
+.payment-editor .payment-wide { grid-column:1/-1; }
+.payment-editor .payment-actions { display:flex; gap:10px; justify-content:flex-end; }
+.payment-editor .payment-error { color:#ab2525; margin:0; }
+.payment-editor button.secondary { background:#ecf0f5; color:#29455f; }
+.payment-history button:focus-visible,.payment-editor button:focus-visible { outline:3px solid #e4ac00; outline-offset:2px; }
+@media(max-width:600px) { .payment-history { padding:12px; } .payment-editor form { grid-template-columns:1fr; } }

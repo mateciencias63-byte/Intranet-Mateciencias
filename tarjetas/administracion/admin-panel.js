@@ -114,6 +114,7 @@
   renderAdminHome();
 
   const moduleScripts = {
+    'Pagos': 'pagos-historial.js',
     'Estudiantes': 'tarjetas/docentes/docente-estudiantes.js',
     Ranking: 'tarjetas/administracion/admin-ranking.js',
     'Materiales': 'tarjetas/docentes/docente-materiales.js',
@@ -154,11 +155,11 @@
     return loading;
   };
   const studentsButton = document.querySelector('[data-module="Estudiantes"]');
-  if (studentsButton && !document.querySelector('[data-admin-link="tarjetas/tesoreria/contabilidad.html"]')) {
+  if (studentsButton && !document.querySelector('[data-module="Pagos"]')) {
     const treasuryButton = document.createElement('button');
     treasuryButton.type = 'button';
-    treasuryButton.dataset.adminLink = 'tarjetas/tesoreria/contabilidad.html';
-    treasuryButton.innerHTML = '<span class="admin-nav-icon">$</span><span>Tesorería Académica</span>';
+    treasuryButton.dataset.module = 'Pagos';
+    treasuryButton.innerHTML = '<span class="admin-nav-icon">$</span><span>Pagos</span>';
     studentsButton.before(treasuryButton);
   }
   const calendarButtonLabel = document.querySelector('[data-module="Calendario"] span:last-child');

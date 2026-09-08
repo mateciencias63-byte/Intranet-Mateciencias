@@ -210,7 +210,7 @@
     const module = getModule(id);
     title.textContent = module.title;
     nav.querySelectorAll('button').forEach((button) => button.classList.toggle('active', button.dataset.module === id));
-    if (id === 'inicio') dashboard(); else if (id === 'horarios') window.HorarioSemanal.mount(content); else renderModule(module);
+    if (id === 'inicio') dashboard(); else if (id === 'pagos') window.PagosHistorial.mount(content); else if (id === 'horarios') window.HorarioSemanal.mount(content); else renderModule(module);
     document.getElementById('saSidebar').classList.remove('open');
   }
 

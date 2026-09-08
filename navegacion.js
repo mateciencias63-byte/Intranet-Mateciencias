@@ -7,13 +7,11 @@
     Inscripcion: 'tarjetas/inscripcion/inscripcion-ciclo.html',
     Matricula: 'tarjetas/matricula/matricula-login.html',
     'Panel administrativo': 'tarjetas/administracion/admin-login.html',
-    Contabilidad: 'tarjetas/tesoreria/contabilidad-login.html',
     Formularios: 'tarjetas/canva-studies/formularios.html',
     'Panel de docentes': 'tarjetas/docentes/docente-login.html',
     'Aula virtual': 'tarjetas/aula-virtual/aula-virtual.html',
     'Biblioteca virtual': 'tarjetas/biblioteca/biblioteca-login.html',
     'Calendario Academico': 'tarjetas/calendario/calendario-academico.html',
-    'Secretaria Academica': 'tarjetas/secretaria/secretaria-login.html',
     Encuestas: 'tarjetas/encuestas/index.html',
     'Tramites Academicos': 'tarjetas/tramites/index.html'
   };

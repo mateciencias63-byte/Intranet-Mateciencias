@@ -20,7 +20,7 @@ localStorage.setItem('matecienciasNotificaciones',JSON.stringify([{title:'Comuni
 localStorage.setItem('matecienciasAsistencias',JSON.stringify([{student:'MateCiencias Adm',className:'Curso propio',status:'Falta'},{student:'Otro alumno',className:'Curso ajeno',status:'Presente'}]));
 localStorage.removeItem('matecienciasClasesSinEjemplos20260908');
 localStorage.setItem('matecienciasClasesVirtuales',JSON.stringify([{name:'Ciclo Preu Verano 2026 - Ciencias',url:'https://meet.google.com/jso-wsie-ndw'},{name:'Clase publicada',url:'https://example.com/clase'}]));
-for(const [page,selector] of [['administracion/admin-panel.html','[data-module="Estudiantes"]'],['docentes/administrativo.html','[data-module="Estudiantes"]'],['aula-virtual/aula-virtual-contenido.html','[data-view="pagos"]'],['secretaria/secretaria-academica.html','[data-module="estudiantes"]']]){
+for(const [page,selector] of [['administracion/admin-panel.html','[data-module="Estudiantes"]'],['docentes/administrativo.html','[data-module="Estudiantes"]'],['aula-virtual/aula-virtual-contenido.html','[data-view="pagos"]']]){
 await new Promise(r=>{frame.onload=r;frame.src='/tarjetas/'+page;setTimeout(r,1800);});await delay(250);
 const doc=frame.contentDocument,nav=doc.querySelector('.menu-lateral');assert(!!nav,page+' menu loaded');
 const classes=JSON.parse(localStorage.getItem('matecienciasClasesVirtuales'));assert(classes.length===1&&classes[0].name==='Clase publicada',page+' removes only legacy example classes');
@@ -91,9 +91,6 @@ history.querySelector('[data-add-payment]').click();const dialog=doc.querySelect
 assert(form.elements.student.tagName==='SELECT','Payment user selected from list');form.elements.student.value=name;form.elements.concept.value=concept;form.elements.amount.value='120.50';form.elements.status.value=state;form.elements.status.dispatchEvent(new Event('change'));if(state==='pagado')form.elements.paymentDate.value='2026-09-08';form.requestSubmit();await delay(80);
 }
 assert(JSON.parse(localStorage.getItem('matecienciasPagos')).length===2,'Admin saves assigned payments');
-}else if(page.startsWith('secretaria/')){
-assert(!!history.querySelector('[data-add-payment]'),'Secretary can assign payments');history.querySelector('tbody button').click();const form=doc.querySelector('.payment-editor form');form.elements.student.value='Joel Chiroque Chiroque';form.elements.status.value='pendiente';form.elements.status.dispatchEvent(new Event('change'));form.requestSubmit();await delay(80);
-assert(JSON.parse(localStorage.getItem('matecienciasPagos')).some(p=>p.student==='Joel Chiroque Chiroque'&&p.status==='pendiente'),'Secretary can reassign user and payment status');
 }else{
 assert(!history.querySelector('[data-add-payment],tbody button'),'Reader cannot modify payments despite other role sessions');
 const text=history.querySelector('tbody').textContent;

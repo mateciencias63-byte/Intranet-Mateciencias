@@ -4,12 +4,11 @@
   const users=()=>[...new Set([...(window.UsuarioService?.getApprovedAccounts()||[]).map(item=>item.name),...(window.docentesAutorizados||[])])];
   function editable(){
     if(document.querySelector('.admin-main'))return window.UsuarioService?.isAdminSessionValid()===true;
-    if(document.querySelector('.sa-main'))return window.UsuarioService?.userIsInList(sessionStorage.getItem('secretariaUsuario'),window.secretariaAutorizados||[])===true;
     return false;
   }
   const read=()=>{const data=JSON.parse(localStorage.getItem(key)||'[]');if(!Array.isArray(data))throw Error('Datos inválidos');return data;};
   const user=()=>document.querySelector('.docente-main')?sessionStorage.getItem('docenteUser'):window.UsuarioService?.getStoredUserName();
-  const actor=()=>document.querySelector('.sa-main')?sessionStorage.getItem('secretariaUsuario'):sessionStorage.getItem('adminUsuario');
+  const actor=()=>sessionStorage.getItem('adminUsuario');
   function mount(target){
     if(!target)return;target.replaceChildren();const root=document.createElement('section');root.className='payment-history';target.append(root);
     let page=1,query='',status='',selectedUser='';const size=10;

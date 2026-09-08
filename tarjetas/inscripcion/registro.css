@@ -35,8 +35,10 @@ body { background:#e3edf5; background-image:none; }
 .registro-notice { background:#eef6fd; color:#24577e; padding:14px; font-size:.85rem; line-height:1.6; }
 .registro-error { color:#a12222; font-size:.85rem; }
 .registro-wide { grid-column:1/-1; }
-.inscripcion-photo-preview { border-radius:50%; width:160px; height:160px; }
-.inscripcion-photo-box { border:1px solid #dce5ee; background:#fafcfe; }
+.inscripcion-photo-preview { box-sizing:border-box; border-radius:50%; width:160px; height:160px; background:#e8f1eb; }
+.inscripcion-photo-box { box-sizing:border-box; width:100%; max-width:280px; justify-self:center; gap:8px; padding:16px; border:1px solid #dce5ee; border-radius:10px; background:#fafcfe; }
+.inscripcion-photo-box > strong { font-size:16px; line-height:21px; text-align:center; }
+.inscripcion-photo-box input[type="file"] { box-sizing:border-box; width:100%; min-width:0; margin:0; padding:11px; border:1px solid #cbd5e1; border-radius:7px; background:#fff; font-size:12px; }
 .registro-crop { display:block; max-width:100%; margin:auto; background:#eee; }
 [hidden] { display:none !important; }
 @media(max-width:700px) { .registro-grid { grid-template-columns:1fr; } .registro-inicio { margin:25px auto; } .registro-dialog { padding:16px; } }

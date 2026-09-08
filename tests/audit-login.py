@@ -32,6 +32,10 @@ assert(!notice.includes(account.password),'Wrong password does not reveal creden
 doc.getElementById('passwordInput').value=account.password;
 doc.getElementById('loginForm').requestSubmit();await delay(400);
 assert(frame.contentWindow.location.pathname==='/dashboard.html','Valid login opens second page');
+assert(frame.contentWindow.createNameAvatar('Joel Chiroque').dataset.avatar==='hombre','Male name uses male avatar');
+assert(frame.contentWindow.createNameAvatar('María Perez').dataset.avatar==='mujer','Female name uses female avatar');
+assert(frame.contentWindow.createNameAvatar('MateCiencias Adm').dataset.avatar==='neutro','Institution uses neutral avatar');
+assert(!frame.contentDocument.querySelector('#dashboardAvatar text'),'Dashboard no longer displays initials');
 frame.contentWindow.history.back();await delay(500);
 assert(frame.contentWindow.location.pathname==='/index.html','Back returns to first page');
 assert(!frame.contentDocument.getElementById('welcomeBlock').classList.contains('hidden'),'Back displays login form');

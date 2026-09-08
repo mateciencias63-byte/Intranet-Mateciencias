@@ -263,6 +263,7 @@
     </div>
 
     <script src="usuario.js?v=20260905-4"></script>
+    <script src="avatar.js?v=20260908-1"></script>
     <script>
       const dashboardUser = document.getElementById('dashboardUser');
       const dashboardAvatar = document.getElementById('dashboardAvatar');
@@ -286,9 +287,6 @@
       const displayName = storedUser || 'USUARIO';
 
 
-      const maleNames = ['UZIEL', 'CARLOS', 'LUIS', 'DIEGO', 'JAVIER', 'TOMAS', 'MATEO', 'SAMUEL', 'BRUNO', 'DANIELA', 'CHRISTIAN', 'FERNANDO', 'GABRIEL', 'OSCAR', 'RICARDO', 'KEVIN'];
-      const femaleNames = ['MARIA', 'ANA', 'SOFIA', 'CAMILA', 'ELENA', 'VALERIA', 'ISABELLA', 'DANIELA', 'JULIANA', 'MARIANA', 'NATALIA', 'RENATA', 'PAULA', 'CARLA', 'LUCIA'];
-
       const setAvatar = (fullName) => {
         if (!dashboardAvatar) return;
 
@@ -304,24 +302,7 @@
           return;
         }
 
-        const initials = UsuarioService.getInitials(fullName);
-        const colors = ['#0d8f36', '#1f8748', '#0a6c27', '#117a5a', '#0b5f3f'];
-        let colorIndex = 0;
-        try {
-          let sum = 0;
-          for (let i = 0; i < initials.length; i++) sum += initials.charCodeAt(i);
-          colorIndex = sum % colors.length;
-        } catch (e) { colorIndex = 0; }
-        const bg = colors[colorIndex];
-
-        const initialsSvg = `
-          <svg viewBox="0 0 100 100" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="50" fill="${bg}" />
-            <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="40" fill="#ffffff" font-weight="700">${initials}</text>
-          </svg>
-        `;
-
-        dashboardAvatar.innerHTML = initialsSvg;
+        dashboardAvatar.appendChild(createNameAvatar(fullName));
       };
 
       // Always show a display name (falls back to 'USUARIO') and set avatar

@@ -18,9 +18,12 @@ const assert=(ok,msg)=>{if(!ok)throw Error(msg);checks.push(msg);};
 Object.entries({dashboardUser:'MateCiencias Adm',dashboardAuthenticated:'true',adminAutenticado:'true',adminUsuario:'MateCiencias Adm',adminTimestamp:String(Date.now()),docenteUser:'Steven Aponte Ramirez',secretariaUsuario:'MateCiencias Adm',aulaVirtualAuth:'true'}).forEach(([k,v])=>sessionStorage.setItem(k,v));
 localStorage.setItem('matecienciasNotificaciones',JSON.stringify([{title:'Comunicado de prueba',detail:'Contenido de prueba',createdAt:'2026-09-08T12:00:00Z'}]));
 localStorage.setItem('matecienciasAsistencias',JSON.stringify([{student:'MateCiencias Adm',className:'Curso propio',status:'Falta'},{student:'Otro alumno',className:'Curso ajeno',status:'Presente'}]));
+localStorage.removeItem('matecienciasClasesSinEjemplos20260908');
+localStorage.setItem('matecienciasClasesVirtuales',JSON.stringify([{name:'Ciclo Preu Verano 2026 - Ciencias',url:'https://meet.google.com/jso-wsie-ndw'},{name:'Clase publicada',url:'https://example.com/clase'}]));
 for(const [page,selector] of [['administracion/admin-panel.html','[data-module="Estudiantes"]'],['docentes/administrativo.html','[data-module="Estudiantes"]'],['aula-virtual/aula-virtual-contenido.html','[data-view="pagos"]'],['secretaria/secretaria-academica.html','[data-module="estudiantes"]']]){
 await new Promise(r=>{frame.onload=r;frame.src='/tarjetas/'+page;setTimeout(r,1800);});await delay(250);
 const doc=frame.contentDocument,nav=doc.querySelector('.menu-lateral');assert(!!nav,page+' menu loaded');
+const classes=JSON.parse(localStorage.getItem('matecienciasClasesVirtuales'));assert(classes.length===1&&classes[0].name==='Clase publicada',page+' removes only legacy example classes');
 const home=doc.querySelector('.portal-home');assert(home&&!home.hidden,page+' initial summary visible');
 assert(home.querySelector('.portal-notices').textContent.includes('Comunicado de prueba'),page+' real notices');
 home.querySelector('.portal-collapse').click();assert(home.querySelector('.portal-notices').hidden,page+' notices collapse');home.querySelector('.portal-collapse').click();

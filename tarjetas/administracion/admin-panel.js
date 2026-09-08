@@ -9,11 +9,7 @@
   const teacherKey = 'matecienciasDocentes';
   const catalogKey = 'matecienciasAulaCatalogo';
   const classLinksKey = 'matecienciasClasesVirtuales';
-  const defaultClasses = [
-    { name: 'Ciclo Preu Verano 2026 - Ciencias', url: 'https://meet.google.com/jso-wsie-ndw' },
-    { name: 'Ciclo Preu Verano 2026 - Medicina', url: 'https://meet.google.com/jso-wsie-ndw' },
-    { name: 'Ciclo Preu Verano 2026 - Letras', url: 'https://meet.google.com/jso-wsie-ndw' }
-  ];
+  const defaultClasses = [];
   const teachers = readArray(teacherKey);
   const catalog = readArray(catalogKey);
   let classes;

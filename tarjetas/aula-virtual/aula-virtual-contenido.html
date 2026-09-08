@@ -163,7 +163,7 @@
 
     <main class="aula-main">
       <section class="aula-cards-section">
-        <div class="aula-layout"> 
+        <div class="aula-layout">
           <aside class="aula-ribbon" aria-label="Navegación del aula virtual">
             <h2>Mi aula</h2>
             <nav class="aula-nav" id="aulaNav">
@@ -241,6 +241,7 @@
       </section>
     </main>
 
+    <script src="clases-migracion.js?v=20260908-1"></script>
     <script src="usuario.js?v=20260905-4"></script>
     <script src="notificaciones.js?v=20260908-2"></script>
     <script>
@@ -270,11 +271,7 @@
       const aulaAvatar = document.getElementById('aulaAvatar');
       const initials = UsuarioService.getInitials(storedName);
       const classLinksKey = 'matecienciasClasesVirtuales';
-      const defaultClasses = [
-        { name: 'Ciclo Preu Verano 2026 - Ciencias', url: 'https://meet.google.com/jso-wsie-ndw' },
-        { name: 'Ciclo Preu Verano 2026 - Medicina', url: 'https://meet.google.com/jso-wsie-ndw' },
-        { name: 'Ciclo Preu Verano 2026 - Letras', url: 'https://meet.google.com/jso-wsie-ndw' }
-      ];
+      const defaultClasses = [];
       const escapeClassText = (value) => String(value || '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
       const renderStudentClasses = () => {
         const classList = document.getElementById('aulaClassList');

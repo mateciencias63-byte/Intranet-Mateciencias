@@ -1,11 +1,7 @@
 (() => {
 	window.DocenteModules = window.DocenteModules || {};
 
-	const classes = [
-		'Ciclo Preu Verano 2026 - Ciencias',
-		'Ciclo Preu Verano 2026 - Medicina',
-		'Ciclo Preu Verano 2026 - Letras'
-	];
+	const classes = [];
 	const classUrl = 'https://meet.google.com/jso-wsie-ndw';
 	const classLinksKey = 'matecienciasClasesVirtuales';
 	const isAdminPanel = Boolean(document.querySelector('.admin-shell'));

@@ -63,21 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const showAuthorizedRoom = (fullName) => {
-    if (welcomeBlock) welcomeBlock.classList.add('hidden');
-    if (welcomeBanner) welcomeBanner.classList.add('hidden');
-    if (cardsGrid) cardsGrid.classList.remove('hidden');
-    if (authorizedRoom) authorizedRoom.classList.remove('hidden');
-    if (accountShell) accountShell.classList.remove('hidden');
-    
-    // Mostrar nombre y apellidos
-    if (accountName) accountName.textContent = fullName;
-    
-    // Generar y mostrar avatar con iniciales
-    const accountAvatar = document.querySelector('.account-avatar');
-    if (accountAvatar) {
-      accountAvatar.innerHTML = generateAvatarWithInitials(fullName);
-    }
-
     sessionStorage.setItem('dashboardUser', fullName);
     sessionStorage.setItem('dashboardAuthenticated', 'true');
     window.location.assign('dashboard.html');
@@ -91,6 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (accountShell) accountShell.classList.add('hidden');
     if (welcomeCard) welcomeCard.classList.add('hidden');
   };
+
+  window.addEventListener('pageshow', () => {
+    showLoginRoom();
+    if (passwordInput) passwordInput.value = '';
+  });
 
   if (loginForm) {
     // Listener en el formulario para submit
@@ -182,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showAuthorizedRoom(fullName);
 
     usernameInput.value = fullName;
-    passwordInput.value = password;
+    passwordInput.value = '';
   }
 
   if (logoutButton) {

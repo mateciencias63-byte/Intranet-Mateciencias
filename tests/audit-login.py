@@ -32,6 +32,13 @@ assert(!notice.includes(account.password),'Wrong password does not reveal creden
 doc.getElementById('passwordInput').value=account.password;
 doc.getElementById('loginForm').requestSubmit();await delay(400);
 assert(frame.contentWindow.location.pathname==='/dashboard.html','Valid login opens second page');
+frame.contentWindow.history.back();await delay(500);
+assert(frame.contentWindow.location.pathname==='/index.html','Back returns to first page');
+assert(!frame.contentDocument.getElementById('welcomeBlock').classList.contains('hidden'),'Back displays login form');
+assert(frame.contentDocument.getElementById('accountShell').classList.contains('hidden'),'Back does not display duplicate account panel');
+assert(frame.contentDocument.getElementById('passwordInput').value==='','Back does not retain password');
+assert(frame.contentDocument.getElementById('cardsGrid').inert,'Cards stay blocked after going back');
+await load('/dashboard.html');
 frame.contentDocument.querySelector('[data-service="Inscripcion"]').click();await delay(400);
 assert(frame.contentWindow.location.pathname.endsWith('/inscripcion-ciclo.html'),'Second-page cards open modules');
 await load('/dashboard.html');frame.contentDocument.getElementById('logoutButton').click();await delay(300);

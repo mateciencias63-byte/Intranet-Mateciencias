@@ -9,10 +9,12 @@
     svg.setAttribute('role', 'img');
     svg.setAttribute('aria-label', kind === 'neutro' ? 'Avatar de usuario' : `Avatar de ${kind}`);
     svg.dataset.avatar = kind;
-    const portrait = kind === 'neutro'
-      ? '<circle cx="60" cy="43" r="20" fill="#fff"/><path d="M24 111v-12a36 36 0 0 1 72 0v12" fill="#fff"/>'
-      : `${kind === 'mujer' ? '<path d="M31 53c0-27 12-35 29-35s29 8 29 35v39H31z" fill="#343a40"/>' : ''}<path d="M20 120v-16c0-20 18-29 40-29s40 9 40 29v16" fill="${kind === 'mujer' ? '#eee6fc' : '#e5f1ff'}"/><path d="M50 69h20v16c-6 8-14 8-20 0z" fill="#dfa67e"/><ellipse cx="60" cy="49" rx="22" ry="28" fill="#f2c29c"/><path d="${kind === 'mujer' ? 'M37 48c-3-27 12-31 23-31 20 0 28 16 24 34-12-2-20-10-25-19-4 9-12 14-22 16' : 'M37 46c-5-23 9-30 23-30 16 0 27 11 24 30l-8-13c-9 5-20 5-31 1z'}" fill="#343a40"/><circle cx="52" cy="51" r="2" fill="#343a40"/><circle cx="69" cy="51" r="2" fill="#343a40"/><path d="M54 63q6 5 12 0" fill="none" stroke="#a65d4e" stroke-width="2" stroke-linecap="round"/>`;
-    svg.innerHTML = `<circle cx="60" cy="60" r="60" fill="#0d8f36"/>${portrait}`;
+    const portrait = kind === 'mujer'
+      ? '<path d="M35 49c0-24 10-35 25-35s25 11 25 35c0 15 3 24 8 31H74v3l30 13 16 24H0l16-24 30-13v-3H27c5-7 8-16 8-31z" fill="#737575"/>'
+      : '<path d="M60 14c-15 0-22 13-22 30 0 11 3 19 8 25v12L11 96 0 120h120l-11-24-35-15V69c5-6 8-14 8-25 0-17-7-30-22-30z" fill="#737575"/>';
+    svg.style.borderRadius = '50%';
+    svg.style.overflow = 'hidden';
+    svg.innerHTML = `<circle cx="60" cy="60" r="60" fill="#d2d2d2"/>${portrait}`;
     return svg;
   };
 })();

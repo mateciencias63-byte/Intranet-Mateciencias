@@ -25,6 +25,17 @@
   document.querySelectorAll('.admin-nav,.docente-nav,.aula-nav,.sa-nav').forEach(nav => {
     nav.classList.add('menu-lateral');
     decorate(nav);
+    nav.addEventListener('click', event => {
+      const button = event.target.closest('button');
+      if (!button || !nav.contains(button) || button.disabled) return;
+      // Run after the selected module's click handlers update the page.
+      setTimeout(() => {
+        window.scrollTo({ top:0, left:0, behavior:'instant' });
+        document.querySelectorAll('.admin-main,.docente-main,.aula-main,.sa-main').forEach(main => {
+          main.scrollTo({ top:0, left:0, behavior:'instant' });
+        });
+      }, 0);
+    });
     new MutationObserver(() => decorate(nav)).observe(nav,{childList:true,subtree:true});
   });
 })();

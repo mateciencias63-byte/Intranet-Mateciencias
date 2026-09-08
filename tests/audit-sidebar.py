@@ -31,7 +31,10 @@ assert(home.querySelectorAll('.portal-shortcut').length===3,page+' three working
 if(page.includes('aula-virtual'))assert(home.querySelector('tbody').textContent.includes('Curso propio')&&!home.querySelector('tbody').textContent.includes('Curso ajeno'),'Student attendance is filtered');
 const button=nav.querySelector(selector)||nav.querySelectorAll('button')[1];assert(nav.querySelectorAll('button').length===nav.querySelectorAll('.menu-lateral-icon svg').length,page+' all icons');
 let style=frame.contentWindow.getComputedStyle(button);assert(style.flexDirection==='column'&&style.color==='rgb(255, 255, 255)',page+' white vertical layout');
+frame.contentWindow.scrollTo(0,650);await delay(50);
+assert(frame.contentWindow.scrollY>0,page+' scrolled down before selecting option');
 button.querySelector('svg path,svg rect,svg circle').dispatchEvent(new MouseEvent('click',{bubbles:true}));await delay(150);assert(button.classList.contains('active'),page+' icon opens module');
+assert(frame.contentWindow.scrollY===0,page+' selecting option returns to top');
 assert(!doc.querySelector('.portal-home')||doc.querySelector('.portal-home').hidden,page+' summary hides on module navigation');
 frame.style.width='390px';await delay(100);style=frame.contentWindow.getComputedStyle(nav);assert(style.flexDirection==='column',page+' mobile vertical menu');assert(nav.getBoundingClientRect().width<=110,page+' mobile compact width');frame.style.width='1200px';
 if(page.startsWith('administracion/')){
@@ -44,7 +47,7 @@ assert(JSON.parse(localStorage.getItem('matecienciasNotificaciones'))[0].detail=
 const canvas=doc.createElement('canvas');canvas.width=10;canvas.height=10;
 const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
 const transfer=new DataTransfer();transfer.items.add(new File([blob],'prueba.png',{type:'image/png'}));
-doc.querySelector('#comunicadoFile').files=transfer.files;doc.querySelector('#comunicadoFile').dispatchEvent(new Event('change'));await delay(300);
+doc.querySelector('#comunicadoFile').files=transfer.files;doc.querySelector('#comunicadoFile').dispatchEvent(new Event('change'));for(let attempt=0;attempt<20&&doc.querySelector('#comunicadoPreview').hidden;attempt++)await delay(100);
 assert(!doc.querySelector('#comunicadoPreview').hidden,'Image preview works');form.requestSubmit();
 assert(JSON.parse(localStorage.getItem('matecienciasNotificaciones'))[0].image.startsWith('data:image/png'),'Image-only announcement saved');
 assert(doc.querySelector('.portal-notice img'),'Image renders in home announcements');

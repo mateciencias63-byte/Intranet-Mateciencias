@@ -1,0 +1,21 @@
+.admin-shell,.docente-shell,.aula-layout,.sa-layout { grid-template-columns:110px minmax(0,1fr); }
+.admin-sidebar,.docente-sidebar,.aula-ribbon,.sa-sidebar { padding:0; background:#00518e; color:#fff; min-width:0; }
+.admin-label,.sidebar-label,.aula-ribbon-title,.aula-ribbon > h2 { display:none; }
+.menu-lateral { display:flex; flex-direction:column; gap:0; width:100%; overflow:visible; }
+.menu-lateral button { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; width:100%; min-height:94px; padding:14px 7px; border:0; border-radius:0; background:#00518e; color:#fff; font:400 12px/1.35 Arial,sans-serif; text-align:center; cursor:pointer; overflow-wrap:anywhere; }
+.menu-lateral button:hover,.menu-lateral button.active { background:#006cba; color:#fff; }
+.menu-lateral button:focus-visible { outline:2px solid #fff; outline-offset:-4px; background:#006cba; }
+.menu-lateral button span:last-child { display:block; }
+.menu-lateral button .menu-lateral-icon { display:block; flex:0 0 auto; width:32px; height:32px; color:#fff; }
+.menu-lateral button.active .menu-lateral-icon { color:#fff; }
+.menu-lateral-icon svg { display:block; width:32px; height:32px; }
+.admin-footer,.sidebar-footer { padding:16px 8px; overflow-wrap:anywhere; font-size:11px; }
+@media(max-width:760px) {
+  .admin-shell,.docente-shell,.aula-layout,.sa-layout { display:grid; grid-template-columns:90px minmax(0,1fr); }
+  .admin-sidebar,.docente-sidebar,.aula-ribbon,.sa-sidebar { position:static; width:auto; height:auto; max-height:none; padding:0; transform:none; overflow:visible; }
+  .menu-lateral { display:flex; flex-direction:column; overflow:visible; gap:0; }
+  .menu-lateral button { flex:0 0 auto; width:100%; min-height:88px; padding:12px 5px; font-size:11px; }
+  .menu-lateral button span:last-child { display:block; }
+  .sa-menu-button { display:none; }
+  .admin-main,.docente-main,.sa-main { min-width:0; padding-left:12px; padding-right:12px; }
+}

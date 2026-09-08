@@ -15,9 +15,6 @@
     const options = aula ? [['Mis actividades','document',['tareas']],['Mis evaluaciones','book',['examenes']],['Mis pagos','money',['pagos']]] : [['Actividades','document',['Tareas','tramites','matriculas']],['Calificaciones','book',['PromedioGeneral','notas']],['Asistencias','document',['Asistencia','asistencia']]];
     home.innerHTML=`<article class="portal-card"><header class="portal-bar"><h2>${svg('bell')}Comunicados</h2><button type="button" class="portal-collapse" aria-label="Contraer comunicados" aria-expanded="true">⌃</button></header><div class="portal-notices"></div></article><div class="portal-columns"><div><div class="portal-shortcuts"></div><button type="button" class="portal-green"></button></div><article class="portal-card"><header class="portal-bar"><h2>${aula?'Mis inasistencias':'Resumen de asistencias'}</h2><button type="button" class="portal-detail">Ver detalle</button></header><div class="portal-table-wrap"><table class="portal-table"><thead><tr><th>Curso</th><th>Registros</th><th>Faltas</th><th>% faltas</th></tr></thead><tbody></tbody></table></div></article></div>`;
     const noticesEl=home.querySelector('.portal-notices');
-    if(document.querySelector('.admin-main')){
-      const create=document.createElement('button');create.type='button';create.className='portal-detail';create.textContent='Publicar comunicado';create.onclick=()=>open('Comunicados');home.querySelector('.portal-bar').insertBefore(create,home.querySelector('.portal-collapse'));
-    }
     if (!notices.length) noticesEl.innerHTML='<p class="portal-empty">No hay comunicados publicados.</p>';
     notices.slice(0,3).forEach(item=>{
       const article=document.createElement('article');article.className='portal-notice';

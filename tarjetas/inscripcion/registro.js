@@ -74,7 +74,6 @@
     if(old){const map={ApellidoPaterno:'apellidoPaterno',ApellidoMaterno:'apellidoMaterno',Nombres:'nombres',Correo:'correo',FechaNacimiento:'fechaNacimiento',Direccion:'direccion',Ubigeo:'ubigeo',Apoderado:'apoderado',Carrera:'carrera',Universidad:'universidad'};Object.entries(map).forEach(([id,key])=>{if(old[key])$('inscripcion'+id).value=old[key];});$('inscripcionEstudioAnterior').value='Sí';updateAge();}
     start.hidden=true;card.hidden=false;$('inscripcionNombres').focus();
   };
-  const back=document.createElement('button');back.type='button';back.className='registro-button secondary';back.textContent='Volver al registro y pagos';back.onclick=()=>{card.hidden=true;start.hidden=false;};card.prepend(back);
   $('inscripcionCiclo').addEventListener('change',()=>{$('registroCiclo').value=$('inscripcionCiclo').value;});
   $('inscripcionNext').hidden=true;
   $('inscripcionPaymentStep').classList.add('visible');

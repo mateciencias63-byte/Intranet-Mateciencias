@@ -15,7 +15,7 @@ const frame=document.getElementById('app'),checks=[];
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 const assert=(ok,msg)=>{if(!ok)throw Error(msg);checks.push(msg);};
 (async()=>{try{
-Object.entries({dashboardUser:'MateCiencias Adm',dashboardAuthenticated:'true',adminAutenticado:'true',adminUsuario:'MateCiencias Adm',adminTimestamp:String(Date.now()),docenteUser:'Steven Aponte Ramirez',secretariaUsuario:'MateCiencias Adm',aulaVirtualAuth:'true'}).forEach(([k,v])=>sessionStorage.setItem(k,v));
+Object.entries({dashboardUser:'MateCiencias Adm',dashboardAuthenticated:'true',adminAutenticado:'true',adminUsuario:'MateCiencias Adm',adminTimestamp:String(Date.now()),docenteUser:'Joel Chiroque Chiroque',secretariaUsuario:'MateCiencias Adm',aulaVirtualAuth:'true'}).forEach(([k,v])=>sessionStorage.setItem(k,v));
 localStorage.setItem('matecienciasNotificaciones',JSON.stringify([{title:'Comunicado de prueba',detail:'Contenido de prueba',createdAt:'2026-09-08T12:00:00Z'}]));
 localStorage.setItem('matecienciasAsistencias',JSON.stringify([{student:'MateCiencias Adm',className:'Curso propio',status:'Falta'},{student:'Otro alumno',className:'Curso ajeno',status:'Presente'}]));
 localStorage.removeItem('matecienciasClasesSinEjemplos20260908');
@@ -97,7 +97,8 @@ const back=inner.contentDocument.querySelector('.admision-actions,.matricula-bac
 const paymentButton=nav.querySelector('[data-module="Pagos"],[data-module="pagos"],[data-view="pagos"]');assert(!!paymentButton,page+' payment menu exists');paymentButton.click();await delay(350);
 let history=doc.querySelector('.payment-history');assert(!!history,page+' payment history loads');
 if(page.startsWith('administracion/')){
-for(const [name,concept,state] of [['Steven Aponte Ramirez','Pago del docente','pendiente'],['MateCiencias Adm','Pago del alumno','pagado']]){
+assert(JSON.stringify([...history.querySelector('[aria-label="Filtrar por usuario"]').options].slice(1).map(option=>option.value))===JSON.stringify(frame.contentWindow.UsuarioService.getApprovedAccounts().map(item=>item.name)),'Payment filter lists only usuario.js accounts');
+for(const [name,concept,state] of [['Joel Chiroque Chiroque','Pago del docente','pendiente'],['MateCiencias Adm','Pago del alumno','pagado']]){
 history.querySelector('[data-add-payment]').click();const dialog=doc.querySelector('.payment-editor'),form=dialog.querySelector('form');
 assert(form.elements.student.tagName==='SELECT','Payment user selected from list');form.elements.student.value=name;form.elements.concept.value=concept;form.elements.amount.value='120.50';form.elements.status.value=state;form.elements.status.dispatchEvent(new Event('change'));if(state==='pagado')form.elements.paymentDate.value='2026-09-08';form.requestSubmit();await delay(80);
 }

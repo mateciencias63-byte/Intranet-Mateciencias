@@ -1,7 +1,7 @@
 (() => {
   const key='matecienciasPagos';
   const normalize=name=>String(name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim().toUpperCase();
-  const users=()=>[...new Set([...(window.UsuarioService?.getApprovedAccounts()||[]).map(item=>item.name),...(window.docentesAutorizados||[])])];
+  const users=()=>[...new Set((window.UsuarioService?.getApprovedAccounts()||[]).map(item=>item.name))];
   function editable(){
     if(document.querySelector('.admin-main'))return window.UsuarioService?.isAdminSessionValid()===true;
     return false;
@@ -21,7 +21,7 @@
       const controls=root.querySelector('.payment-controls'),search=controls.querySelector('input'),filter=controls.querySelector('select');search.value=query;filter.value=status;
       search.oninput=()=>{query=search.value;page=1;const position=search.selectionStart;render();const input=root.querySelector('input');input.focus();try{input.setSelectionRange(position,position);}catch{}};
       filter.onchange=()=>{status=filter.value;page=1;render();};
-      if(edit){const people=document.createElement('select');people.setAttribute('aria-label','Filtrar por usuario');const all=document.createElement('option');all.value='';all.textContent='Todos los usuarios';people.append(all);[...new Set([...users(),...records.map(item=>item.student).filter(Boolean)])].forEach(name=>{const option=document.createElement('option');option.value=name;option.textContent=name;people.append(option);});people.value=selectedUser;people.onchange=()=>{selectedUser=people.value;page=1;render();};controls.append(people);if(!failed){const add=document.createElement('button');add.type='button';add.dataset.addPayment='true';add.textContent='Asignar pago';add.onclick=()=>editor();controls.append(add);}}
+      if(edit){const people=document.createElement('select');people.setAttribute('aria-label','Filtrar por usuario');const all=document.createElement('option');all.value='';all.textContent='Todos los usuarios';people.append(all);users().forEach(name=>{const option=document.createElement('option');option.value=name;option.textContent=name;people.append(option);});people.value=selectedUser;people.onchange=()=>{selectedUser=people.value;page=1;render();};controls.append(people);if(!failed){const add=document.createElement('button');add.type='button';add.dataset.addPayment='true';add.textContent='Asignar pago';add.onclick=()=>editor();controls.append(add);}}
       const headers=[...(edit?['Usuario']:[]),'Tipo','Concepto','Código','Importe','Fecha de pago','Estado','Opciones'];headers.forEach(text=>{const th=document.createElement('th');th.textContent=text;root.querySelector('thead tr').append(th);});
       const first=(page-1)*size,slice=filtered.slice(first,first+size);
       root.querySelector('.payment-count').textContent=failed?'No se pudieron leer los pagos guardados.':`Mostrando ${filtered.length?first+1:0}–${Math.min(first+size,filtered.length)} de ${filtered.length} registros`;

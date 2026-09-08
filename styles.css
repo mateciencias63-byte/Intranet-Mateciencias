@@ -1256,7 +1256,7 @@ body::-webkit-scrollbar {
 .welcome-banner .welcome-tagline {
   font-family: 'Montserrat', 'Trebuchet MS', sans-serif;
   font-size: clamp(1.25rem, 2.4vw, 2rem);
-  font-weight: 800;
+  font-weight: 900;
   line-height: 1.25;
   letter-spacing: 0.055em;
   text-wrap: balance;

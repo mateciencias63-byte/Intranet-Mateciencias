@@ -12,14 +12,13 @@
     body { margin:0; min-height:100vh; background:#f5f8fb; color:#102a43; font-family:Arial,sans-serif; }
     .calendar-page-header { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:20px; background:white; }
     .calendar-page-header h1 { margin:0; }
-    .calendar-page-back { padding:12px; border-radius:8px; background:#0d8f36; color:white; text-decoration:none; }
     .calendar-page-main { padding:24px; }
     .calendar-card { padding:20px; border:1px solid #dbe7ed; border-radius:12px; background:white; }
     @media(max-width:600px) { .calendar-page-header { flex-direction:column; align-items:start; } .calendar-page-main { padding:12px; } .calendar-card { padding:12px; } }
   </style>
 </head>
 <body>
-  <header class="calendar-page-header"><h1>Calendario</h1><a class="calendar-page-back" href="dashboard.html">Volver al panel principal</a></header>
+  <header class="calendar-page-header"><h1>Calendario</h1></header>
   <main class="calendar-page-main"><section class="calendar-card" aria-label="Agenda académica">
     <div class="aula-calendar-toolbar"><button type="button" id="aulaCalendarPrevious" aria-label="Mes anterior">←</button><strong id="aulaCalendarMonth"></strong><button type="button" id="aulaCalendarNext" aria-label="Mes siguiente">→</button></div>
     <div class="aula-calendar-grid" id="aulaCalendarGrid"></div>

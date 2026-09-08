@@ -91,6 +91,11 @@ history.querySelector('[data-add-payment]').click();const dialog=doc.querySelect
 assert(form.elements.student.tagName==='SELECT','Payment user selected from list');form.elements.student.value=name;form.elements.concept.value=concept;form.elements.amount.value='120.50';form.elements.status.value=state;form.elements.status.dispatchEvent(new Event('change'));if(state==='pagado')form.elements.paymentDate.value='2026-09-08';form.requestSubmit();await delay(80);
 }
 assert(JSON.parse(localStorage.getItem('matecienciasPagos')).length===2,'Admin saves assigned payments');
+localStorage.setItem('matecienciasDocentesDetalle',JSON.stringify([{id:'teacher-test',name:'Docente Prueba',email:'prueba@example.com',specialty:'Matemática',areas:'Álgebra'}]));
+nav.querySelector('[data-module="MisDocentes"]').click();await delay(250);
+doc.querySelector('[data-edit-teacher-detail]').click();assert(doc.querySelector('#teacherDetailName').value==='Docente Prueba','Pencil loads teacher details');
+doc.querySelector('#teacherDetailSpecialty').value='Estadística';doc.querySelector('#teacherDetailsForm').requestSubmit();
+const teachers=JSON.parse(localStorage.getItem('matecienciasDocentesDetalle'));assert(teachers.length===1&&teachers[0].id==='teacher-test'&&teachers[0].specialty==='Estadística','Teacher edit updates existing record without duplicate');
 }else{
 assert(!history.querySelector('[data-add-payment],tbody button'),'Reader cannot modify payments despite other role sessions');
 const text=history.querySelector('tbody').textContent;

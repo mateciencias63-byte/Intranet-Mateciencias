@@ -91,16 +91,47 @@
       const content = document.getElementById('adminContent');
       if (!content) return;
       addTeacherStyles();
+      let editingId = null;
       const drawTeachers = () => {
         const teachers = readTeacherDetails();
         const rows = teachers.length ? teachers.map((teacher, index) => `<tr><td>${index + 1}</td><td>${escapeHtml(teacher.name)}</td><td>${escapeHtml(teacher.email)}</td><td>${escapeHtml(teacher.specialty)}</td><td>${escapeHtml(teacher.areas)}</td><td><button class="teacher-details-delete" type="button" data-delete-teacher-detail="${teacher.id}" aria-label="Eliminar docente" title="Eliminar docente">×</button></td></tr>`).join('') : '<tr><td class="teacher-details-empty" colspan="6">No hay docentes registrados.</td></tr>';
         content.innerHTML = `<section class="admin-panel teacher-details-panel"><form class="teacher-details-form" id="teacherDetailsForm"><label class="teacher-details-field">Nombres y apellidos<input id="teacherDetailName" required placeholder="Nombre completo" /></label><label class="teacher-details-field">Correo<input id="teacherDetailEmail" type="email" required placeholder="correo@ejemplo.com" /></label><label class="teacher-details-field">Especialidad<input id="teacherDetailSpecialty" required placeholder="Especialidad" /></label><label class="teacher-details-field">Áreas<input id="teacherDetailAreas" required placeholder="Áreas que enseña" /></label><button class="teacher-details-submit" type="submit">Agregar</button></form><div class="teacher-details-wrap"><table class="teacher-details-table"><thead><tr><th>N.º</th><th>Nombres y apellidos</th><th>Correo</th><th>Especialidad</th><th>Áreas</th><th>Acción</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
         document.getElementById('teacherDetailsForm').addEventListener('submit', (event) => {
           event.preventDefault();
+          if (!window.UsuarioService?.isAdminSessionValid()) return;
           const updated = readTeacherDetails();
-          updated.push({ id: `docente-${Date.now()}`, name: document.getElementById('teacherDetailName').value.trim(), email: document.getElementById('teacherDetailEmail').value.trim(), specialty: document.getElementById('teacherDetailSpecialty').value.trim(), areas: document.getElementById('teacherDetailAreas').value.trim() });
-          localStorage.setItem(teacherDetailsKey, JSON.stringify(updated));
+          const record = { id: editingId || `docente-${Date.now()}`, name: document.getElementById('teacherDetailName').value.trim(), email: document.getElementById('teacherDetailEmail').value.trim(), specialty: document.getElementById('teacherDetailSpecialty').value.trim(), areas: document.getElementById('teacherDetailAreas').value.trim() };
+          if (editingId) {
+            const index = updated.findIndex(teacher => teacher.id === editingId);
+            if (index < 0) { window.alert('El docente ya no está disponible. Vuelve a abrir la lista.'); return; }
+            updated[index] = { ...updated[index], ...record };
+          } else updated.push(record);
+          try { localStorage.setItem(teacherDetailsKey, JSON.stringify(updated)); }
+          catch { window.alert('No se pudo guardar. Los datos siguen en el formulario.'); return; }
+          editingId = null;
           drawTeachers();
+        });
+        const form = document.getElementById('teacherDetailsForm');
+        const cancel = document.createElement('button');
+        cancel.type = 'button'; cancel.className = 'teacher-details-submit'; cancel.textContent = 'Cancelar edición'; cancel.hidden = true;
+        cancel.onclick = () => { editingId = null; drawTeachers(); };
+        form.append(cancel);
+        content.querySelectorAll('[data-delete-teacher-detail]').forEach(remove => {
+          const edit = document.createElement('button'); edit.type = 'button'; edit.dataset.editTeacherDetail = remove.dataset.deleteTeacherDetail;
+          edit.setAttribute('aria-label', 'Editar docente'); edit.title = 'Editar docente';
+          edit.style.cssText = 'display:inline-grid;place-items:center;width:29px;height:29px;margin-right:7px;padding:6px;border:0;border-radius:50%;background:#e6f1ff;color:#1769b0;cursor:pointer';
+          edit.innerHTML = '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg>';
+          remove.before(edit);
+          edit.onclick = () => {
+            if (!window.UsuarioService?.isAdminSessionValid()) return;
+            const teacher = readTeacherDetails().find(item => item.id === edit.dataset.editTeacherDetail);
+            if (!teacher) return;
+            editingId = teacher.id;
+            for (const [field, key] of [['Name','name'],['Email','email'],['Specialty','specialty'],['Areas','areas']]) document.getElementById(`teacherDetail${field}`).value = teacher[key] || '';
+            form.querySelector('[type="submit"]').textContent = 'Guardar cambios'; cancel.hidden = false;
+            form.scrollIntoView({ block:'center', behavior:'smooth' });
+            document.getElementById('teacherDetailName').focus({ preventScroll:true });
+          };
         });
         content.querySelectorAll('[data-delete-teacher-detail]').forEach((button) => button.addEventListener('click', () => {
           if (!window.confirm('¿Eliminar este docente?')) return;

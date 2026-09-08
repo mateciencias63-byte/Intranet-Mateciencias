@@ -1,6 +1,7 @@
 (() => {
   const key='matecienciasHorarioSemanal';
   const days=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  const clockFormat=new Intl.DateTimeFormat('en-GB',{timeZone:'America/Lima',weekday:'short',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
   const minutes=time=>{const [h,m]=String(time).split(':').map(Number);return h*60+m;};
   const hour=n=>`${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`;
   const display=time=>{const n=minutes(time),h=Math.floor(n/60);return `${h%12||12}:${String(n%60).padStart(2,'0')} ${h<12?'AM':'PM'}`;};
@@ -21,6 +22,18 @@
     target.replaceChildren();
     const root=document.createElement('section');root.className='week-schedule';target.append(root);
     let editor;
+    function updateClock() {
+      if(!root.isConnected)return;
+      const parts=Object.fromEntries(clockFormat.formatToParts(new Date()).map(part=>[part.type,part.value]));
+      const day=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].indexOf(parts.weekday);
+      const elapsed=Number(parts.hour)*60+Number(parts.minute)+Number(parts.second)/60;
+      root.querySelectorAll('.week-day').forEach((col,index)=>{
+        col.classList.toggle('today',index===day);
+        col.querySelector('.week-now-line')?.remove();
+        if(index===day){const line=document.createElement('div');line.className='week-now-line';line.style.top=`${elapsed/60*68}px`;line.setAttribute('role','img');line.setAttribute('aria-label',`Hora actual en Perú: ${parts.hour}:${parts.minute}`);col.append(line);}
+      });
+      root.querySelectorAll('.week-day-heading').forEach((heading,index)=>heading.classList.toggle('today',index===day+1));
+    }
     function render() {
       if(!root.isConnected)return;
       let events=[],failed=false;
@@ -29,14 +42,14 @@
       root.innerHTML='<header class="week-heading"><div><h2>Horario semanal</h2><p></p></div></header><div class="week-scroll" tabindex="0" aria-label="Horario de lunes a domingo"><div class="week-grid"></div></div><p class="week-message" role="status"></p>';
       root.querySelector('.week-heading p').textContent=editable?'Registra el curso, el docente y las horas de cada clase.':'Horario publicado por administración.';
       if(editable&&!failed){const add=document.createElement('button');add.type='button';add.className='week-button';add.textContent='Agregar clase';add.onclick=()=>edit();root.querySelector('header').append(add);}
-      const start=Math.min(360,...items.map(i=>Math.floor(minutes(i.start)/60)*60));
-      const end=Math.max(1320,...items.map(i=>Math.ceil(minutes(i.end)/60)*60));
+      const start=0;
+      const end=1440;
       const grid=root.querySelector('.week-grid');
       ['Hora',...days].forEach(name=>{const el=document.createElement('div');el.className='week-day-heading';el.textContent=name;grid.append(el);});
       const hours=document.createElement('div');hours.className='week-hours';
       for(let n=start;n<end;n+=60){const el=document.createElement('div');el.className='week-hour';el.textContent=display(hour(n));hours.append(el);}grid.append(hours);
       days.forEach((day,index)=>{
-        const col=document.createElement('div');col.className='week-day'+((new Date().getDay()+6)%7===index?' today':'');col.style.height=`${(end-start)/60*68}px`;
+        const col=document.createElement('div');col.className='week-day';col.style.height=`${(end-start)/60*68}px`;
         const entries=items.filter(i=>i.day===index).sort((a,b)=>minutes(a.start)-minutes(b.start));
         const lanes=[];const positioned=entries.map(item=>{let lane=lanes.findIndex(end=>end<=minutes(item.start));if(lane<0)lane=lanes.length;lanes[lane]=minutes(item.end);return {item,lane};});
         positioned.forEach(({item,lane})=>{
@@ -48,6 +61,7 @@
         });grid.append(col);
       });
       root.querySelector('.week-message').textContent=failed?'No se pudo leer el horario guardado. No se modificaron los datos.':items.length?'':'Todavía no hay clases registradas.';
+      updateClock();
     }
     function edit(item) {
       if(!canEdit())return;
@@ -70,7 +84,10 @@
       editor.addEventListener('close',()=>editor.remove());document.body.append(editor);editor.showModal();
     }
     render();
-    const update=()=>{if(!root.isConnected){window.removeEventListener('storage',update);window.removeEventListener('horario-updated',update);window.removeEventListener('focus',update);return;}render();};
+    const dispose=()=>{clearInterval(timer);window.removeEventListener('storage',update);window.removeEventListener('horario-updated',update);window.removeEventListener('focus',update);document.removeEventListener('visibilitychange',updateClock);};
+    const timer=setInterval(()=>{if(!root.isConnected){dispose();return;}updateClock();},1000);
+    const update=()=>{if(!root.isConnected){dispose();return;}render();};
+    document.addEventListener('visibilitychange',updateClock);
     window.addEventListener('storage',update);window.addEventListener('horario-updated',update);window.addEventListener('focus',update);
   }
   window.HorarioSemanal={mount};

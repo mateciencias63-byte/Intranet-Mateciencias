@@ -41,6 +41,18 @@ const scheduleButton=nav.querySelector('[data-module="Horario"],[data-module="ho
 assert(!!scheduleButton,page+' schedule option available');scheduleButton.click();await delay(400);
 const schedule=doc.querySelector('.week-schedule');assert(!!schedule,page+' weekly timetable loaded');
 assert(schedule.querySelectorAll('.week-day-heading').length===8,page+' seven days and hour column');
+assert(schedule.querySelectorAll('.week-hour').length===24,page+' full 24-hour schedule');
+const RealDate=frame.contentWindow.Date;let clockTime='2026-09-09T05:00:00Z';
+frame.contentWindow.Date=class extends RealDate { constructor(...args){super(...(args.length?args:[clockTime]));} };
+await delay(1100);
+let currentDay=schedule.querySelector('.week-day.today');
+assert([...schedule.querySelectorAll('.week-day')].indexOf(currentDay)===2&&parseFloat(currentDay.querySelector('.week-now-line').style.top)===0,page+' Wednesday starts at midnight Peru time');
+clockTime='2026-09-09T17:30:00Z';await delay(1100);
+assert(parseFloat(schedule.querySelector('.week-now-line').style.top)===850,page+' time line advances automatically');
+clockTime='2026-09-10T05:00:00Z';await delay(1100);
+assert([...schedule.querySelectorAll('.week-day')].indexOf(schedule.querySelector('.week-day.today'))===3&&parseFloat(schedule.querySelector('.week-now-line').style.top)===0,page+' line and highlight move to next day');
+assert(schedule.querySelectorAll('.week-now-line').length===1,page+' only one current-time marker');
+frame.contentWindow.Date=RealDate;
 if(page.startsWith('administracion/')){
 schedule.querySelector('.week-heading button').click();let editor=doc.querySelector('.week-editor'),form=editor.querySelector('form');
 form.elements.course.value='Álgebra de prueba';form.elements.teacher.value='Docente de prueba';form.elements.start.value='08:50';form.elements.end.value='08:00';form.requestSubmit();
@@ -103,7 +115,7 @@ if __name__ == '__main__':
         with tempfile.TemporaryDirectory(prefix='mateciencias-login-') as profile:
             result=subprocess.run([r'C:\Program Files\Google\Chrome\Application\chrome.exe',
                 '--headless','--no-sandbox','--disable-gpu','--no-first-run','--disable-background-networking',
-                '--user-data-dir='+profile,'--virtual-time-budget=25000','--dump-dom',
+                '--user-data-dir='+profile,'--virtual-time-budget=45000','--dump-dom',
                 f'http://127.0.0.1:{server.server_port}/__login_test.html'],capture_output=True,timeout=60)
             match=re.search(r'<pre id="result">(.*?)</pre>',result.stdout.decode('utf-8'),re.S)
             if not match or match.group(1)=='RUNNING':

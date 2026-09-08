@@ -1,5 +1,6 @@
 .week-schedule { min-width:0; width:100%; grid-column:1/-1; background:#fff; padding:18px; box-sizing:border-box; color:#174263; }
 .week-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+.week-heading:empty { display:none; }
 .week-heading h2 { margin:0; font-size:20px; }
 .week-heading p { margin:6px 0 0; color:#64748b; font-size:13px; }
 .week-button { padding:9px 14px; background:#0066ae; color:#fff; border:0; border-radius:4px; cursor:pointer; font:inherit; }
